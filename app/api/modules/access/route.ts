@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { supabaseAdmin } from "@/lib/supabase";
 
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
 export async function POST(req: NextRequest) {
   const cookieStore = cookies();
 
@@ -36,8 +38,18 @@ export async function POST(req: NextRequest) {
   }
 
   const userId = session.user.id;
+  const now = new Date();
 
-  // Fetch this module's progress row
+  const fetchAll = async () => {
+    const { data } = await supabaseAdmin
+      .from("module_progress")
+      .select("*")
+      .eq("user_id", userId)
+      .order("module_number");
+    return data ?? [];
+  };
+
+  // Fetch current module's progress row
   const { data: progress } = await supabaseAdmin
     .from("module_progress")
     .select("*")
@@ -45,63 +57,81 @@ export async function POST(req: NextRequest) {
     .eq("module_number", moduleNumber)
     .maybeSingle();
 
-  const fetchAll = () =>
-    supabaseAdmin
-      .from("module_progress")
-      .select("*")
-      .eq("user_id", userId)
-      .order("module_number");
-
-  // No row → not yet scheduled (locked)
+  // No row yet → locked (no scheduled unlock date known)
   if (!progress) {
-    const { data: allProgress } = await fetchAll();
     return NextResponse.json({
       locked: true,
       locked_until: null,
       module: null,
-      all_progress: allProgress ?? [],
+      all_progress: await fetchAll(),
     });
   }
 
-  const now = new Date();
-  const unlockDate = new Date(progress.unlocked_at);
-
-  // Future unlock date → locked
-  if (unlockDate > now) {
-    const { data: allProgress } = await fetchAll();
+  // Unlock date is in the future → locked
+  if (new Date(progress.unlocked_at) > now) {
     return NextResponse.json({
       locked: true,
       locked_until: progress.unlocked_at,
       module: progress,
-      all_progress: allProgress ?? [],
+      all_progress: await fetchAll(),
     });
   }
 
-  // First access — stamp it and schedule the next module's unlock
+  // ── Module is accessible ─────────────────────────────────────────────────
+
+  // Stamp first access
   if (!progress.first_accessed_at) {
     await supabaseAdmin
       .from("module_progress")
       .update({ first_accessed_at: now.toISOString() })
       .eq("user_id", userId)
       .eq("module_number", moduleNumber);
+  }
 
-    if (moduleNumber < 7) {
-      const nextUnlock = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  // Schedule / unlock the next module (modules 1–6 only)
+  if (moduleNumber < 7) {
+    const { data: nextProgress } = await supabaseAdmin
+      .from("module_progress")
+      .select("id, unlocked_at")
+      .eq("user_id", userId)
+      .eq("module_number", moduleNumber + 1)
+      .maybeSingle();
 
-      const { data: existing } = await supabaseAdmin
-        .from("module_progress")
-        .select("id")
-        .eq("user_id", userId)
-        .eq("module_number", moduleNumber + 1)
-        .maybeSingle();
+    if (!nextProgress) {
+      // Check if the previous module was accessed 7+ days ago
+      let nextUnlockAt: string;
 
-      if (!existing) {
-        await supabaseAdmin.from("module_progress").insert({
-          user_id: userId,
-          module_number: moduleNumber + 1,
-          unlocked_at: nextUnlock.toISOString(),
-        });
+      if (moduleNumber > 1) {
+        const { data: prevProgress } = await supabaseAdmin
+          .from("module_progress")
+          .select("first_accessed_at")
+          .eq("user_id", userId)
+          .eq("module_number", moduleNumber - 1)
+          .maybeSingle();
+
+        const prevAccessed = prevProgress?.first_accessed_at
+          ? new Date(prevProgress.first_accessed_at)
+          : null;
+
+        if (
+          prevAccessed &&
+          now.getTime() - prevAccessed.getTime() >= SEVEN_DAYS_MS
+        ) {
+          // 7-day window already elapsed — next module unlocks immediately
+          nextUnlockAt = now.toISOString();
+        } else {
+          nextUnlockAt = new Date(now.getTime() + SEVEN_DAYS_MS).toISOString();
+        }
+      } else {
+        // Module 1 has no predecessor — schedule module 2 for 7 days from now
+        nextUnlockAt = new Date(now.getTime() + SEVEN_DAYS_MS).toISOString();
       }
+
+      await supabaseAdmin.from("module_progress").insert({
+        user_id: userId,
+        module_number: moduleNumber + 1,
+        unlocked_at: nextUnlockAt,
+      });
     }
   }
 
@@ -113,12 +143,10 @@ export async function POST(req: NextRequest) {
     .eq("module_number", moduleNumber)
     .single();
 
-  const { data: allProgress } = await fetchAll();
-
   return NextResponse.json({
     locked: false,
     locked_until: null,
     module: updatedModule,
-    all_progress: allProgress ?? [],
+    all_progress: await fetchAll(),
   });
 }
