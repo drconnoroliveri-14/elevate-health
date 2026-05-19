@@ -6,6 +6,146 @@ A production-ready full-stack web application for the **Elevate Longevity Progra
 
 ---
 
+## Quick-Start Setup (Steps 1–9)
+
+### Step 1 — Clone the repo and install dependencies
+
+```bash
+git clone https://github.com/your-org/elevate-health.git
+cd elevate-health
+npm install
+```
+
+Copy the environment template:
+
+```bash
+cp .env.local .env.local.bak   # optional backup
+# then fill in every value as described in the steps below
+```
+
+---
+
+### Step 2 — Supabase project setup
+
+1. Go to [supabase.com](https://supabase.com) → **New project**.
+2. Name it `elevate-health`, set a strong database password, choose a region.
+3. Once provisioned, go to **SQL Editor → New query**.
+4. Paste the entire contents of `supabase-schema.sql` and click **Run**.
+5. Go to **Project Settings → API** and copy:
+   - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
+   - **anon public** key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - **service_role secret** key → `SUPABASE_SERVICE_ROLE_KEY`
+6. Go to **Authentication → URL Configuration** and set:
+   - **Site URL**: your Vercel domain (or `http://localhost:3000` for local dev)
+   - **Redirect URLs**: add `https://yourdomain.com/dashboard`
+
+---
+
+### Step 3 — Stripe setup
+
+1. Sign in at [stripe.com](https://stripe.com) (use test mode during development).
+2. Go to **Products → Add product**:
+   - Name: `Elevate Longevity Program`
+   - Pricing: **One-time · $997.00 USD**
+   - Save and copy the **Price ID** (starts `price_…`) → `STRIPE_PRICE_ID`
+3. Go to **Developers → API keys** and copy the **Secret key** → `STRIPE_SECRET_KEY`
+4. Go to **Developers → Webhooks → Add endpoint**:
+   - **Endpoint URL**: `https://yourdomain.com/api/webhooks/stripe`
+   - **Events**: select `checkout.session.completed`
+   - Save and copy the **Signing secret** (starts `whsec_…`) → `STRIPE_WEBHOOK_SECRET`
+
+**Local webhook testing:** Install the [Stripe CLI](https://stripe.com/docs/stripe-cli) and run:
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+# copy the printed local signing secret into STRIPE_WEBHOOK_SECRET
+```
+
+---
+
+### Step 4 — Resend setup
+
+1. Sign up at [resend.com](https://resend.com).
+2. Go to **Domains → Add Domain**, enter your sending domain (e.g. `mail.elevatehealth.com`).
+3. Add the displayed DNS records in your DNS provider and click **Verify**.
+4. Go to **API Keys → Create API Key** (Full access) → copy it → `RESEND_API_KEY`
+5. Update the `FROM` constant in these two files to use your verified domain:
+   - `app/api/leads/route.ts`
+   - `app/api/webhooks/stripe/route.ts`
+
+---
+
+### Step 5 — Fill in environment variables
+
+Edit `.env.local` with all values from the steps above:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_PRICE_ID=price_...
+RESEND_API_KEY=re_...
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+---
+
+### Step 6 — Local development and testing
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+**Test the full purchase flow:**
+
+1. Click **Join the Program** or **Complete Purchase** on the landing page.
+2. Use Stripe test card `4242 4242 4242 4242` · any future expiry · any CVC.
+3. After checkout, the Stripe CLI (from Step 3) forwards the webhook to your local server.
+4. Check your email (if Resend is wired up) or inspect the `profiles` and `module_progress` tables in Supabase.
+5. Log in at `/login` with the credentials from the welcome email.
+
+---
+
+### Step 7 — Deploy to Vercel
+
+1. Push your code to GitHub:
+   ```bash
+   git add . && git commit -m "production build" && git push origin main
+   ```
+2. Go to [vercel.com](https://vercel.com) → **Add New → Project → Import** your repo.
+3. Vercel auto-detects Next.js — leave all settings as default.
+4. In **Settings → Environment Variables**, add every key from `.env.local` with production values. Set `NEXT_PUBLIC_SITE_URL` to your Vercel domain.
+5. Click **Deploy**.
+
+---
+
+### Step 8 — Update Stripe webhook for production
+
+After your first Vercel deploy:
+
+1. Go to **Stripe → Developers → Webhooks** and update the endpoint URL to your live domain: `https://yourdomain.vercel.app/api/webhooks/stripe`.
+2. Update the Supabase **Authentication → URL Configuration** with your live Vercel domain.
+3. Update `NEXT_PUBLIC_SITE_URL` in Vercel's environment variables to your live domain and **redeploy**.
+
+---
+
+### Step 9 — Grant admin access
+
+To access the `/admin` dashboard:
+
+1. Purchase the course (or manually insert a row in `profiles`).
+2. In the Supabase **Table Editor**, open the `profiles` table.
+3. Find your row and change the `role` field from `student` to `admin`.
+4. Visit `/admin` — you'll now see the full admin dashboard.
+
+---
+
+---
+
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)

@@ -129,7 +129,7 @@ export function welcomeEmail({
   return {
     subject: "You're in! Here's how to get started",
     html: wrap(`
-      <p>Welcome to the <strong>Elevate Longevity Program</strong>!</p>
+      <p>Hey ${firstName || "there"}, welcome to the <strong>Elevate Longevity Program</strong>!</p>
       <p>Your login details are below. Module 1 is unlocked and ready. A new module will unlock every 7 days as you progress through the program.</p>
       <table style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px 24px;width:100%;box-sizing:border-box;margin:24px 0;">
         <tr><td style="padding:4px 0;font-size:14px;"><strong>Login URL:</strong> <a href="${loginUrl}" style="color:${BRAND_TEAL};">${loginUrl}</a></td></tr>

@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { supabaseAdmin } from "@/lib/supabase";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   // ── Authenticate ──────────────────────────────────────────────────────────
   const cookieStore = cookies();
 

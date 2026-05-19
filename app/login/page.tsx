@@ -32,11 +32,6 @@ function Spinner() {
 
 export default function LoginPage() {
   const router = useRouter();
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -47,6 +42,11 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
+      // Instantiate inside the handler so this never runs during SSR
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
       const { error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,

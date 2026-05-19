@@ -274,7 +274,7 @@ export default function LandingPage() {
           </div>
           <p className="text-gray-500 text-base">
             Join{" "}
-            <strong className="text-gray-700">2,000+</strong> people who've
+            <strong className="text-gray-700">2,000+</strong> people who&apos;ve
             already reversed their biological age
           </p>
         </div>

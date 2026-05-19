@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { SupabaseProvider } from "@/components/SupabaseProvider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Elevate Longevity Program — Add 10+ Healthy Years to Your Life",
+  title: "Elevate Health — Longevity Program",
   description:
-    "The Elevate Longevity Program reveals the 5 biomarkers silently aging you faster — and gives you the exact protocol to reverse them.",
+    "Add 10+ healthy years to your life with the science-backed Elevate Longevity Program.",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
 };
 
 export default function RootLayout({
@@ -17,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased`}>
+        <SupabaseProvider>{children}</SupabaseProvider>
+      </body>
     </html>
   );
 }
