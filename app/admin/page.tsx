@@ -196,8 +196,8 @@ export default function AdminPage() {
       <header className="bg-teal-700 text-white px-4 sm:px-8 py-5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
-            <Link href="/" className="text-lg font-bold tracking-tight">
-              Elevate Health
+            <Link href="/">
+              <img src="/logo.PNG" alt="Elevate Health" height="40" style={{height: '40px', width: 'auto'}} />
             </Link>
             <p className="text-teal-200 text-xs mt-0.5">Admin Dashboard</p>
           </div>
