@@ -203,7 +203,7 @@ export default function LandingPage() {
       {/* ── NAV ── */}
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Image src="/logo.PNG" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
+          <Image src="/logo.PNG" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} unoptimized />
           <button
             onClick={() => scrollToId("enroll")}
             className="bg-teal-500 hover:bg-teal-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
@@ -262,14 +262,13 @@ export default function LandingPage() {
       {/* ── VSL ── */}
       <section className="bg-white py-16 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-xl mb-6">
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="Elevate Longevity Program — Introduction"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full"
-            />
+          <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-xl mb-6 bg-gray-900 flex flex-col items-center justify-center gap-4">
+            <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
+              <svg className="w-10 h-10 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+            <p className="text-white/60 text-sm font-medium tracking-wide">Your Sales Video Goes Here</p>
           </div>
           <p className="text-gray-500 text-base">
             Join{" "}
@@ -524,7 +523,7 @@ export default function LandingPage() {
       {/* ── FOOTER ── */}
       <footer className="bg-teal-700 text-white py-10 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Image src="/logo.PNG" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
+          <Image src="/logo.PNG" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} unoptimized />
           <p className="text-teal-200 text-sm">
             © {new Date().getFullYear()} Elevate Health. All rights reserved.
           </p>
