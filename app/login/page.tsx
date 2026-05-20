@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
@@ -70,9 +71,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/">
-            <span className="text-2xl font-bold text-teal-500 tracking-tight">
-              Elevate Health
-            </span>
+            <Image src="/logo.png" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
           </Link>
           <p className="text-gray-500 text-sm mt-2">
             Sign in to your student portal

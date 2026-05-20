@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Card from "@/components/Card";
@@ -196,8 +197,8 @@ export default function AdminPage() {
       <header className="bg-teal-700 text-white px-4 sm:px-8 py-5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
-            <Link href="/" className="text-lg font-bold tracking-tight">
-              Elevate Health
+            <Link href="/">
+              <Image src="/logo.png" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
             </Link>
             <p className="text-teal-200 text-xs mt-0.5">Admin Dashboard</p>
           </div>

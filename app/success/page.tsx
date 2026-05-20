@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -106,9 +107,7 @@ function SuccessContent() {
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-16">
       {/* Logo */}
       <Link href="/" className="mb-10">
-        <span className="text-xl font-bold text-teal-500 tracking-tight">
-          Elevate Health
-        </span>
+        <Image src="/logo.png" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
       </Link>
 
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8 sm:p-12">
