@@ -197,7 +197,7 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
             <Link href="/">
-              <img src="/logo.PNG" alt="Elevate Health" height="40" style={{height: '40px', width: 'auto'}} />
+              <img src="/logo.PNG" alt="Elevate Health" style={{height: '70px', width: 'auto'}} />
             </Link>
             <p className="text-teal-200 text-xs mt-0.5">Admin Dashboard</p>
           </div>
