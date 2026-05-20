@@ -26,7 +26,7 @@ export default function PrivacyPage() {
       <nav className="bg-teal-700 text-white px-4 sm:px-8 py-4">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.png" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
+            <Image src="/logo.PNG" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
           </Link>
           <Link
             href="/"

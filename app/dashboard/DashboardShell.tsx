@@ -136,7 +136,7 @@ export default function DashboardShell({
       {/* Logo */}
       <div className="px-5 py-5 border-b border-teal-600">
         <Link href="/dashboard">
-          <Image src="/logo.png" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
+          <Image src="/logo.PNG" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
         </Link>
       </div>
 
@@ -230,7 +230,7 @@ export default function DashboardShell({
           <button onClick={() => setSidebarOpen(true)} aria-label="Open menu">
             <MenuIcon />
           </button>
-          <Image src="/logo.png" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
+          <Image src="/logo.PNG" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
           {sidebarOpen && (
             <button
               onClick={() => setSidebarOpen(false)}

@@ -71,7 +71,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/">
-            <Image src="/logo.png" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
+            <Image src="/logo.PNG" alt="Elevate Health" height={40} width={160} style={{ height: 40, width: "auto" }} />
           </Link>
           <p className="text-gray-500 text-sm mt-2">
             Sign in to your student portal
