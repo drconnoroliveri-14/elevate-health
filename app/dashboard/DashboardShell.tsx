@@ -189,6 +189,24 @@ export default function DashboardShell({
             );
           })}
         </ul>
+
+        {/* Bonuses */}
+        <div className="mt-4 pt-4 border-t border-teal-600">
+          <Link
+            href="/dashboard/bonuses"
+            onClick={() => setSidebarOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+              pathname === "/dashboard/bonuses"
+                ? "bg-teal-500 text-white"
+                : "text-teal-100 hover:bg-teal-600"
+            }`}
+          >
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+            </svg>
+            <span className="text-sm font-medium flex-1">My Bonuses</span>
+          </Link>
+        </div>
       </nav>
 
       {/* Footer */}
