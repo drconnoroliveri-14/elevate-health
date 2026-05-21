@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Elevate Health — Pain-Free Program",
   description:
-    "Finally eliminate neck, mid back, and lower back pain from home with the physical therapist-designed Elevate Pain-Free Program.",
+    "Finally eliminate neck, mid back, and lower back pain from home with the chiropractor-designed Elevate Pain-Free Program.",
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },

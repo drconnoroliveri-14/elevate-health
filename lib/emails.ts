@@ -42,7 +42,7 @@ export function nurtureEmail1(firstName: string) {
       <p>Hey ${firstName || "there"},</p>
       <p>Here is your free <strong>Back Pain Relief Guide</strong>.</p>
       <p>It covers the 3 root causes of chronic neck and back pain — and why most people never fix them.</p>
-      <p>The full <strong>Elevate Pain-Free Program</strong> goes 10x deeper with 7 physical therapy modules you can do at home in just 20 minutes a day.</p>
+      <p>The full <strong>Elevate Pain-Free Program</strong> goes 10x deeper with 7 chiropractic care modules you can do at home in just 20 minutes a day.</p>
       <p>I will share more over the next few days.</p>
       <p>To your health,<br>The Elevate Health Team</p>
       <p style="text-align:center;margin-top:32px;">
@@ -118,7 +118,7 @@ export function nurtureEmail5(firstName: string) {
       <p>Hey ${firstName || "there"},</p>
       <p>Here is everything inside the <strong>Elevate Pain-Free Program</strong>:</p>
       <ul style="padding-left:20px;line-height:2;">
-        <li>7 physical therapy video modules</li>
+        <li>7 chiropractic care video modules</li>
         <li>90-day personal rehab protocol</li>
         <li>Pain Tracking Journal ($47 value)</li>
         <li>Posture Correction Quick Reference Guide ($37 value)</li>
@@ -198,12 +198,12 @@ export function day14Email(firstName: string) {
       <p>Hey ${firstName || "there"},</p>
       <p>Two weeks in — most students notice real improvement by now. How are you feeling?</p>
       <p>If you want to accelerate your results, I have a personal offer for you.</p>
-      <p><strong>1-on-1 Virtual PT Consultation — $197</strong></p>
-      <p>A licensed physical therapist will review your specific muscle imbalances, assess your movement patterns, and create a custom protocol just for you.</p>
+      <p><strong>1-on-1 Virtual Chiropractic Consultation — $197</strong></p>
+      <p>A licensed chiropractor will review your specific muscle imbalances, assess your movement patterns, and create a custom protocol just for you.</p>
       <p>This is the fastest way to get pain-free — a session tailored exactly to your body.</p>
       <p style="text-align:center;margin-top:32px;">
         <a href="${SITE_URL}/consult" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
-          Book My Consultation — $197
+          Book My Chiropractic Consultation — $197
         </a>
       </p>
       <p>To your health,<br>The Elevate Health Team</p>
@@ -222,7 +222,7 @@ export function day30Email(firstName: string) {
       <p><strong>What you get: $97 one-time</strong></p>
       <ul style="padding-left:20px;line-height:2;">
         <li>Lifetime access to all future program updates</li>
-        <li>Monthly live Q&A calls with our PT team</li>
+        <li>Monthly live Q&A calls with our DC team</li>
         <li>Private community of pain-free members</li>
         <li>Priority email support</li>
       </ul>

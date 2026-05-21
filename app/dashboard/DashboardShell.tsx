@@ -265,7 +265,7 @@ export default function DashboardShell({
           {showUpsell && (
             <div className="sticky bottom-0 bg-teal-700 text-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
               <p className="text-sm text-teal-100 text-center sm:text-left">
-                Want faster results? Book a 1-on-1 Virtual PT Consultation with a licensed physical therapist.
+                Want faster results? Book a 1-on-1 Virtual Chiropractic Consultation with a licensed chiropractor.
               </p>
               <a
                 href="https://buy.stripe.com/placeholder_coaching_link"
@@ -273,7 +273,7 @@ export default function DashboardShell({
                 rel="noopener noreferrer"
                 className="flex-shrink-0 bg-white text-teal-700 font-semibold text-sm px-5 py-2 rounded-lg hover:bg-teal-50 transition-colors"
               >
-                Book My 1-on-1 Virtual PT Consultation — $197 →
+                Book My 1-on-1 Virtual Chiropractic Consultation — $197 →
               </a>
             </div>
           )}

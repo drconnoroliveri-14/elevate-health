@@ -25,7 +25,7 @@ const TESTIMONIALS = [
 ];
 
 const INCLUDES = [
-  "7 physical therapy rehabilitation modules",
+  "7 chiropractic care rehabilitation modules",
   "Lifetime access + all future updates",
   "90-day personal pain-free protocol",
   "Pain Tracking Journal ($47 value)",
@@ -175,11 +175,11 @@ export default function LandingPage() {
             Finally End Your Neck &amp; Back Pain&nbsp;— From Home, Without Surgery or Medication
           </h1>
           <p className="text-lg sm:text-xl text-teal-50 mb-10 leading-relaxed">
-            The Elevate Pain-Free Program gives you a proven at-home rehabilitation system used by physical therapists — so you can eliminate neck, mid back, and lower back pain for good.
+            The Elevate Pain-Free Program gives you a proven at-home rehabilitation system used by chiropractors — so you can eliminate neck, mid back, and lower back pain for good.
           </p>
           <ul className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             {[
-              "Developed with licensed physical therapists",
+              "Developed with licensed chiropractors",
               "Step-by-step video exercises — no equipment needed",
               "90-day pain-free guarantee",
             ].map((bullet) => (
@@ -329,7 +329,7 @@ export default function LandingPage() {
       <section className="bg-white border-t border-gray-100 py-14 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-gray-700 text-lg leading-relaxed">
-            The Elevate Pain-Free Program was developed in collaboration with licensed physical therapists and rehabilitation specialists — combining the latest evidence-based research with practical at-home exercises that actually work.
+            The Elevate Pain-Free Program was developed in collaboration with licensed chiropractors and spinal health specialists — combining the latest evidence-based research with practical at-home exercises that actually work.
           </p>
         </div>
       </section>
