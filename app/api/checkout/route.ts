@@ -3,11 +3,10 @@ import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
-  // Read at request time so the live env var is always used,
-  // and strip any accidental trailing slash.
-  const siteUrl = (
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://elevatehealth.com"
-  ).replace(/\/$/, "");
+  const successUrl =
+    "https://elevate-health-mv18ooax5-elevate-health-high-ticket-s-projects.vercel.app/success?session_id={CHECKOUT_SESSION_ID}";
+  const cancelUrl =
+    "https://elevate-health-mv18ooax5-elevate-health-high-ticket-s-projects.vercel.app";
 
   let email: string | undefined;
   let fullName: string | undefined;
@@ -23,9 +22,6 @@ export async function POST(req: NextRequest) {
   } catch {
     // Body is optional — proceed without it
   }
-
-  const successUrl = `${siteUrl}/success?session_id={CHECKOUT_SESSION_ID}`;
-  const cancelUrl = `${siteUrl}/`;
 
   try {
     const session = await stripe.checkout.sessions.create({
