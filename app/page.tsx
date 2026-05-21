@@ -447,11 +447,11 @@ export default function LandingPage() {
               Elevate Pain-Free Program
             </p>
             <div className="text-center mb-2">
-              <span className="text-2xl text-gray-400 line-through mr-2">$297</span>
+              <span className="text-2xl text-gray-400 line-through mr-2">$281</span>
               <span className="text-6xl font-bold text-teal-500">$97</span>
             </div>
             <p className="text-center text-orange-600 text-sm font-semibold mb-2">
-              Limited time offer — save $200 today.
+              Limited time offer — save $184 today.
             </p>
             <p className="text-center text-gray-400 text-sm mb-8">
               One-time payment
@@ -502,7 +502,7 @@ export default function LandingPage() {
             </button>
 
             <p className="text-center text-xs text-gray-500 mt-3 font-medium">
-              $381 total value
+              $281 total value ($197 program + $47 journal + $37 guide)
             </p>
             <p className="text-center text-xs text-gray-400 mt-2">
               One-time payment · Lifetime access · Instant delivery · Secure
