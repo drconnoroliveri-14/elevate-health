@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 
@@ -13,25 +13,18 @@ function Spinner() {
       fill="none"
       viewBox="0 0 24 24"
     >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v8H4z"
-      />
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
     </svg>
   );
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
+  const linkExpired = searchParams.get("error") === "link_expired";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,47 +35,63 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      // Instantiate inside the handler so this never runs during SSR
       const supabase = createBrowserClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
       );
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
       if (authError) throw authError;
       router.push("/dashboard");
     } catch (err: unknown) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Login failed. Please check your credentials."
-      );
+      setError(err instanceof Error ? err.message : "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
   }
 
+  async function handleForgotPassword() {
+    if (!email) {
+      setError("Enter your email address above, then click Forgot password.");
+      return;
+    }
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://elevate-health-lyart.vercel.app/auth/callback",
+    });
+    setError("");
+    alert("Check your email for a password reset link.");
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/">
-            <img src="/logo.PNG" alt="Elevate Health" style={{height: '70px', width: 'auto'}} />
+            <img src="/logo.PNG" alt="Elevate Health" style={{ height: "70px", width: "auto" }} />
           </Link>
-          <p className="text-gray-500 text-sm mt-2">
-            Sign in to your student portal
-          </p>
+          <p className="text-gray-500 text-sm mt-2">Sign in to your student portal</p>
         </div>
+
+        {message && (
+          <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-3 mb-5">
+            <p className="text-green-700 text-sm">{message}</p>
+          </div>
+        )}
+
+        {linkExpired && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 mb-5">
+            <p className="text-yellow-700 text-sm">
+              That reset link has expired. Enter your email and click &ldquo;Forgot password?&rdquo; to get a new one.
+            </p>
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="flex flex-col gap-5">
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1.5"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
               Email Address
             </label>
             <input
@@ -98,12 +107,18 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1.5"
-            >
-              Password
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-xs text-teal-600 hover:underline"
+              >
+                Forgot password?
+              </button>
+            </div>
             <input
               id="password"
               type="password"
@@ -127,26 +142,29 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-teal-500 hover:bg-teal-700 disabled:opacity-60 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
-            {loading ? (
-              <>
-                <Spinner /> Signing in…
-              </>
-            ) : (
-              "Log In"
-            )}
+            {loading ? <><Spinner /> Signing in…</> : "Log In"}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-400 mt-6">
           Having trouble?{" "}
-          <a
-            href="mailto:support@elevatehealth.com"
-            className="text-teal-600 hover:underline"
-          >
+          <a href="mailto:support@elevatehealth.com" className="text-teal-600 hover:underline">
             Contact support
           </a>
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-teal-500 border-t-transparent rounded-full" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }
