@@ -175,15 +175,6 @@ export default function LandingPage() {
           background: "linear-gradient(135deg, rgba(8,80,65,0.87) 0%, rgba(15,110,86,0.82) 100%), url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1920&q=80') center/cover no-repeat",
         }}
       >
-        {/* Subtle grid texture overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.045) 39px, rgba(255,255,255,0.045) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.045) 39px, rgba(255,255,255,0.045) 40px)",
-          }}
-        />
-
         <div className="relative max-w-4xl mx-auto text-center">
           {/* Headline */}
           <h1 className="mb-5">
