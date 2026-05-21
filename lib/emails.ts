@@ -151,7 +151,7 @@ export function welcomeEmail({
   return {
     subject: "You are in! Here is how to get started",
     html: wrap(`
-      <p>Welcome to the <strong>Elevate Pain-Free Program</strong>!</p>
+      <p>Hey ${firstName || "there"}, welcome to the <strong>Elevate Pain-Free Program</strong>!</p>
       <p>Your 7-module rehabilitation program is ready. Module 1 is unlocked and waiting for you right now.</p>
       <p>A new module unlocks every 7 days as you progress through the program.</p>
       <table style="background:#f3f4f6;border-radius:8px;padding:16px 24px;margin:24px 0;width:100%;">
