@@ -481,14 +481,6 @@ export default function LandingPage() {
               ))}
             </ul>
 
-            <label className="flex items-start gap-3 bg-teal-50 border border-teal-200 rounded-xl p-4 cursor-pointer mb-6">
-              <input type="checkbox" defaultChecked className="mt-1 h-4 w-4 accent-teal-500" />
-              <span className="text-sm text-gray-700">
-                <strong>✓ Add the Posture Correction Video Series for just $47 more</strong>
-                <span className="text-gray-500"> (normally $147) — step-by-step posture correction videos for desk workers.</span>
-              </span>
-            </label>
-
             {checkoutError && (
               <p className="text-red-600 text-sm text-center mb-4">
                 {checkoutError}
