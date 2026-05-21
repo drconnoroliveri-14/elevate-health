@@ -25,7 +25,8 @@ function getModuleStatus(
   const p = progress.find((r) => r.module_number === num);
   if (!p) return "locked";
   if (p.completed_at) return "completed";
-  if (new Date(p.unlocked_at) <= new Date()) return "unlocked";
+  // Treat null/missing unlocked_at as immediately available (manual provisioning).
+  if (!p.unlocked_at || new Date(p.unlocked_at) <= new Date()) return "unlocked";
   return "locked";
 }
 

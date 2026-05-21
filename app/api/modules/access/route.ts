@@ -67,8 +67,8 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // Unlock date is in the future → locked
-  if (new Date(progress.unlocked_at) > now) {
+  // Unlock date is in the future → locked (null/missing = treat as already unlocked)
+  if (progress.unlocked_at && new Date(progress.unlocked_at) > now) {
     return NextResponse.json({
       locked: true,
       locked_until: progress.unlocked_at,

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/auth-helpers-nextjs";
+import { supabaseAdmin } from "@/lib/supabase";
 import type { Profile, ModuleProgress } from "@/types";
 import DashboardShell from "./DashboardShell";
 
@@ -23,13 +24,15 @@ export default async function DashboardLayout({
 
   if (!session) redirect("/login");
 
+  // Use admin client so RLS never blocks manually-provisioned accounts.
+  // Session is already verified above; filtering by session.user.id keeps this secure.
   const [{ data: profile }, { data: moduleProgress }] = await Promise.all([
-    supabase
+    supabaseAdmin
       .from("profiles")
       .select("*")
       .eq("id", session.user.id)
-      .single(),
-    supabase
+      .maybeSingle(),
+    supabaseAdmin
       .from("module_progress")
       .select("*")
       .eq("user_id", session.user.id)
