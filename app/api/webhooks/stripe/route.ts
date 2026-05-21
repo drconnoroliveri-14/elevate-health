@@ -14,7 +14,9 @@ import {
 // Next.js App Router does not pre-parse the body; we read it raw here.
 export const dynamic = "force-dynamic";
 
-const FROM = "Elevate Health <hello@mail.elevatehealth.com>";
+// Resend shared sender — works without domain verification.
+// Swap to "Elevate Health <hello@mail.elevatehealth.com>" once that domain is verified in Resend.
+const FROM = "Elevate Health <onboarding@resend.dev>";
 
 function daysFromNow(days: number): string {
   return new Date(Date.now() + days * 86_400_000).toISOString();
@@ -156,6 +158,7 @@ export async function POST(req: NextRequest) {
     subject: welcome.subject,
     html: welcome.html,
   });
+  if (welcomeErr) console.error("[stripe-webhook] Welcome email failed:", welcomeErr);
   await logEmail(email, "welcome", welcomeErr ? "failed" : "sent");
 
   // ── 7. Schedule Day 3, 14, 90 follow-up emails ──────────────────────────
