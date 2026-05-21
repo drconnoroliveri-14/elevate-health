@@ -40,6 +40,8 @@ export async function POST(req: NextRequest) {
   const userId = session.user.id;
   const now = new Date();
 
+  console.log(`[modules/access] userId=${userId} module=${moduleNumber} now=${now.toISOString()}`);
+
   const fetchAll = async () => {
     const { data } = await supabaseAdmin
       .from("module_progress")
@@ -50,15 +52,24 @@ export async function POST(req: NextRequest) {
   };
 
   // Fetch current module's progress row
-  const { data: progress } = await supabaseAdmin
+  const { data: progress, error: progressError } = await supabaseAdmin
     .from("module_progress")
     .select("*")
     .eq("user_id", userId)
     .eq("module_number", moduleNumber)
     .maybeSingle();
 
+  console.log(`[modules/access] progress row:`, JSON.stringify(progress), "error:", JSON.stringify(progressError));
+
+  // Surface admin query errors instead of silently treating them as "no row"
+  if (progressError) {
+    console.error("[modules/access] supabaseAdmin query failed:", progressError);
+    return NextResponse.json({ error: "Database error.", locked: true }, { status: 500 });
+  }
+
   // No row yet → locked (no scheduled unlock date known)
   if (!progress) {
+    console.log(`[modules/access] no progress row found for userId=${userId} module=${moduleNumber} — locked`);
     return NextResponse.json({
       locked: true,
       locked_until: null,
@@ -68,7 +79,14 @@ export async function POST(req: NextRequest) {
   }
 
   // Unlock date is in the future → locked (null/missing = treat as already unlocked)
-  if (progress.unlocked_at && new Date(progress.unlocked_at) > now) {
+  // Guard against Invalid Date — Postgres "+00" suffix without colon may parse oddly.
+  const unlockedAt = progress.unlocked_at ? new Date(progress.unlocked_at) : null;
+  const unlockedAtValid = unlockedAt && !isNaN(unlockedAt.getTime());
+  const isStillLocked = unlockedAtValid && unlockedAt > now;
+
+  console.log(`[modules/access] unlocked_at="${progress.unlocked_at}" parsed=${unlockedAt?.toISOString() ?? "null"} valid=${unlockedAtValid} isStillLocked=${isStillLocked}`);
+
+  if (isStillLocked) {
     return NextResponse.json({
       locked: true,
       locked_until: progress.unlocked_at,

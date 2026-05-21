@@ -39,6 +39,8 @@ export default async function DashboardLayout({
       .order("module_number"),
   ]);
 
+  console.log(`[dashboard/layout] userId=${session.user.id} moduleProgress=${JSON.stringify(moduleProgress)} profile=${JSON.stringify(profile)}`);
+
   return (
     <DashboardShell
       profile={profile as Profile | null}

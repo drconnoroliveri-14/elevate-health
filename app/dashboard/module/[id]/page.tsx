@@ -357,10 +357,12 @@ export default function ModulePage({
     })
       .then(async (res) => {
         if (res.status === 401) {
+          console.log("[module/access] 401 — redirecting to login");
           router.push("/login");
           return;
         }
         const data = await res.json();
+        console.log("[module/access] response status:", res.status, "body:", JSON.stringify(data));
         if (data.locked) {
           setLockedUntil(data.locked_until ?? null);
           setPageState("locked");
@@ -370,7 +372,10 @@ export default function ModulePage({
           router.refresh();
         }
       })
-      .catch(() => setPageState("error"));
+      .catch((err) => {
+        console.error("[module/access] fetch error:", err);
+        setPageState("error");
+      });
   }, [moduleNum, router]);
 
   useEffect(() => {
