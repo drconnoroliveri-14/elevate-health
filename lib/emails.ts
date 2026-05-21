@@ -43,12 +43,14 @@ function btn(text: string, url: string) {
 
 export function nurtureEmail1(firstName: string) {
   return {
-    subject: "Your free longevity guide is inside",
+    subject: "The real reason your back pain keeps coming back",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>Here's your free <strong>Longevity Quickstart Guide</strong>. It covers the 5 biomarkers most doctors never test — and what each one means for how fast you're actually aging.</p>
-      <p>The full Elevate Longevity Program goes 10x deeper. I'll share more over the next few days.</p>
-      <p>To your health,<br><strong>The Elevate Health Team</strong></p>
+      <p>Most people treat back and neck pain by chasing symptoms — pain pills, heat packs, occasional stretching. It helps for a day or two. Then the pain returns.</p>
+      <p>Here's why: <strong>symptoms are not the problem. The root causes are.</strong></p>
+      <p>Chronic neck and back pain almost always comes down to three things: poor posture, muscle imbalances, and faulty movement patterns. Until those are addressed, the pain will keep coming back — no matter how many times you treat the symptoms.</p>
+      <p>The Elevate Pain-Free Program is built around addressing these root causes directly. It's the same approach used by physical therapists — now available as a complete at-home system.</p>
+      <p>To your recovery,<br><strong>The Elevate Health Team</strong></p>
       ${btn("Explore the Program →", `${SITE_URL}/#enroll`)}
     `),
   };
@@ -56,60 +58,75 @@ export function nurtureEmail1(firstName: string) {
 
 export function nurtureEmail2(firstName: string) {
   return {
-    subject: "The aging myth that's quietly costing you years",
+    subject: "3 exercises that eliminate neck pain (physical therapist approved)",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>Most people believe aging is genetic.</p>
-      <p>Here's what the science actually says: <strong>up to 80% of how you age is determined by lifestyle</strong> — not DNA.</p>
-      <p>Tomorrow I'll share the #1 longevity predictor that almost nobody tracks.</p>
-      <p>To your health,<br><strong>The Elevate Health Team</strong></p>
+      <p>Here are 3 exercises physical therapists use to eliminate neck pain fast:</p>
+      <ol style="padding-left:20px;line-height:2.2;">
+        <li><strong>Chin Tucks</strong> — Gently retract your chin straight back (not down). Hold 5 seconds. Repeat 10 times. This resets cervical alignment and releases deep neck tension.</li>
+        <li><strong>Thoracic Extension</strong> — Sit at the edge of a chair, interlace fingers behind your head, and gently arch backwards over the backrest. Hold 3 seconds. Repeat 8 times. This opens the upper back and takes pressure off the neck.</li>
+        <li><strong>Hip Flexor Stretch</strong> — Kneel on one knee, push hips forward gently, hold 30 seconds each side. Tight hip flexors pull the pelvis forward and cause a chain reaction all the way up to the neck.</li>
+      </ol>
+      <p>These 3 exercises are just a preview of what's inside Module 2 of the Elevate Pain-Free Program. The full protocol goes much deeper.</p>
+      <p>To your recovery,<br><strong>The Elevate Health Team</strong></p>
+      ${btn("See the Full Program →", `${SITE_URL}/#enroll`)}
     `),
   };
 }
 
 export function nurtureEmail3(firstName: string) {
   return {
-    subject: "The #1 longevity predictor (it's probably not what you think)",
+    subject: "Michael eliminated 6 years of back pain in 8 weeks. Here's how.",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>It's not diet. It's not sleep. It's not even stress.</p>
-      <p>The single strongest predictor of how long you'll live is your <strong>VO2 max</strong>. People in the top 25% have a 5× lower risk of early death.</p>
-      <p>Module 3 of the Elevate Longevity Program is entirely dedicated to building yours.</p>
-      ${btn("Join the Program →", `${SITE_URL}/#enroll`)}
+      <p>Michael R. had chronic lower back pain for 6 years. He tried everything — chiropractic, massage, painkillers, even a cortisone injection. Nothing gave him lasting relief.</p>
+      <p>When he found the Elevate Pain-Free Program, he was skeptical. <em>"I'd tried so many things, I didn't think anything would actually work,"</em> he told us.</p>
+      <p>But he committed to the program anyway. He worked through the modules, did the exercises every day, and followed the 90-day protocol.</p>
+      <p>Eight weeks later, Michael was completely pain-free. His words: <em>"I can't believe I waited this long. I feel like I have my life back."</em></p>
+      <p>Michael's results aren't magic. They're the result of addressing the <em>actual root causes</em> of his pain — something most treatments never do.</p>
+      <p>If you're ready for the same result, the program is waiting for you.</p>
+      ${btn("Join the Elevate Pain-Free Program →", `${SITE_URL}/#enroll`)}
+      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
     `),
   };
 }
 
 export function nurtureEmail4(firstName: string) {
   return {
-    subject: "David reversed 8 years of biological age. Here's how.",
+    subject: "Why surgery and painkillers don't fix back pain",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>David came to us at 54 feeling like 70. Six months later his biological age test showed he'd reversed 8 years.</p>
-      <p>He followed the 7-module protocol step by step. His words: <em>"I feel better at 54 than I did at 40."</em></p>
-      <p>Ready for your own reset?</p>
-      ${btn("Join the Elevate Longevity Program → $997", `${SITE_URL}/#enroll`)}
+      <p>Here's an uncomfortable truth about back pain treatment:</p>
+      <p><strong>Spinal surgery fails to relieve pain in over 50% of cases</strong> for non-specific back pain. There's even a medical term for it: Failed Back Surgery Syndrome.</p>
+      <p>Painkillers and anti-inflammatories mask the symptoms — but the underlying cause remains untreated. The moment the medication wears off, the pain returns. Often worse.</p>
+      <p>The only proven long-term solution for non-specific neck and back pain is <strong>targeted rehabilitation</strong>: correcting posture, rebalancing muscles, and retraining movement patterns. This is exactly what the Elevate Pain-Free Program delivers.</p>
+      <p>The 90-day guarantee means there's zero risk. If you're not pain-free, you pay nothing.</p>
+      <p>Don't wait another week to start feeling better.</p>
+      ${btn("Join the Elevate Pain-Free Program → $497", `${SITE_URL}/#enroll`)}
+      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
     `),
   };
 }
 
 export function nurtureEmail5(firstName: string) {
   return {
-    subject: "Everything you get (and why now)",
+    subject: "Last chance — your Free Back Pain Relief Guide is waiting",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>Here's everything inside the Elevate Longevity Program:</p>
+      <p>You downloaded the Free Back Pain Relief Guide a little while ago. I hope it's been helpful.</p>
+      <p>If you're serious about ending your pain for good, the full Elevate Pain-Free Program has everything you need:</p>
       <ul style="padding-left:20px;line-height:2;">
-        <li>7 science-backed video modules</li>
-        <li>90-day personal protocol</li>
-        <li>Biomarker Tracking Spreadsheet ($197 value)</li>
-        <li>Supplement Stack Reference Guide ($97 value)</li>
+        <li>7 evidence-based rehabilitation modules</li>
+        <li>90-day personal pain-free protocol</li>
+        <li>Pain Tracking Journal ($97 value)</li>
+        <li>Posture Correction Quick Reference Guide ($67 value)</li>
         <li>Lifetime access + all future updates</li>
-        <li>90-day money-back guarantee</li>
+        <li>90-day pain-free guarantee — full refund if you're not satisfied</li>
       </ul>
-      <p>Total value: <strong>$1,500+</strong>. Your investment: <strong>$997</strong>.</p>
-      <p>Enrollment closes soon.</p>
-      ${btn("Join Now →", `${SITE_URL}/#enroll`)}
+      <p>Total value: <strong>$661</strong>. Your investment: <strong>$497</strong>.</p>
+      <p>The 90-day guarantee removes all risk. If you follow the program and aren't completely satisfied with your results, you get every penny back. No questions asked.</p>
+      ${btn("Join the Elevate Pain-Free Program →", `${SITE_URL}/#enroll`)}
+      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
     `),
   };
 }
@@ -127,61 +144,65 @@ export function welcomeEmail({
 }) {
   const loginUrl = `${SITE_URL}/login`;
   return {
-    subject: "You're in! Here's how to get started",
+    subject: "Welcome to the Elevate Pain-Free Program — Your login details inside",
     html: wrap(`
-      <p>Hey ${firstName || "there"}, welcome to the <strong>Elevate Longevity Program</strong>!</p>
-      <p>Your login details are below. Module 1 is unlocked and ready. A new module will unlock every 7 days as you progress through the program.</p>
+      <p>Hey ${firstName || "there"}, congratulations and welcome to the <strong>Elevate Pain-Free Program</strong>!</p>
+      <p>You now have full access to all 7 rehabilitation modules. Start with Module 1 today — understanding your pain is the foundation for everything that follows.</p>
+      <p>Your login details are below:</p>
       <table style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px 24px;width:100%;box-sizing:border-box;margin:24px 0;">
         <tr><td style="padding:4px 0;font-size:14px;"><strong>Login URL:</strong> <a href="${loginUrl}" style="color:${BRAND_TEAL};">${loginUrl}</a></td></tr>
         <tr><td style="padding:4px 0;font-size:14px;"><strong>Email:</strong> ${email}</td></tr>
         <tr><td style="padding:4px 0;font-size:14px;"><strong>Temporary Password:</strong> <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">${tempPassword}</code></td></tr>
       </table>
       <p style="font-size:13px;color:#6b7280;"><em>Please change your password after your first login.</em></p>
+      <p>Remember: you're backed by a <strong>90-day pain-free guarantee</strong>. If you follow the program and aren't completely satisfied with your results, we'll refund every penny — no questions asked.</p>
       ${btn("Start Module 1 →", `${SITE_URL}/dashboard/module/1`)}
-      <p style="margin-top:28px;">To your longevity,<br><strong>The Elevate Health Team</strong></p>
+      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
     `),
   };
 }
 
 export function day3Email(firstName: string) {
   return {
-    subject: "How's Module 1 going?",
+    subject: "Day 3 check-in — how is your pain today?",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>Just checking in — how are you finding Module 1: <strong>The Science of Aging</strong>?</p>
-      <p>Once you complete Module 1 and it's been 7 days since you first accessed it, Module 2 (Nutrition for Longevity) will automatically unlock.</p>
-      <p>Take your time — the most important thing is to actually implement what you learn, not to rush through the content.</p>
-      ${btn("Continue to Module 1 →", `${SITE_URL}/dashboard/module/1`)}
-      <p style="margin-top:28px;">To your health,<br><strong>The Elevate Health Team</strong></p>
+      <p>You're 3 days into the Elevate Pain-Free Program — how are you feeling?</p>
+      <p>Many students notice the first signs of relief within the first week. Don't be discouraged if you haven't yet — your body is just starting to respond to the correct stimulus.</p>
+      <p>If you haven't finished Module 1 yet, make that your priority today. Understanding the root causes of your pain is the foundation for everything that follows.</p>
+      <p><strong>Pro tip:</strong> Do your exercises at the same time each day. Consistency matters more than perfection. Even 15–20 minutes at the same time every morning will produce dramatically better results than sporadic longer sessions.</p>
+      ${btn("Continue Module 1 →", `${SITE_URL}/dashboard/module/1`)}
+      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
     `),
   };
 }
 
 export function day14Email(firstName: string) {
   return {
-    subject: "Want to go deeper? A personal offer for you",
+    subject: "2 weeks in — most students feel significant relief by now",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>You've been working through the Elevate Longevity Program for 2 weeks now — incredible commitment.</p>
-      <p>For students who want to go further faster, we offer <strong>private 1-on-1 coaching calls</strong> with our longevity experts. In 60 minutes, we'll review your biomarkers, personalise your protocol, and answer every question you have.</p>
-      <p><strong>Investment: $497</strong> — one call, unlimited impact.</p>
-      ${btn("Book Your Coaching Call →", "https://calendly.com/elevatehealth/coaching-placeholder")}
-      <p style="margin-top:28px;">To your longevity,<br><strong>The Elevate Health Team</strong></p>
+      <p>Two weeks into the Elevate Pain-Free Program — this is where most students start noticing real, meaningful improvement in their pain levels.</p>
+      <p>How are you doing? Hit reply and let us know — we read every response.</p>
+      <p>If you haven't already, make sure you're using your <strong>Pain Tracking Journal</strong> (included in your program). Tracking your daily pain levels is one of the most powerful things you can do to stay motivated and on track — you'll often notice progress you'd otherwise miss.</p>
+      <p>Remember Michael R.? He had chronic lower back pain for 6 years. By week 2 he was already noticing improvement. By week 8 he was completely pain-free. You can get there too.</p>
+      ${btn("Continue Your Program →", `${SITE_URL}/dashboard`)}
+      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
     `),
   };
 }
 
 export function day90Email(firstName: string) {
   return {
-    subject: "90 days in — how do you feel?",
+    subject: "90 days — are you pain-free?",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>It's been 90 days since you joined the Elevate Longevity Program. That's 90 days of intentional investment in your health.</p>
-      <p>We'd love to hear your story. <strong>Could you take 2 minutes to leave a review?</strong> Your experience helps others who are on the fence make the decision that could change their life.</p>
-      <p>As a thank-you, here's a <strong>unique 20% off referral link</strong> you can share with anyone you think would benefit from the program.</p>
-      <p style="font-size:13px;color:#6b7280;">Referral link: <a href="${SITE_URL}/?ref=${firstName?.toLowerCase().replace(/\s+/g, "-") || "friend"}" style="color:${BRAND_TEAL};">${SITE_URL}/?ref=you</a></p>
-      ${btn("Leave a Review →", `${SITE_URL}/?review=1`)}
-      <p style="margin-top:28px;">Thank you for trusting us with your health.<br><strong>The Elevate Health Team</strong></p>
+      <p>90 days. That's a milestone worth celebrating.</p>
+      <p>We'd love to know: how is your pain today compared to when you started? Hit reply and tell us — we read every message and your story genuinely matters to us.</p>
+      <p>If you've followed the program and you're not completely satisfied with your results, remember that your <strong>90-day pain-free guarantee</strong> is still active. Just reply to this email and we'll process your full refund — no questions asked.</p>
+      <p>And if you are pain-free — congratulations. That result is yours forever. Use the maintenance protocol in <strong>Module 7</strong> to keep your spine strong and prevent pain from returning.</p>
+      <p>Thank you for trusting us with your recovery.<br><strong>The Elevate Health Team</strong></p>
+      ${btn("Return to Your Program →", `${SITE_URL}/dashboard`)}
     `),
   };
 }

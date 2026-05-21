@@ -16,86 +16,86 @@ type ModuleContent = {
 
 const MODULE_CONTENT: Record<number, ModuleContent> = {
   1: {
-    title: "The Science of Aging",
+    title: "Understanding Your Pain",
     duration: "~45 min",
     description:
-      "Understand hallmarks of aging, cellular senescence, telomere science, and epigenetic clocks. Establish your baseline biological age.",
+      "The root causes of neck, mid back, and lower back pain. How posture, muscle imbalances, and movement patterns create chronic pain.",
     takeaways: [
-      "What biological age means and how it differs from chronological age",
-      "The 3 biggest lifestyle accelerators of aging",
-      "How to take your baseline biological age assessment",
+      "The 3 root causes of chronic back and neck pain",
+      "How to do your baseline pain assessment",
+      "Why most treatments fail — and what works instead",
     ],
     videoId: "dQw4w9WgXcQ",
   },
   2: {
-    title: "Nutrition for Longevity",
+    title: "Neck Pain Relief Protocol",
     duration: "~50 min",
     description:
-      "Senolytic foods, time-restricted eating, autophagy protocols, and anti-inflammatory nutrition patterns optimized for muscle retention.",
+      "Step-by-step exercises to release neck tension, restore cervical mobility, and eliminate headaches caused by neck dysfunction.",
     takeaways: [
-      "How to trigger autophagy with eating windows",
-      "Top 10 senolytic foods to add this week",
-      "Ideal protein targets for longevity and muscle retention",
+      "Top 5 neck release exercises",
+      "Posture correction for desk workers",
+      "Cervical mobility daily routine",
     ],
     videoId: "9bZkp7q19f0",
   },
   3: {
-    title: "Movement & VO2 Max",
+    title: "Mid Back Pain Relief Protocol",
     duration: "~40 min",
     description:
-      "Why VO2 max is the single most powerful longevity predictor and how to build it through Zone 2 training, HIIT, and strength work.",
+      "Thoracic mobility exercises, postural correction, and strengthening routines to eliminate mid back pain and improve breathing.",
     takeaways: [
-      "How to test your VO2 max at home",
-      "Zone 2 vs HIIT — how to balance both",
-      "Your 12-week progressive training plan",
+      "Thoracic spine mobilization sequence",
+      "Scapular stability exercises",
+      "Desk posture reset routine",
     ],
     videoId: "tgbNymZ7vqY",
   },
   4: {
-    title: "Sleep Architecture & HRV",
+    title: "Lower Back Pain Relief Protocol",
     duration: "~35 min",
     description:
-      "Deep sleep optimization, HRV tracking, circadian rhythm tuning, and the best tools and wearables for recovery.",
+      "Core activation, hip flexor release, and lumbar stabilization exercises proven to eliminate lower back pain.",
     takeaways: [
-      "The 4 sleep stages and which matter most for longevity",
-      "Top HRV wearables and how to read your score",
-      "The circadian reset protocol for jet lag and shift work",
+      "The McGill Big 3 exercises",
+      "Hip flexor release sequence",
+      "Lumbar stabilization routine",
     ],
     videoId: "ZZ5LpwO-An4",
   },
   5: {
-    title: "Hormones, Peptides & Supplements",
+    title: "Posture Correction & Alignment",
     duration: "~55 min",
     description:
-      "Testosterone, estrogen, DHEA, and IGF-1 optimization. Evidence-based supplements including NMN, resveratrol, and spermidine — what works and what's hype.",
+      "Full body postural assessment and correction. How to sit, stand, sleep, and move without creating pain.",
     takeaways: [
-      "The 6 key hormones to track and optimize",
-      "Top 5 longevity supplements with dosing protocols",
-      "What to avoid — overhyped supplements and dangerous stacks",
+      "Ideal sitting and standing posture guide",
+      "Sleep position guide for pain relief",
+      "Movement pattern corrections",
     ],
     videoId: "Ke90Tje7VS0",
   },
   6: {
-    title: "Biomarker Testing & Tracking",
+    title: "Strengthening for a Pain-Free Life",
     duration: "~40 min",
     description:
-      "The 12 biomarkers every longevity-focused person should track, how to order the right tests, read results, and act on them.",
+      "Progressive strengthening program to bulletproof your spine and prevent pain from returning.",
     takeaways: [
-      "The complete longevity blood panel",
-      "How to read your results and what's optimal vs normal",
-      "Walkthrough of the Biomarker Tracking Spreadsheet",
+      "Spine-safe strength exercises",
+      "Progressive overload for beginners",
+      "3-day weekly strength routine",
     ],
     videoId: "HQmmM_qwG4k",
   },
   7: {
-    title: "Your Personal 90-Day Protocol",
+    title: "Your Personal 90-Day Pain-Free Protocol",
     duration: "~30 min",
     description:
-      "Build your fully customized longevity stack. Week-by-week implementation guide, progress checkpoints, and long-term maintenance strategy.",
+      "Build your customized daily rehabilitation routine with week-by-week implementation, pain tracking, and long-term maintenance.",
     takeaways: [
-      "Your personal protocol template",
-      "30, 60, and 90-day milestones",
-      "How to retest your biological age and iterate",
+      "Your personal daily routine template",
+      "Pain tracking system",
+      "How to progress safely long-term",
     ],
     videoId: "uelHwf8o7_U",
   },

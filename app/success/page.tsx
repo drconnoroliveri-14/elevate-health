@@ -9,12 +9,12 @@ const STEPS = [
   {
     num: 2,
     title: "Log in to your portal",
-    desc: "Click the link in your email or visit /login with the credentials provided.",
+    desc: "Click the link in your email or visit /login with the credentials provided to access all 7 rehabilitation modules.",
   },
   {
     num: 3,
-    title: "Start Module 1",
-    desc: "Your first module is unlocked and ready to watch. The science of aging starts now.",
+    title: "Start Module 1 today",
+    desc: "Begin with Understanding Your Pain — your first step toward a pain-free life starts now.",
   },
 ];
 

@@ -46,7 +46,7 @@ export default function TermsPage() {
 
         <p className="text-gray-600 leading-relaxed mb-8">
           Please read these Terms of Service (&ldquo;Terms&rdquo;) carefully before
-          purchasing or accessing the Elevate Longevity Program. By completing a
+          purchasing or accessing the Elevate Pain-Free Program. By completing a
           purchase or using our platform, you agree to be bound by these Terms.
           If you do not agree, do not purchase or access the course.
         </p>
@@ -55,7 +55,7 @@ export default function TermsPage() {
           <p>
             These Terms constitute a legally binding agreement between you and
             Elevate Health (&ldquo;Company,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;). They govern your
-            access to and use of the Elevate Longevity Program and all related
+            access to and use of the Elevate Pain-Free Program and all related
             content, materials, and services.
           </p>
           <p>
@@ -67,25 +67,25 @@ export default function TermsPage() {
 
         <Section title="2. Product Description">
           <p>
-            The Elevate Longevity Program is a digital educational course
-            consisting of 7 video modules covering topics in longevity science,
-            nutrition, exercise, sleep, hormones, biomarker testing, and
-            protocol design. The course is delivered through a drip-based online
-            portal — one module unlocks every 7 days after the previous module
-            is first accessed.
+            The Elevate Pain-Free Program is a digital educational course
+            consisting of 7 video modules covering at-home rehabilitation for
+            neck, mid back, and lower back pain — including posture correction,
+            targeted exercises, and a 90-day personal protocol. The course is
+            delivered through a drip-based online portal — one module unlocks
+            every 7 days after the previous module is first accessed.
           </p>
           <p>
             Upon purchase, you receive lifetime access to all course content,
             including any future updates we add to the program, plus two bonus
-            resources: the Biomarker Tracking Spreadsheet and the Supplement
-            Stack Reference Guide.
+            resources: the Pain Tracking Journal and the Posture Correction
+            Quick Reference Guide.
           </p>
         </Section>
 
         <Section title="3. Payment and Refund Policy">
           <p>
-            <strong>Price:</strong> The Elevate Longevity Program is available
-            for a one-time payment of <strong>$997 USD</strong>. There are no
+            <strong>Price:</strong> The Elevate Pain-Free Program is available
+            for a one-time payment of <strong>$497 USD</strong>. There are no
             recurring charges or hidden fees.
           </p>
           <p>
@@ -116,7 +116,7 @@ export default function TermsPage() {
         <Section title="4. Medical Disclaimer">
           <p>
             <strong>
-              The Elevate Longevity Program is for educational purposes only.
+              The Elevate Pain-Free Program is for educational purposes only.
               It is not intended to diagnose, treat, cure, or prevent any
               disease or medical condition.
             </strong>
@@ -124,10 +124,9 @@ export default function TermsPage() {
           <p>
             The content in this course does not constitute medical advice,
             professional healthcare advice, or a doctor-patient relationship.
-            Always consult a qualified healthcare provider before making changes
-            to your diet, exercise routine, supplement stack, or any other
-            health-related behaviour — especially if you have existing medical
-            conditions or take prescription medications.
+            Always consult a qualified healthcare provider before beginning any
+            new exercise or rehabilitation program — especially if you have
+            existing medical conditions, injuries, or have recently had surgery.
           </p>
           <p>
             Results described by testimonials or case studies are individual
@@ -191,7 +190,7 @@ export default function TermsPage() {
           <p>
             Our total liability to you for any claim arising out of or relating
             to these Terms or your use of the service shall not exceed the
-            amount you paid for the course ($997).
+            amount you paid for the course ($497).
           </p>
         </Section>
 

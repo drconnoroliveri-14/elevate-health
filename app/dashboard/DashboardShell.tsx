@@ -7,13 +7,13 @@ import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import type { Profile, ModuleProgress } from "@/types";
 
 const MODULES = [
-  { num: 1, title: "The Science of Aging" },
-  { num: 2, title: "Nutrition for Longevity" },
-  { num: 3, title: "Movement & VO2 Max" },
-  { num: 4, title: "Sleep Architecture & HRV" },
-  { num: 5, title: "Hormones, Peptides & Supplements" },
-  { num: 6, title: "Biomarker Testing & Tracking" },
-  { num: 7, title: "Your Personal 90-Day Protocol" },
+  { num: 1, title: "Understanding Your Pain" },
+  { num: 2, title: "Neck Pain Relief Protocol" },
+  { num: 3, title: "Mid Back Pain Relief Protocol" },
+  { num: 4, title: "Lower Back Pain Relief Protocol" },
+  { num: 5, title: "Posture Correction & Alignment" },
+  { num: 6, title: "Strengthening for a Pain-Free Life" },
+  { num: 7, title: "Your Personal 90-Day Pain-Free Protocol" },
 ];
 
 type ModuleStatus = "completed" | "unlocked" | "locked";
@@ -266,7 +266,7 @@ export default function DashboardShell({
             <div className="sticky bottom-0 bg-teal-700 text-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
               <p className="text-sm text-teal-100 text-center sm:text-left">
                 Ready to go deeper? Book a 1-on-1 coaching call with our
-                longevity experts.
+                rehabilitation specialists for a personalised pain relief plan.
               </p>
               <a
                 href="https://buy.stripe.com/placeholder_coaching_link"
@@ -274,7 +274,7 @@ export default function DashboardShell({
                 rel="noopener noreferrer"
                 className="flex-shrink-0 bg-white text-teal-700 font-semibold text-sm px-5 py-2 rounded-lg hover:bg-teal-50 transition-colors"
               >
-                Add a Coaching Call — $497 →
+                Add a Coaching Call — $297 →
               </a>
             </div>
           )}

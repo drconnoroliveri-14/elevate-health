@@ -6,75 +6,75 @@ import Link from "next/link";
 const MODULES = [
   {
     num: 1,
-    title: "The Science of Aging",
-    desc: "Understand hallmarks of aging, cellular senescence, and how to establish your baseline biological age.",
+    title: "Understanding Your Pain",
+    desc: "The root causes of neck, mid back, and lower back pain. How posture, muscle imbalances, and movement patterns create chronic pain. Your baseline pain assessment.",
   },
   {
     num: 2,
-    title: "Nutrition for Longevity",
-    desc: "Senolytic foods, time-restricted eating, autophagy protocols, and anti-inflammatory nutrition.",
+    title: "Neck Pain Relief Protocol",
+    desc: "Step-by-step exercises to release neck tension, restore cervical mobility, and eliminate headaches caused by neck dysfunction.",
   },
   {
     num: 3,
-    title: "Movement & VO2 Max",
-    desc: "Why VO2 max is the #1 longevity biomarker and how to build it with Zone 2 and HIIT.",
+    title: "Mid Back Pain Relief Protocol",
+    desc: "Thoracic mobility exercises, postural correction, and strengthening routines to eliminate mid back pain and improve breathing.",
   },
   {
     num: 4,
-    title: "Sleep Architecture & HRV",
-    desc: "Deep sleep optimization, HRV tracking, and circadian rhythm tuning.",
+    title: "Lower Back Pain Relief Protocol",
+    desc: "Core activation, hip flexor release, and lumbar stabilization exercises proven to eliminate lower back pain.",
   },
   {
     num: 5,
-    title: "Hormones, Peptides & Supplements",
-    desc: "Optimize key hormones and learn which supplements actually work.",
+    title: "Posture Correction & Alignment",
+    desc: "Full body postural assessment and correction. How to sit, stand, sleep, and move without creating pain.",
   },
   {
     num: 6,
-    title: "Biomarker Testing & Tracking",
-    desc: "The 12 biomarkers every longevity-focused person should track and how to act on results.",
+    title: "Strengthening for a Pain-Free Life",
+    desc: "Progressive strengthening program to bulletproof your spine and prevent pain from returning.",
   },
   {
     num: 7,
-    title: "Your Personal 90-Day Protocol",
-    desc: "Build your customized longevity stack with week-by-week implementation.",
+    title: "Your Personal 90-Day Pain-Free Protocol",
+    desc: "Build your customized daily rehabilitation routine with week-by-week implementation, pain tracking, and long-term maintenance.",
   },
 ];
 
 const BONUSES = [
   {
-    title: "Biomarker Tracking Spreadsheet",
-    value: "$197",
-    desc: "Pre-built spreadsheet to log and visualize all 12 longevity biomarkers over time.",
+    title: "Pain Tracking Journal",
+    value: "$97",
+    desc: "Track your daily pain levels, exercises, and progress to stay on track and celebrate your wins.",
   },
   {
-    title: "Supplement Stack Reference Guide",
-    value: "$97",
-    desc: "Evidence-based breakdown of the top longevity supplements with dosing protocols.",
+    title: "Posture Correction Quick Reference Guide",
+    value: "$67",
+    desc: "One-page visual guide showing ideal sitting, standing, and sleeping posture to reinforce your daily habits.",
   },
 ];
 
 const TESTIMONIALS = [
   {
-    quote: "I dropped 6 years off my biological age in 4 months.",
-    name: "Marcus T.",
-    age: 54,
+    quote: "I had chronic lower back pain for 6 years. After 8 weeks I was completely pain-free.",
+    name: "Michael R.",
+    age: 52,
   },
   {
-    quote: "My doctor couldn't believe my bloodwork.",
-    name: "Sandra L.",
-    age: 61,
+    quote: "My neck pain from desk work is completely gone. I do 20 minutes a day.",
+    name: "Sarah K.",
+    age: 38,
   },
-  { quote: "Worth 10x the price.", name: "James R.", age: 48 },
+  { quote: "Avoided surgery thanks to this program. My orthopedic surgeon was shocked.", name: "David L.", age: 61 },
 ];
 
 const INCLUDES = [
-  "7 science-backed video modules",
+  "7 evidence-based rehabilitation modules",
   "Lifetime access + all future updates",
   "90-day personal protocol",
-  "Biomarker Tracking Spreadsheet ($197 value)",
-  "Supplement Stack Reference Guide ($97 value)",
-  "90-day money-back guarantee",
+  "Pain Tracking Journal ($97 value)",
+  "Posture Correction Quick Reference Guide ($67 value)",
+  "90-day pain-free guarantee",
   "Secure checkout · Instant delivery",
 ];
 
@@ -216,17 +216,16 @@ export default function LandingPage() {
       <section className="bg-teal-700 text-white py-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-            Add 10+ Healthy Years to Your Life&nbsp;— Starting This Week
+            Finally End Your Neck &amp; Back Pain — From Home, Without Surgery or Medication
           </h1>
           <p className="text-lg sm:text-xl text-teal-50 mb-10 leading-relaxed">
-            The Elevate Longevity Program reveals the 5 biomarkers silently
-            aging you faster — and gives you the exact protocol to reverse them.
+            The Elevate Pain-Free Program gives you a proven at-home rehabilitation system used by physical therapists — so you can eliminate neck, mid back, and lower back pain for good.
           </p>
           <ul className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             {[
-              "7 science-backed video modules",
-              "Lifetime access — learn at your pace",
-              "90-day money-back guarantee",
+              "Developed with licensed physical therapists",
+              "Step-by-step video exercises — no equipment needed",
+              "90-day pain-free guarantee",
             ].map((bullet) => (
               <li
                 key={bullet}
@@ -253,7 +252,7 @@ export default function LandingPage() {
             onClick={() => scrollToId("enroll")}
             className="bg-white text-teal-700 hover:bg-teal-50 font-bold text-lg px-10 py-4 rounded-xl shadow-lg transition-colors"
           >
-            Yes, I Want to Live Longer →
+            Yes, I Want to Live Pain-Free →
           </button>
         </div>
       </section>
@@ -272,7 +271,7 @@ export default function LandingPage() {
           <p className="text-gray-500 text-base">
             Join{" "}
             <strong className="text-gray-700">2,000+</strong> people who&apos;ve
-            already reversed their biological age
+            already found lasting pain relief
           </p>
         </div>
       </section>
@@ -374,10 +373,7 @@ export default function LandingPage() {
       <section className="bg-white border-t border-gray-100 py-14 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-gray-700 text-lg leading-relaxed">
-            The Elevate Longevity Program was built by a team of functional
-            medicine doctors, longevity researchers, and health optimization
-            coaches — combining the latest peer-reviewed science with practical,
-            implementable protocols.
+            The Elevate Pain-Free Program was developed in collaboration with licensed physical therapists and rehabilitation specialists — combining the latest evidence-based research with practical at-home exercises that actually work.
           </p>
         </div>
       </section>
@@ -390,9 +386,7 @@ export default function LandingPage() {
             90-Day Full Money-Back Guarantee
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed">
-            Try the entire program. If you don&apos;t feel measurably younger,
-            more energized, and sharper within 90 days, we&apos;ll refund every
-            penny. No questions asked.
+            90-Day Pain-Free Guarantee — Follow the program for 90 days. If you&apos;re not completely satisfied with your results, we&apos;ll refund every penny. No questions asked.
           </p>
         </div>
       </section>
@@ -404,7 +398,7 @@ export default function LandingPage() {
           {!leadCaptured ? (
             <div className="bg-teal-50 border border-teal-200 rounded-2xl p-8 mb-8">
               <h3 className="text-xl font-bold text-gray-900 mb-1 text-center">
-                Get Your Free Longevity Guide
+                Get Your Free Back Pain Relief Guide
               </h3>
               <p className="text-sm text-gray-500 text-center mb-6">
                 Enter your details to unlock the guide — then enroll below.
@@ -439,7 +433,7 @@ export default function LandingPage() {
                       <Spinner /> Sending…
                     </>
                   ) : (
-                    "Get My Free Longevity Guide"
+                    "Get My Free Back Pain Relief Guide"
                   )}
                 </button>
               </form>
@@ -458,10 +452,10 @@ export default function LandingPage() {
             className="bg-white border-2 border-teal-500 rounded-2xl shadow-xl p-8"
           >
             <p className="text-center text-sm font-semibold text-teal-600 uppercase tracking-widest mb-2">
-              Elevate Longevity Program
+              Elevate Pain-Free Program
             </p>
             <p className="text-center text-6xl font-bold text-teal-500 mb-2">
-              $997
+              $497
             </p>
             <p className="text-center text-gray-400 text-sm mb-8">
               One-time payment

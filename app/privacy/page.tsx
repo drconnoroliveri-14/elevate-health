@@ -47,7 +47,7 @@ export default function PrivacyPage() {
         <p className="text-gray-600 leading-relaxed mb-8">
           Elevate Health (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) is committed to protecting your
           personal information. This Privacy Policy explains how we collect, use,
-          and safeguard data when you use our website and the Elevate Longevity
+          and safeguard data when you use our website and the Elevate Pain-Free
           Program.
         </p>
 
@@ -68,7 +68,7 @@ export default function PrivacyPage() {
             </li>
             <li>
               <strong>Lead data:</strong> name and email if you opt in to our
-              free longevity guide before purchasing.
+              free back pain relief guide before purchasing.
             </li>
             <li>
               <strong>Usage data:</strong> browser type, IP address, and page
