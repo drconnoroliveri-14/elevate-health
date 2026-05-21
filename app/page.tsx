@@ -4,76 +4,32 @@ import { useState } from "react";
 import Link from "next/link";
 
 const MODULES = [
-  {
-    num: 1,
-    title: "Understanding Your Pain",
-    desc: "The root causes of neck, mid back, and lower back pain. How posture, muscle imbalances, and movement patterns create chronic pain. Your baseline pain assessment.",
-  },
-  {
-    num: 2,
-    title: "Neck Pain Relief Protocol",
-    desc: "Step-by-step exercises to release neck tension, restore cervical mobility, and eliminate headaches caused by neck dysfunction.",
-  },
-  {
-    num: 3,
-    title: "Mid Back Pain Relief Protocol",
-    desc: "Thoracic mobility exercises, postural correction, and strengthening routines to eliminate mid back pain and improve breathing.",
-  },
-  {
-    num: 4,
-    title: "Lower Back Pain Relief Protocol",
-    desc: "Core activation, hip flexor release, and lumbar stabilization exercises proven to eliminate lower back pain.",
-  },
-  {
-    num: 5,
-    title: "Posture Correction & Alignment",
-    desc: "Full body postural assessment and correction. How to sit, stand, sleep, and move without creating pain.",
-  },
-  {
-    num: 6,
-    title: "Strengthening for a Pain-Free Life",
-    desc: "Progressive strengthening program to bulletproof your spine and prevent pain from returning.",
-  },
-  {
-    num: 7,
-    title: "Your Personal 90-Day Pain-Free Protocol",
-    desc: "Build your customized daily rehabilitation routine with week-by-week implementation, pain tracking, and long-term maintenance.",
-  },
+  { num: 1, title: "Understanding Your Pain", desc: "The root causes of neck, mid back, and lower back pain. How posture, muscle imbalances, and movement patterns create chronic pain. Your baseline pain assessment." },
+  { num: 2, title: "Neck Pain Relief Protocol", desc: "Step-by-step exercises to release neck tension, restore cervical mobility, and eliminate headaches caused by neck dysfunction." },
+  { num: 3, title: "Mid Back Pain Relief Protocol", desc: "Thoracic mobility exercises, postural correction, and strengthening routines to eliminate mid back pain and improve breathing." },
+  { num: 4, title: "Lower Back Pain Relief Protocol", desc: "Core activation, hip flexor release, and lumbar stabilization exercises proven to eliminate lower back pain." },
+  { num: 5, title: "Posture Correction & Alignment", desc: "Full body postural assessment and correction. How to sit, stand, sleep, and move without creating pain." },
+  { num: 6, title: "Strengthening for a Pain-Free Life", desc: "Progressive strengthening program to bulletproof your spine and prevent pain from returning." },
+  { num: 7, title: "Your Personal 90-Day Pain-Free Protocol", desc: "Build your customized daily rehabilitation routine. Week-by-week implementation, pain tracking, and long-term maintenance." },
 ];
 
 const BONUSES = [
-  {
-    title: "Pain Tracking Journal",
-    value: "$97",
-    desc: "Track your daily pain levels, exercises, and progress to stay on track and celebrate your wins.",
-  },
-  {
-    title: "Posture Correction Quick Reference Guide",
-    value: "$67",
-    desc: "One-page visual guide showing ideal sitting, standing, and sleeping posture to reinforce your daily habits.",
-  },
+  { title: "Pain Tracking Journal", value: "$47", desc: "Track your daily pain levels, exercises, and progress to stay on track and celebrate your wins." },
+  { title: "Posture Correction Quick Reference Guide", value: "$37", desc: "One-page visual guide showing ideal sitting, standing, and sleeping posture to reinforce your daily habits." },
 ];
 
 const TESTIMONIALS = [
-  {
-    quote: "I had chronic lower back pain for 6 years. After 8 weeks I was completely pain-free.",
-    name: "Michael R.",
-    age: 52,
-  },
-  {
-    quote: "My neck pain from desk work is completely gone. I do 20 minutes a day.",
-    name: "Sarah K.",
-    age: 38,
-  },
+  { quote: "I had chronic lower back pain for 6 years. After 8 weeks I was completely pain-free.", name: "Michael R.", age: 52 },
+  { quote: "My neck pain from desk work is completely gone. I do 20 minutes a day.", name: "Sarah K.", age: 38 },
   { quote: "Avoided surgery thanks to this program. My orthopedic surgeon was shocked.", name: "David L.", age: 61 },
 ];
 
 const INCLUDES = [
-  "7 evidence-based rehabilitation modules",
+  "7 physical therapy rehabilitation modules",
   "Lifetime access + all future updates",
-  "90-day personal protocol",
-  "Pain Tracking Journal ($97 value)",
-  "Posture Correction Quick Reference Guide ($67 value)",
+  "90-day personal pain-free protocol",
+  "Pain Tracking Journal ($47 value)",
+  "Posture Correction Quick Reference Guide ($37 value)",
   "90-day pain-free guarantee",
   "Secure checkout · Instant delivery",
 ];
@@ -207,7 +163,7 @@ export default function LandingPage() {
             onClick={() => scrollToId("enroll")}
             className="bg-teal-500 hover:bg-teal-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
-            Join the Program
+            Yes, I Want to Live Pain-Free →
           </button>
         </div>
       </nav>
@@ -216,7 +172,7 @@ export default function LandingPage() {
       <section className="bg-teal-700 text-white py-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-            Finally End Your Neck &amp; Back Pain — From Home, Without Surgery or Medication
+            Finally End Your Neck &amp; Back Pain&nbsp;— From Home, Without Surgery or Medication
           </h1>
           <p className="text-lg sm:text-xl text-teal-50 mb-10 leading-relaxed">
             The Elevate Pain-Free Program gives you a proven at-home rehabilitation system used by physical therapists — so you can eliminate neck, mid back, and lower back pain for good.
@@ -270,8 +226,8 @@ export default function LandingPage() {
           </div>
           <p className="text-gray-500 text-base">
             Join{" "}
-            <strong className="text-gray-700">2,000+</strong> people who&apos;ve
-            already found lasting pain relief
+            <strong className="text-gray-700">2,000+</strong> people who have
+            already eliminated their neck and back pain
           </p>
         </div>
       </section>
@@ -386,7 +342,7 @@ export default function LandingPage() {
             90-Day Full Money-Back Guarantee
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed">
-            90-Day Pain-Free Guarantee — Follow the program for 90 days. If you&apos;re not completely satisfied with your results, we&apos;ll refund every penny. No questions asked.
+            90-Day Pain-Free Guarantee — Follow the program for 90 days. If you are not completely satisfied with your results, we will refund every penny. No questions asked.
           </p>
         </div>
       </section>
@@ -398,10 +354,10 @@ export default function LandingPage() {
           {!leadCaptured ? (
             <div className="bg-teal-50 border border-teal-200 rounded-2xl p-8 mb-8">
               <h3 className="text-xl font-bold text-gray-900 mb-1 text-center">
-                Get Your Free Back Pain Relief Guide
+                Get Instant Access — Start Pain-Free Today
               </h3>
               <p className="text-sm text-gray-500 text-center mb-6">
-                Enter your details to unlock the guide — then enroll below.
+                Enter your details to unlock your free Back Pain Relief Guide — then enroll below.
               </p>
               <form onSubmit={handleLeadSubmit} className="flex flex-col gap-4">
                 <input
@@ -454,8 +410,12 @@ export default function LandingPage() {
             <p className="text-center text-sm font-semibold text-teal-600 uppercase tracking-widest mb-2">
               Elevate Pain-Free Program
             </p>
-            <p className="text-center text-6xl font-bold text-teal-500 mb-2">
-              $497
+            <div className="text-center mb-2">
+              <span className="text-2xl text-gray-400 line-through mr-2">$297</span>
+              <span className="text-6xl font-bold text-teal-500">$97</span>
+            </div>
+            <p className="text-center text-orange-600 text-sm font-semibold mb-2">
+              Limited time offer — save $200 today.
             </p>
             <p className="text-center text-gray-400 text-sm mb-8">
               One-time payment
@@ -485,6 +445,14 @@ export default function LandingPage() {
               ))}
             </ul>
 
+            <label className="flex items-start gap-3 bg-teal-50 border border-teal-200 rounded-xl p-4 cursor-pointer mb-6">
+              <input type="checkbox" defaultChecked className="mt-1 h-4 w-4 accent-teal-500" />
+              <span className="text-sm text-gray-700">
+                <strong>✓ Add the Posture Correction Video Series for just $47 more</strong>
+                <span className="text-gray-500"> (normally $147) — step-by-step posture correction videos for desk workers.</span>
+              </span>
+            </label>
+
             {checkoutError && (
               <p className="text-red-600 text-sm text-center mb-4">
                 {checkoutError}
@@ -501,11 +469,14 @@ export default function LandingPage() {
                   <Spinner /> Redirecting…
                 </>
               ) : (
-                "Complete Purchase →"
+                "Yes, I Want to Live Pain-Free →"
               )}
             </button>
 
-            <p className="text-center text-xs text-gray-400 mt-4">
+            <p className="text-center text-xs text-gray-500 mt-3 font-medium">
+              $381 total value
+            </p>
+            <p className="text-center text-xs text-gray-400 mt-2">
               One-time payment · Lifetime access · Instant delivery · Secure
               checkout
             </p>

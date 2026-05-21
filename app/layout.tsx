@@ -6,9 +6,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Elevate Health — Longevity Program",
+  title: "Elevate Health — Pain-Free Program",
   description:
-    "Add 10+ healthy years to your life with the science-backed Elevate Longevity Program.",
+    "Finally eliminate neck, mid back, and lower back pain from home with the physical therapist-designed Elevate Pain-Free Program.",
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
