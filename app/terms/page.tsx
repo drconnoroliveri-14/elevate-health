@@ -85,7 +85,7 @@ export default function TermsPage() {
         <Section title="3. Payment and Refund Policy">
           <p>
             <strong>Price:</strong> The Elevate Pain-Free Program is available
-            for a one-time payment of <strong>$497 USD</strong>. There are no
+            for a one-time payment of <strong>$97 USD</strong>. There are no
             recurring charges or hidden fees.
           </p>
           <p>
@@ -190,7 +190,7 @@ export default function TermsPage() {
           <p>
             Our total liability to you for any claim arising out of or relating
             to these Terms or your use of the service shall not exceed the
-            amount you paid for the course ($497).
+            amount you paid for the course ($97).
           </p>
         </Section>
 

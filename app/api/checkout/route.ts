@@ -1,3 +1,4 @@
+// IMPORTANT: STRIPE_PRICE_ID env var must point to a $97 product in Stripe dashboard.
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase";

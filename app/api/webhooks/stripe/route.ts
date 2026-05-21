@@ -7,6 +7,7 @@ import {
   welcomeEmail,
   day3Email,
   day14Email,
+  day30Email,
   day90Email,
 } from "@/lib/emails";
 
@@ -180,11 +181,13 @@ export async function POST(req: NextRequest) {
 
   const d3 = day3Email(firstName);
   const d14 = day14Email(firstName);
+  const d30 = day30Email(firstName);
   const d90 = day90Email(firstName);
 
   await Promise.all([
     scheduleEmail("post_day3", d3.subject, d3.html, 3),
     scheduleEmail("post_day14", d14.subject, d14.html, 14),
+    scheduleEmail("post_day30", d30.subject, d30.html, 30),
     scheduleEmail("post_day90", d90.subject, d90.html, 90),
   ]);
 

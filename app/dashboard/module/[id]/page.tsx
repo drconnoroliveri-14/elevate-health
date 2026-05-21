@@ -17,13 +17,13 @@ type ModuleContent = {
 const MODULE_CONTENT: Record<number, ModuleContent> = {
   1: {
     title: "Understanding Your Pain",
-    duration: "~45 min",
+    duration: "~40 min",
     description:
       "The root causes of neck, mid back, and lower back pain. How posture, muscle imbalances, and movement patterns create chronic pain.",
     takeaways: [
       "The 3 root causes of chronic back and neck pain",
-      "How to do your baseline pain assessment",
-      "Why most treatments fail — and what works instead",
+      "How to assess your own posture",
+      "Your baseline pain score",
     ],
     videoId: "dQw4w9WgXcQ",
   },

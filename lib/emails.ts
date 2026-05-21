@@ -33,100 +33,106 @@ function wrap(body: string) {
 </html>`;
 }
 
-function btn(text: string, url: string) {
-  return `<p style="margin:28px 0 0;">
-    <a href="${url}" style="background:${BRAND_TEAL};color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 28px;border-radius:10px;display:inline-block;">${text}</a>
-  </p>`;
-}
-
 // ── Pre-purchase nurture ───────────────────────────────────────────────────────
 
 export function nurtureEmail1(firstName: string) {
   return {
-    subject: "The real reason your back pain keeps coming back",
+    subject: "Your free back pain relief guide is inside",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>Most people treat back and neck pain by chasing symptoms — pain pills, heat packs, occasional stretching. It helps for a day or two. Then the pain returns.</p>
-      <p>Here's why: <strong>symptoms are not the problem. The root causes are.</strong></p>
-      <p>Chronic neck and back pain almost always comes down to three things: poor posture, muscle imbalances, and faulty movement patterns. Until those are addressed, the pain will keep coming back — no matter how many times you treat the symptoms.</p>
-      <p>The Elevate Pain-Free Program is built around addressing these root causes directly. It's the same approach used by physical therapists — now available as a complete at-home system.</p>
-      <p>To your recovery,<br><strong>The Elevate Health Team</strong></p>
-      ${btn("Explore the Program →", `${SITE_URL}/#enroll`)}
+      <p>Here is your free <strong>Back Pain Relief Guide</strong>.</p>
+      <p>It covers the 3 root causes of chronic neck and back pain — and why most people never fix them.</p>
+      <p>The full <strong>Elevate Pain-Free Program</strong> goes 10x deeper with 7 physical therapy modules you can do at home in just 20 minutes a day.</p>
+      <p>I will share more over the next few days.</p>
+      <p>To your health,<br>The Elevate Health Team</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/#enroll" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          See the Full Program — $97 Today
+        </a>
+      </p>
     `),
   };
 }
 
 export function nurtureEmail2(firstName: string) {
   return {
-    subject: "3 exercises that eliminate neck pain (physical therapist approved)",
+    subject: "The real reason your back pain keeps coming back",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>Here are 3 exercises physical therapists use to eliminate neck pain fast:</p>
-      <ol style="padding-left:20px;line-height:2.2;">
-        <li><strong>Chin Tucks</strong> — Gently retract your chin straight back (not down). Hold 5 seconds. Repeat 10 times. This resets cervical alignment and releases deep neck tension.</li>
-        <li><strong>Thoracic Extension</strong> — Sit at the edge of a chair, interlace fingers behind your head, and gently arch backwards over the backrest. Hold 3 seconds. Repeat 8 times. This opens the upper back and takes pressure off the neck.</li>
-        <li><strong>Hip Flexor Stretch</strong> — Kneel on one knee, push hips forward gently, hold 30 seconds each side. Tight hip flexors pull the pelvis forward and cause a chain reaction all the way up to the neck.</li>
-      </ol>
-      <p>These 3 exercises are just a preview of what's inside Module 2 of the Elevate Pain-Free Program. The full protocol goes much deeper.</p>
-      <p>To your recovery,<br><strong>The Elevate Health Team</strong></p>
-      ${btn("See the Full Program →", `${SITE_URL}/#enroll`)}
+      <p>Most people treat back pain with rest, painkillers, or the same stretches over and over.</p>
+      <p>None of that fixes the root cause.</p>
+      <p>The real reason your pain keeps returning is <strong>muscle imbalances and movement pattern dysfunction</strong> — and until you fix those, the pain always comes back.</p>
+      <p>Tomorrow I will share the single most effective exercise for lower back pain relief.</p>
+      <p>To your health,<br>The Elevate Health Team</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/#enroll" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Fix the Root Cause — $97 Today
+        </a>
+      </p>
     `),
   };
 }
 
 export function nurtureEmail3(firstName: string) {
   return {
-    subject: "Michael eliminated 6 years of back pain in 8 weeks. Here's how.",
+    subject: "The #1 exercise for lower back pain (most people never do this)",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>Michael R. had chronic lower back pain for 6 years. He tried everything — chiropractic, massage, painkillers, even a cortisone injection. Nothing gave him lasting relief.</p>
-      <p>When he found the Elevate Pain-Free Program, he was skeptical. <em>"I'd tried so many things, I didn't think anything would actually work,"</em> he told us.</p>
-      <p>But he committed to the program anyway. He worked through the modules, did the exercises every day, and followed the 90-day protocol.</p>
-      <p>Eight weeks later, Michael was completely pain-free. His words: <em>"I can't believe I waited this long. I feel like I have my life back."</em></p>
-      <p>Michael's results aren't magic. They're the result of addressing the <em>actual root causes</em> of his pain — something most treatments never do.</p>
-      <p>If you're ready for the same result, the program is waiting for you.</p>
-      ${btn("Join the Elevate Pain-Free Program →", `${SITE_URL}/#enroll`)}
-      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
+      <p>It is not crunches. It is not stretching.</p>
+      <p>The single most effective exercise for lower back pain is the <strong>McGill Curl-Up</strong> — developed by spine biomechanics expert Dr. Stuart McGill.</p>
+      <p>It activates deep core muscles that stabilize your lumbar spine without putting pressure on your discs.</p>
+      <p>Module 4 of the Elevate Pain-Free Program walks you through the complete McGill protocol step by step.</p>
+      <p>To your health,<br>The Elevate Health Team</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/#enroll" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Get the Full Protocol — $97 Today
+        </a>
+      </p>
     `),
   };
 }
 
 export function nurtureEmail4(firstName: string) {
   return {
-    subject: "Why surgery and painkillers don't fix back pain",
+    subject: "Michael avoided back surgery. Here is his story.",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>Here's an uncomfortable truth about back pain treatment:</p>
-      <p><strong>Spinal surgery fails to relieve pain in over 50% of cases</strong> for non-specific back pain. There's even a medical term for it: Failed Back Surgery Syndrome.</p>
-      <p>Painkillers and anti-inflammatories mask the symptoms — but the underlying cause remains untreated. The moment the medication wears off, the pain returns. Often worse.</p>
-      <p>The only proven long-term solution for non-specific neck and back pain is <strong>targeted rehabilitation</strong>: correcting posture, rebalancing muscles, and retraining movement patterns. This is exactly what the Elevate Pain-Free Program delivers.</p>
-      <p>The 90-day guarantee means there's zero risk. If you're not pain-free, you pay nothing.</p>
-      <p>Don't wait another week to start feeling better.</p>
-      ${btn("Join the Elevate Pain-Free Program → $497", `${SITE_URL}/#enroll`)}
-      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
+      <p>Michael came to us at 52 with 6 years of chronic lower back pain. His doctor had recommended surgery.</p>
+      <p>Instead he followed the Elevate Pain-Free Program for 8 weeks.</p>
+      <p>His words: <em>"I am completely pain-free. No surgery, no medication, just the program."</em></p>
+      <p>Ready for your own results?</p>
+      <p>To your health,<br>The Elevate Health Team</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/#enroll" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Join the Elevate Pain-Free Program — $97 Today
+        </a>
+      </p>
     `),
   };
 }
 
 export function nurtureEmail5(firstName: string) {
   return {
-    subject: "Last chance — your Free Back Pain Relief Guide is waiting",
+    subject: "Everything you get for just $97",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>You downloaded the Free Back Pain Relief Guide a little while ago. I hope it's been helpful.</p>
-      <p>If you're serious about ending your pain for good, the full Elevate Pain-Free Program has everything you need:</p>
+      <p>Here is everything inside the <strong>Elevate Pain-Free Program</strong>:</p>
       <ul style="padding-left:20px;line-height:2;">
-        <li>7 evidence-based rehabilitation modules</li>
-        <li>90-day personal pain-free protocol</li>
-        <li>Pain Tracking Journal ($97 value)</li>
-        <li>Posture Correction Quick Reference Guide ($67 value)</li>
-        <li>Lifetime access + all future updates</li>
-        <li>90-day pain-free guarantee — full refund if you're not satisfied</li>
+        <li>7 physical therapy video modules</li>
+        <li>90-day personal rehab protocol</li>
+        <li>Pain Tracking Journal ($47 value)</li>
+        <li>Posture Correction Quick Reference Guide ($37 value)</li>
+        <li>Lifetime access and all future updates</li>
+        <li>90-day money-back guarantee</li>
       </ul>
-      <p>Total value: <strong>$661</strong>. Your investment: <strong>$497</strong>.</p>
-      <p>The 90-day guarantee removes all risk. If you follow the program and aren't completely satisfied with your results, you get every penny back. No questions asked.</p>
-      ${btn("Join the Elevate Pain-Free Program →", `${SITE_URL}/#enroll`)}
-      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
+      <p><strong>Total value: $297. Your investment today: just $97.</strong></p>
+      <p>Enrollment closes soon.</p>
+      <p>To your health,<br>The Elevate Health Team</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/#enroll" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Get Instant Access — $97
+        </a>
+      </p>
     `),
   };
 }
@@ -142,22 +148,26 @@ export function welcomeEmail({
   email: string;
   tempPassword: string;
 }) {
-  const loginUrl = `${SITE_URL}/login`;
   return {
-    subject: "Welcome to the Elevate Pain-Free Program — Your login details inside",
+    subject: "You are in! Here is how to get started",
     html: wrap(`
-      <p>Hey ${firstName || "there"}, congratulations and welcome to the <strong>Elevate Pain-Free Program</strong>!</p>
-      <p>You now have full access to all 7 rehabilitation modules. Start with Module 1 today — understanding your pain is the foundation for everything that follows.</p>
-      <p>Your login details are below:</p>
-      <table style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px 24px;width:100%;box-sizing:border-box;margin:24px 0;">
-        <tr><td style="padding:4px 0;font-size:14px;"><strong>Login URL:</strong> <a href="${loginUrl}" style="color:${BRAND_TEAL};">${loginUrl}</a></td></tr>
+      <p>Welcome to the <strong>Elevate Pain-Free Program</strong>!</p>
+      <p>Your 7-module rehabilitation program is ready. Module 1 is unlocked and waiting for you right now.</p>
+      <p>A new module unlocks every 7 days as you progress through the program.</p>
+      <table style="background:#f3f4f6;border-radius:8px;padding:16px 24px;margin:24px 0;width:100%;">
+        <tr><td style="padding:4px 0;font-size:14px;"><strong>Login URL:</strong> <a href="${SITE_URL}/login">${SITE_URL}/login</a></td></tr>
         <tr><td style="padding:4px 0;font-size:14px;"><strong>Email:</strong> ${email}</td></tr>
         <tr><td style="padding:4px 0;font-size:14px;"><strong>Temporary Password:</strong> <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">${tempPassword}</code></td></tr>
       </table>
       <p style="font-size:13px;color:#6b7280;"><em>Please change your password after your first login.</em></p>
-      <p>Remember: you're backed by a <strong>90-day pain-free guarantee</strong>. If you follow the program and aren't completely satisfied with your results, we'll refund every penny — no questions asked.</p>
-      ${btn("Start Module 1 →", `${SITE_URL}/dashboard/module/1`)}
-      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
+      <p>Start with <strong>Module 1: Understanding Your Pain</strong> — it gives you the foundation everything else builds on.</p>
+      <p>You are on your way to a pain-free life.</p>
+      <p>To your health,<br>The Elevate Health Team</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/login" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Go to My Program →
+        </a>
+      </p>
     `),
   };
 }
@@ -167,27 +177,61 @@ export function day3Email(firstName: string) {
     subject: "Day 3 check-in — how is your pain today?",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>You're 3 days into the Elevate Pain-Free Program — how are you feeling?</p>
-      <p>Many students notice the first signs of relief within the first week. Don't be discouraged if you haven't yet — your body is just starting to respond to the correct stimulus.</p>
-      <p>If you haven't finished Module 1 yet, make that your priority today. Understanding the root causes of your pain is the foundation for everything that follows.</p>
-      <p><strong>Pro tip:</strong> Do your exercises at the same time each day. Consistency matters more than perfection. Even 15–20 minutes at the same time every morning will produce dramatically better results than sporadic longer sessions.</p>
-      ${btn("Continue Module 1 →", `${SITE_URL}/dashboard/module/1`)}
-      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
+      <p>You are 3 days into the Elevate Pain-Free Program — nice work for showing up.</p>
+      <p>Quick tip: the students who get the best results do their exercises at the same time every day. Even 20 minutes builds real momentum.</p>
+      <p>If you have not finished Module 1 yet, do it today. It gives you your baseline pain score so you can track your improvement over the next 90 days.</p>
+      <p>Module 2 — Neck Pain Relief Protocol — unlocks after you complete Module 1.</p>
+      <p>To your health,<br>The Elevate Health Team</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/login" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Continue My Program →
+        </a>
+      </p>
     `),
   };
 }
 
 export function day14Email(firstName: string) {
   return {
-    subject: "2 weeks in — most students feel significant relief by now",
+    subject: "Want faster results? A personal offer for you",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>Two weeks into the Elevate Pain-Free Program — this is where most students start noticing real, meaningful improvement in their pain levels.</p>
-      <p>How are you doing? Hit reply and let us know — we read every response.</p>
-      <p>If you haven't already, make sure you're using your <strong>Pain Tracking Journal</strong> (included in your program). Tracking your daily pain levels is one of the most powerful things you can do to stay motivated and on track — you'll often notice progress you'd otherwise miss.</p>
-      <p>Remember Michael R.? He had chronic lower back pain for 6 years. By week 2 he was already noticing improvement. By week 8 he was completely pain-free. You can get there too.</p>
-      ${btn("Continue Your Program →", `${SITE_URL}/dashboard`)}
-      <p style="margin-top:28px;">To your recovery,<br><strong>The Elevate Health Team</strong></p>
+      <p>Two weeks in — most students notice real improvement by now. How are you feeling?</p>
+      <p>If you want to accelerate your results, I have a personal offer for you.</p>
+      <p><strong>1-on-1 Virtual PT Consultation — $197</strong></p>
+      <p>A licensed physical therapist will review your specific muscle imbalances, assess your movement patterns, and create a custom protocol just for you.</p>
+      <p>This is the fastest way to get pain-free — a session tailored exactly to your body.</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/consult" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Book My Consultation — $197
+        </a>
+      </p>
+      <p>To your health,<br>The Elevate Health Team</p>
+    `),
+  };
+}
+
+export function day30Email(firstName: string) {
+  return {
+    subject: "How is your pain level compared to Day 1?",
+    html: wrap(`
+      <p>Hey ${firstName || "there"},</p>
+      <p>You are 30 days in. How does your pain compare to when you started?</p>
+      <p>Most students see a 50–70% reduction in pain by day 30. Some are already completely pain-free.</p>
+      <p>If you want ongoing support and the ability to ask questions as you progress, I want to invite you to our <strong>Lifetime Access + Q&A Membership</strong>.</p>
+      <p><strong>What you get: $97 one-time</strong></p>
+      <ul style="padding-left:20px;line-height:2;">
+        <li>Lifetime access to all future program updates</li>
+        <li>Monthly live Q&A calls with our PT team</li>
+        <li>Private community of pain-free members</li>
+        <li>Priority email support</li>
+      </ul>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/membership" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Join the Membership — $97
+        </a>
+      </p>
+      <p>To your health,<br>The Elevate Health Team</p>
     `),
   };
 }
@@ -197,12 +241,13 @@ export function day90Email(firstName: string) {
     subject: "90 days — are you pain-free?",
     html: wrap(`
       <p>Hey ${firstName || "there"},</p>
-      <p>90 days. That's a milestone worth celebrating.</p>
-      <p>We'd love to know: how is your pain today compared to when you started? Hit reply and tell us — we read every message and your story genuinely matters to us.</p>
-      <p>If you've followed the program and you're not completely satisfied with your results, remember that your <strong>90-day pain-free guarantee</strong> is still active. Just reply to this email and we'll process your full refund — no questions asked.</p>
-      <p>And if you are pain-free — congratulations. That result is yours forever. Use the maintenance protocol in <strong>Module 7</strong> to keep your spine strong and prevent pain from returning.</p>
-      <p>Thank you for trusting us with your recovery.<br><strong>The Elevate Health Team</strong></p>
-      ${btn("Return to Your Program →", `${SITE_URL}/dashboard`)}
+      <p>90 days. This is a big milestone.</p>
+      <p>How is your pain level compared to Day 1?</p>
+      <p>If you are pain-free — congratulations. You did the work and it paid off. We would love to share your story.</p>
+      <p>Reply to this email with your results and we will feature you in our next student spotlight.</p>
+      <p><strong>Know someone with back or neck pain?</strong> Refer them and they get 20% off with your personal link.</p>
+      <p>And remember — your 90-day money-back guarantee is still active. If you are not satisfied for any reason, reply to this email and we will refund you in full. No questions asked.</p>
+      <p>To your health,<br>The Elevate Health Team</p>
     `),
   };
 }

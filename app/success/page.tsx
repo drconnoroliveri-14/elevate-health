@@ -4,7 +4,7 @@ const STEPS = [
   {
     num: 1,
     title: "Check your email",
-    desc: "Your login credentials have been sent to your inbox. Check your spam folder if you don't see it within a few minutes.",
+    desc: "Your login credentials have been sent to your inbox. Check your spam folder if you do not see it within a few minutes.",
   },
   {
     num: 2,
