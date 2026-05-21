@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { randomBytes } from "crypto";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase";
 import { resend } from "@/lib/resend";
@@ -79,8 +78,8 @@ export async function POST(req: NextRequest) {
 
   const now = new Date().toISOString();
 
-  // ── 1. Generate a secure temporary password ──────────────────────────────
-  const tempPassword = randomBytes(12).toString("base64url");
+  // ── 1. Generate a temporary password — no special chars that break login forms
+  const tempPassword = `Elevate${stripeSessionId.slice(-8)}!`;
 
   // ── 2. Create Supabase auth user ─────────────────────────────────────────
   let userId: string;
