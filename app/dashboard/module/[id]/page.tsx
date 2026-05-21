@@ -4,8 +4,6 @@ import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { supabaseAdmin } from "@/lib/supabase";
 import MarkCompleteButton from "./MarkCompleteButton";
 
-// ── Static module content ─────────────────────────────────────────────────────
-
 type ModuleContent = {
   title: string;
   duration: string;
@@ -101,107 +99,37 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
   },
 };
 
-// ── Page ──────────────────────────────────────────────────────────────────────
-
 export default async function ModulePage({
   params,
 }: {
   params: { id: string };
 }) {
   const moduleNum = parseInt(params.id, 10);
-
   if (!Number.isInteger(moduleNum) || moduleNum < 1 || moduleNum > 7) {
     redirect("/dashboard/module/1");
   }
 
   const content = MODULE_CONTENT[moduleNum];
 
-  // ── Auth: identify current user via server-side cookie ──────────────────────
+  // Identify the current user
   const cookieStore = cookies();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     { cookies: { getAll: () => cookieStore.getAll() } }
   );
-
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // ── Direct DB query via admin client — bypasses RLS entirely ────────────────
-  const { data: rows, error } = await supabaseAdmin
+  // Fetch completion status only (no lock logic — layout already gates on purchased_at)
+  const { data: progressRows } = await supabaseAdmin
     .from("module_progress")
-    .select("*")
+    .select("completed_at")
     .eq("user_id", user.id)
     .eq("module_number", moduleNum)
     .limit(1);
+  const completed = !!(progressRows?.[0]?.completed_at);
 
-  if (error) {
-    console.error("[module/page] supabaseAdmin error:", error);
-  }
-
-  const progress = rows?.[0] ?? null;
-
-  // Stamp first_accessed_at if this is the first visit
-  if (progress && !progress.first_accessed_at) {
-    await supabaseAdmin
-      .from("module_progress")
-      .update({ first_accessed_at: new Date().toISOString() })
-      .eq("user_id", user.id)
-      .eq("module_number", moduleNum);
-
-    // Schedule the next module if not already scheduled
-    if (moduleNum < 7) {
-      const { data: nextRows } = await supabaseAdmin
-        .from("module_progress")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("module_number", moduleNum + 1)
-        .limit(1);
-
-      if (!nextRows?.length) {
-        await supabaseAdmin.from("module_progress").insert({
-          user_id: user.id,
-          module_number: moduleNum + 1,
-          unlocked_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-        });
-      }
-    }
-  }
-
-  // ── Lock check: no row OR unlocked_at is a future date ──────────────────────
-  const isLocked = (() => {
-    if (!progress) return true;
-    if (!progress.unlocked_at) return false; // null = immediately available
-    const unlockDate = new Date(progress.unlocked_at);
-    if (isNaN(unlockDate.getTime())) return false; // unparseable = treat as available
-    return unlockDate > new Date();
-  })();
-
-  // ── Locked view ──────────────────────────────────────────────────────────────
-  if (isLocked) {
-    const unlockDate = progress?.unlocked_at ? new Date(progress.unlocked_at) : null;
-    const unlockLabel = unlockDate && !isNaN(unlockDate.getTime())
-      ? unlockDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
-      : null;
-
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-6">
-          <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-          </svg>
-        </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Module {moduleNum} is Locked</h2>
-        {unlockLabel ? (
-          <p className="text-gray-500">Unlocks on <strong>{unlockLabel}</strong></p>
-        ) : (
-          <p className="text-gray-500">Complete the previous module to unlock this one.</p>
-        )}
-      </div>
-    );
-  }
-
-  // ── Module content view ──────────────────────────────────────────────────────
   return (
     <div>
       {/* Header */}
@@ -248,8 +176,7 @@ export default async function ModulePage({
         </ul>
       </div>
 
-      {/* Mark complete (client component) */}
-      <MarkCompleteButton moduleNumber={moduleNum} completed={!!progress?.completed_at} />
+      <MarkCompleteButton moduleNumber={moduleNum} completed={completed} />
     </div>
   );
 }

@@ -39,6 +39,9 @@ export default async function DashboardLayout({
 
   const profile = (profileRows as Profile[] | null)?.[0] ?? null;
 
+  // Gate: must have purchased to access the dashboard
+  if (!profile?.purchased_at) redirect("/");
+
   return (
     <DashboardShell
       profile={profile}

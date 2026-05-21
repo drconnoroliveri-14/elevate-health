@@ -23,11 +23,8 @@ function getModuleStatus(
   progress: ModuleProgress[]
 ): ModuleStatus {
   const p = progress.find((r) => r.module_number === num);
-  if (!p) return "locked";
-  if (p.completed_at) return "completed";
-  // Treat null/missing unlocked_at as immediately available (manual provisioning).
-  if (!p.unlocked_at || new Date(p.unlocked_at) <= new Date()) return "unlocked";
-  return "locked";
+  if (p?.completed_at) return "completed";
+  return "unlocked"; // purchased = full access; drip logic removed
 }
 
 function CompletedIcon() {
