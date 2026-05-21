@@ -22,11 +22,12 @@ export async function GET() {
   }
 
   // ── Check admin role ──────────────────────────────────────────────────────
-  const { data: profile } = await supabaseAdmin
+  const { data: profileRows } = await supabaseAdmin
     .from("profiles")
     .select("role")
     .eq("id", session.user.id)
-    .single();
+    .limit(1);
+  const profile = profileRows?.[0] ?? null;
 
   if (profile?.role !== "admin") {
     return NextResponse.json({ error: "Forbidden." }, { status: 403 });

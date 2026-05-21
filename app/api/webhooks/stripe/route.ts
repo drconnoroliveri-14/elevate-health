@@ -98,11 +98,12 @@ export async function POST(req: NextRequest) {
       createError.status === 422
     ) {
       // User exists — look up their ID from profiles
-      const { data: existingProfile } = await supabaseAdmin
+      const { data: existingRows } = await supabaseAdmin
         .from("profiles")
         .select("id")
         .eq("email", email)
-        .maybeSingle();
+        .limit(1);
+      const existingProfile = existingRows?.[0] ?? null;
 
       if (!existingProfile?.id) {
         console.error(

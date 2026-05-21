@@ -51,13 +51,16 @@ export async function POST(req: NextRequest) {
     return data ?? [];
   };
 
-  // Fetch current module's progress row
-  const { data: progress, error: progressError } = await supabaseAdmin
+  // Fetch current module's progress row — use limit(1)+array to avoid
+  // the Range header that .maybeSingle()/.single() send, which triggers
+  // PGRST117 RANGE_MISSING_UNIT when Range-Unit is stripped.
+  const { data: progressRows, error: progressError } = await supabaseAdmin
     .from("module_progress")
     .select("*")
     .eq("user_id", userId)
     .eq("module_number", moduleNumber)
-    .maybeSingle();
+    .limit(1);
+  const progress = progressRows?.[0] ?? null;
 
   console.log(`[modules/access] progress row:`, JSON.stringify(progress), "error:", JSON.stringify(progressError));
 
@@ -108,24 +111,26 @@ export async function POST(req: NextRequest) {
 
   // Schedule / unlock the next module (modules 1–6 only)
   if (moduleNumber < 7) {
-    const { data: nextProgress } = await supabaseAdmin
+    const { data: nextRows } = await supabaseAdmin
       .from("module_progress")
       .select("id, unlocked_at")
       .eq("user_id", userId)
       .eq("module_number", moduleNumber + 1)
-      .maybeSingle();
+      .limit(1);
+    const nextProgress = nextRows?.[0] ?? null;
 
     if (!nextProgress) {
       // Check if the previous module was accessed 7+ days ago
       let nextUnlockAt: string;
 
       if (moduleNumber > 1) {
-        const { data: prevProgress } = await supabaseAdmin
+        const { data: prevRows } = await supabaseAdmin
           .from("module_progress")
           .select("first_accessed_at")
           .eq("user_id", userId)
           .eq("module_number", moduleNumber - 1)
-          .maybeSingle();
+          .limit(1);
+        const prevProgress = prevRows?.[0] ?? null;
 
         const prevAccessed = prevProgress?.first_accessed_at
           ? new Date(prevProgress.first_accessed_at)
@@ -154,12 +159,13 @@ export async function POST(req: NextRequest) {
   }
 
   // Return fresh data
-  const { data: updatedModule } = await supabaseAdmin
+  const { data: updatedRows } = await supabaseAdmin
     .from("module_progress")
     .select("*")
     .eq("user_id", userId)
     .eq("module_number", moduleNumber)
-    .single();
+    .limit(1);
+  const updatedModule = updatedRows?.[0] ?? null;
 
   return NextResponse.json({
     locked: false,
