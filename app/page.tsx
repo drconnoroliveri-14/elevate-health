@@ -172,7 +172,7 @@ export default function LandingPage() {
       <section
         className="relative text-white py-28 sm:py-36 px-4 sm:px-6 overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, rgba(8,80,65,0.87) 0%, rgba(15,110,86,0.82) 100%), url('https://images.unsplash.com/photo-1559757175-5700dde675bc?w=1920&q=80') center/cover no-repeat",
+          background: "linear-gradient(135deg, rgba(8,80,65,0.87) 0%, rgba(15,110,86,0.82) 100%), url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1920&q=80') center/cover no-repeat",
         }}
       >
         {/* Subtle grid texture overlay */}
