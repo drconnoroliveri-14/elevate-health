@@ -13,10 +13,10 @@ export async function POST(req: NextRequest) {
   );
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
   const { error } = await supabaseAdmin
     .from("module_progress")
     .update({ completed_at: new Date().toISOString() })
-    .eq("user_id", session.user.id)
+    .eq("user_id", user.id)
     .eq("module_number", moduleNumber)
     .is("completed_at", null);
 

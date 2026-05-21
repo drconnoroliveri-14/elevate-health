@@ -14,10 +14,10 @@ export async function GET() {
   );
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
@@ -25,7 +25,7 @@ export async function GET() {
   const { data: profileRows } = await supabaseAdmin
     .from("profiles")
     .select("role")
-    .eq("id", session.user.id)
+    .eq("id", user.id)
     .limit(1);
   const profile = profileRows?.[0] ?? null;
 

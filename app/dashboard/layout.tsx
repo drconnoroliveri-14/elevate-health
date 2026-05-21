@@ -18,34 +18,32 @@ export default async function DashboardLayout({
     { cookies: { getAll: () => cookieStore.getAll() } }
   );
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) redirect("/login");
+  // getUser() validates the JWT with Supabase Auth — safer than getSession()
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
   // Use admin client so RLS never blocks manually-provisioned accounts.
-  // Session is already verified above; filtering by session.user.id keeps this secure.
-  const [{ data: profile }, { data: moduleProgress }] = await Promise.all([
+  // User is already verified above; filtering by user.id keeps this secure.
+  const [{ data: profileRows }, { data: moduleProgress }] = await Promise.all([
     supabaseAdmin
       .from("profiles")
       .select("*")
-      .eq("id", session.user.id)
-      .maybeSingle(),
+      .eq("id", user.id)
+      .limit(1),
     supabaseAdmin
       .from("module_progress")
       .select("*")
-      .eq("user_id", session.user.id)
+      .eq("user_id", user.id)
       .order("module_number"),
   ]);
 
-  console.log(`[dashboard/layout] userId=${session.user.id} moduleProgress=${JSON.stringify(moduleProgress)} profile=${JSON.stringify(profile)}`);
+  const profile = (profileRows as Profile[] | null)?.[0] ?? null;
 
   return (
     <DashboardShell
-      profile={profile as Profile | null}
+      profile={profile}
       moduleProgress={(moduleProgress as ModuleProgress[]) ?? []}
-      userEmail={session.user.email ?? ""}
+      userEmail={user.email ?? ""}
     >
       {children}
     </DashboardShell>

@@ -15,10 +15,10 @@ export async function POST(req: NextRequest) {
   );
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const userId = session.user.id;
+  const userId = user.id;
   const now = new Date();
 
   console.log(`[modules/access] userId=${userId} module=${moduleNumber} now=${now.toISOString()}`);
