@@ -169,15 +169,46 @@ export default function LandingPage() {
       </nav>
 
       {/* ── HERO ── */}
-      <section className="bg-teal-700 text-white py-20 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-            Finally End Your Neck &amp; Back Pain&nbsp;— From Home, Without Surgery or Medication
+      <section
+        className="relative text-white py-28 sm:py-36 px-4 sm:px-6 overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #085041 0%, #0F6E56 100%)" }}
+      >
+        {/* Subtle grid texture overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.045) 39px, rgba(255,255,255,0.045) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.045) 39px, rgba(255,255,255,0.045) 40px)",
+          }}
+        />
+
+        <div className="relative max-w-4xl mx-auto text-center">
+          {/* Headline */}
+          <h1 className="mb-5">
+            <span className="block text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white/90 mb-1">
+              Finally End Your
+            </span>
+            <span className="relative inline-block text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
+              Neck &amp; Back Pain.
+              <span
+                className="absolute left-0 w-full rounded-full"
+                style={{ background: "#4ECCA3", height: "4px", bottom: "-6px" }}
+              />
+            </span>
           </h1>
-          <p className="text-lg sm:text-xl text-teal-50 mb-10 leading-relaxed">
+
+          {/* Styled subtitle */}
+          <p className="text-lg sm:text-xl font-medium mb-8 mt-6 tracking-wide" style={{ color: "rgba(255,255,255,0.60)" }}>
+            From Home, Without Surgery or Medication
+          </p>
+
+          {/* Body copy */}
+          <p className="text-base sm:text-lg text-teal-100/90 mb-10 leading-relaxed max-w-2xl mx-auto">
             The Elevate Pain-Free Program gives you a proven at-home rehabilitation system used by chiropractors — so you can eliminate neck, mid back, and lower back pain for good.
           </p>
-          <ul className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+
+          {/* Trust pill badges */}
+          <ul className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
             {[
               "Developed with licensed chiropractors",
               "Step-by-step video exercises — no equipment needed",
@@ -185,31 +216,43 @@ export default function LandingPage() {
             ].map((bullet) => (
               <li
                 key={bullet}
-                className="flex items-center gap-2 text-teal-50 font-medium"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-white"
+                style={{ background: "rgba(255,255,255,0.13)", backdropFilter: "blur(4px)" }}
               >
                 <svg
-                  className="w-5 h-5 text-green-400 flex-shrink-0"
+                  className="w-4 h-4 flex-shrink-0"
+                  style={{ color: "#4ECCA3" }}
                   fill="none"
                   stroke="currentColor"
                   strokeWidth={2.5}
                   viewBox="0 0 24 24"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4.5 12.75l6 6 9-13.5"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
                 {bullet}
               </li>
             ))}
           </ul>
-          <button
-            onClick={() => scrollToId("enroll")}
-            className="bg-white text-teal-700 hover:bg-teal-50 font-bold text-lg px-10 py-4 rounded-xl shadow-lg transition-colors"
-          >
-            Yes, I Want to Live Pain-Free →
-          </button>
+
+          {/* Social proof */}
+          <p className="text-sm font-semibold mb-5" style={{ color: "rgba(255,255,255,0.72)" }}>
+            ★★★★★&nbsp; Trusted by 2,000+ people with chronic pain
+          </p>
+
+          {/* CTA with pulse ring */}
+          <div className="relative inline-flex">
+            <span
+              className="absolute inset-0 rounded-2xl animate-ping opacity-25 pointer-events-none"
+              style={{ background: "#F5C842" }}
+            />
+            <button
+              onClick={() => scrollToId("enroll")}
+              className="relative font-extrabold text-xl px-12 py-5 rounded-2xl shadow-2xl transition-transform hover:scale-105 active:scale-100 duration-150"
+              style={{ background: "#F5C842", color: "#085041" }}
+            >
+              Yes, I Want to Live Pain-Free →
+            </button>
+          </div>
         </div>
       </section>
 
