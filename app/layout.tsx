@@ -8,9 +8,17 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Elevate Health — Pain-Free Program",
   description:
-    "Finally eliminate neck, mid back, and lower back pain from home with the chiropractor-designed Elevate Pain-Free Program.",
+    "Finally eliminate neck, mid back, and lower back pain from home with the chiropractor-designed Elevate Pain-Free Program. Just $97.",
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
+  openGraph: {
+    title: "Elevate Health — Pain-Free Program",
+    description:
+      "Finally eliminate neck, mid back, and lower back pain from home. Just $97 — 90-day guarantee.",
+    url: "https://elevate-health-lyart.vercel.app",
+    siteName: "Elevate Health",
+    type: "website",
   },
 };
 
