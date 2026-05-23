@@ -190,8 +190,8 @@ export default function DashboardShell({
           })}
         </ul>
 
-        {/* Bonuses */}
-        <div className="mt-4 pt-4 border-t border-teal-600">
+        {/* Bonuses + purchased add-ons */}
+        <div className="mt-4 pt-4 border-t border-teal-600 space-y-1">
           <Link
             href="/dashboard/bonuses"
             onClick={() => setSidebarOpen(false)}
@@ -206,6 +206,40 @@ export default function DashboardShell({
             </svg>
             <span className="text-sm font-medium flex-1">My Bonuses</span>
           </Link>
+
+          {profile?.has_nutrition_course && (
+            <Link
+              href="/dashboard/nutrition"
+              onClick={() => setSidebarOpen(false)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                pathname === "/dashboard/nutrition"
+                  ? "bg-teal-500 text-white"
+                  : "text-teal-100 hover:bg-teal-600"
+              }`}
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+              </svg>
+              <span className="text-sm font-medium flex-1">Nutrition Course</span>
+            </Link>
+          )}
+
+          {profile?.has_consultation && (
+            <Link
+              href="/dashboard/consultation"
+              onClick={() => setSidebarOpen(false)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                pathname === "/dashboard/consultation"
+                  ? "bg-teal-500 text-white"
+                  : "text-teal-100 hover:bg-teal-600"
+              }`}
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+              </svg>
+              <span className="text-sm font-medium flex-1">My Consultation</span>
+            </Link>
+          )}
         </div>
       </nav>
 

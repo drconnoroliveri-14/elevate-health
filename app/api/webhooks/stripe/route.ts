@@ -63,7 +63,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   }
 
-  const session = event.data.object as Stripe.Checkout.Session;
+  const rawSession = event.data.object as Stripe.Checkout.Session;
+
+  // Retrieve with line items expanded so we can detect upsell purchases
+  const session = await stripe.checkout.sessions.retrieve(rawSession.id, {
+    expand: ["line_items"],
+  });
+
+  const lineItemPriceIds = (session.line_items?.data ?? []).map(
+    (item) => item.price?.id
+  );
+  const hasNutritionCourse =
+    !!process.env.STRIPE_UPSELL_1_PRICE_ID &&
+    lineItemPriceIds.includes(process.env.STRIPE_UPSELL_1_PRICE_ID);
+  const hasConsultation =
+    !!process.env.STRIPE_UPSELL_2_PRICE_ID &&
+    lineItemPriceIds.includes(process.env.STRIPE_UPSELL_2_PRICE_ID);
 
   const email = session.customer_details?.email;
   const fullName = session.customer_details?.name ?? "";
@@ -131,6 +146,8 @@ export async function POST(req: NextRequest) {
       stripe_customer_id: stripeCustomerId,
       stripe_session_id: stripeSessionId,
       purchased_at: now,
+      ...(hasNutritionCourse && { has_nutrition_course: true }),
+      ...(hasConsultation && { has_consultation: true }),
     },
     { onConflict: "id" }
   );
@@ -162,7 +179,29 @@ export async function POST(req: NextRequest) {
   if (welcomeErr) console.error("[stripe-webhook] Welcome email failed:", welcomeErr);
   await logEmail(email, "welcome", welcomeErr ? "failed" : "sent");
 
-  // ── 7. Schedule Day 3, 14, 90 follow-up emails ──────────────────────────
+  // ── 7. Consultation confirmation email (if purchased) ───────────────────
+  if (hasConsultation) {
+    const consultHtml = `
+      <p>Hi ${firstName || "there"},</p>
+      <p>Congratulations on securing your private 15-minute Pain Relief Consultation with Dr. Oliveri.</p>
+      <p>Click the link below to choose your preferred time.</p>
+      <p><strong>Booking Link:</strong><br>
+      <a href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation">https://calendly.com/drconnoroliveri/15min-pain-free-consultation</a></p>
+      <p>You will receive a Zoom link automatically after booking.</p>
+      <p>If you have any questions reply to this email. We look forward to speaking with you.</p>
+      <p>— Dr. Oliveri &amp; The Elevate Health Team</p>
+    `.trim();
+    const { error: consultErr } = await resend.emails.send({
+      from: FROM,
+      to: email,
+      subject: "Your 1-on-1 Consultation is Confirmed — Here is How to Book",
+      html: consultHtml,
+    });
+    await logEmail(email, "consultation_confirmation", consultErr ? "failed" : "sent");
+    if (consultErr) console.error("[stripe-webhook] Consultation email failed:", consultErr);
+  }
+
+  // ── 8. Schedule Day 3, 14, 90 follow-up emails ──────────────────────────
   const scheduleEmail = async (
     type: string,
     subject: string,

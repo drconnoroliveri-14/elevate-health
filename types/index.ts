@@ -6,6 +6,8 @@ export type Profile = {
   stripe_customer_id: string;
   stripe_session_id: string;
   purchased_at: string;
+  has_nutrition_course: boolean;
+  has_consultation: boolean;
   created_at: string;
 };
 

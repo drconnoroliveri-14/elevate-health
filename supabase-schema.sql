@@ -9,6 +9,8 @@ create table profiles (
   stripe_customer_id text,
   stripe_session_id text,
   purchased_at timestamptz,
+  has_nutrition_course boolean default false,
+  has_consultation boolean default false,
   created_at timestamptz default now()
 );
 
@@ -90,3 +92,8 @@ create policy "Admins can view all progress"
 -- Service-role bypass: the SUPABASE_SERVICE_ROLE_KEY used in API routes
 -- bypasses RLS automatically, so webhooks and admin API routes work without
 -- additional policies.
+
+-- ── Migration: upsell product flags ─────────────────────────────────────────
+-- Run these two statements in the Supabase SQL editor to add the new columns:
+alter table profiles add column if not exists has_nutrition_course boolean default false;
+alter table profiles add column if not exists has_consultation boolean default false;
