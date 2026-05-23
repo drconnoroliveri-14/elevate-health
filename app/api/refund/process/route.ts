@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { supabaseAdmin } from "@/lib/supabase";
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 const FROM = "Dr. Connor Oliveri <droliveri@elevatehealthtampa.com>";
 const REPLY_TO = "droliveri@elevatehealthtampa.com";
 
-export async function POST(req: NextRequest) {
+export async function POST() {
   // ── 1. Authenticate ───────────────────────────────────────────────────────
   const cookieStore = cookies();
   const supabase = createServerClient(

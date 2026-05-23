@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const CONFIRM_TEXT = "CONFIRM-REFUND";
@@ -16,7 +15,6 @@ const LOSSES = [
 ];
 
 export default function RefundPage() {
-  const router = useRouter();
   const [confirmText, setConfirmText] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);

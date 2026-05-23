@@ -3,7 +3,6 @@
 const TEAL = "#0F6E56";
 const TEAL_LIGHT = "#4ECCA3";
 const GOLD = "#F5C842";
-const GOLD_DARK = "#D4A800";
 
 function DownloadButton({ adId }: { adId: string }) {
   function handlePrint() {
