@@ -64,6 +64,10 @@ function Ad1() {
         position: "relative",
       }}
     >
+      {/* Logo — bottom right */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo.PNG" alt="Elevate Health" height={24} style={{ position: "absolute", bottom: 16, right: 16, width: "auto", zIndex: 10 }} />
+
       {/* Subtle background pattern */}
       <div style={{
         position: "absolute", inset: 0,
@@ -72,12 +76,6 @@ function Ad1() {
 
       {/* Main content */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "80px 90px 40px", position: "relative" }}>
-        {/* Logo */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 36 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.PNG" alt="Elevate Health" height={32} style={{ width: "auto" }} />
-        </div>
-
         <h1 style={{ color: "white", fontSize: 88, fontWeight: 900, lineHeight: 1.05, marginBottom: 28, letterSpacing: "-2px" }}>
           Why does your back pain keep coming back?
         </h1>
@@ -106,9 +104,7 @@ function Ad1() {
         gap: 24,
       }}>
         <div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.PNG" alt="Elevate Health" height={32} style={{ width: "auto", marginBottom: 6 }} />
-          <p style={{ color: "#4b5563", fontSize: 19, marginTop: 6 }}>7-Module At-Home Rehab Program</p>
+          <p style={{ color: "#4b5563", fontSize: 19 }}>7-Module At-Home Rehab Program</p>
           <p style={{ color: "#6b7280", fontSize: 16, marginTop: 4 }}>$97 &nbsp;·&nbsp; 90-Day Money-Back Guarantee</p>
         </div>
         <div style={{
@@ -144,6 +140,10 @@ function Ad2() {
         position: "relative",
       }}
     >
+      {/* Logo — bottom right */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo.PNG" alt="Elevate Health" height={24} style={{ position: "absolute", bottom: 16, right: 16, width: "auto", zIndex: 10 }} />
+
       {/* Background gradients simulating body/spine imagery */}
       <div style={{
         position: "absolute", inset: 0,
@@ -199,9 +199,7 @@ function Ad2() {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
           <div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.PNG" alt="Elevate Health" height={32} style={{ width: "auto", marginBottom: 8 }} />
-            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 18, marginTop: 6 }}>The Elevate Pain-Free Program</p>
+            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 18 }}>The Elevate Pain-Free Program</p>
             <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, marginTop: 4 }}>$97 Today · 90-Day Money Back Guarantee</p>
           </div>
           <div style={{
@@ -244,16 +242,14 @@ function Ad3() {
         position: "relative",
       }}
     >
+      {/* Logo — bottom right */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo.PNG" alt="Elevate Health" height={24} style={{ position: "absolute", bottom: 16, right: 16, width: "auto", zIndex: 10 }} />
+
       {/* Top teal bar */}
       <div style={{ height: 10, background: `linear-gradient(90deg, ${TEAL}, ${TEAL_LIGHT})` }} />
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "52px 90px 48px" }}>
-        {/* Logo */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 44 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.PNG" alt="Elevate Health" height={32} style={{ width: "auto" }} />
-        </div>
-
         {/* Headline */}
         <h1 style={{ color: TEAL, fontSize: 74, fontWeight: 900, lineHeight: 1.08, marginBottom: 40, letterSpacing: "-2px" }}>
           The At-Home Fix for Chronic Neck &amp; Back Pain
