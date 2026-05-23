@@ -6,6 +6,13 @@ import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import Image from "next/image";
 
+function getSupabase() {
+  return createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
+
 function Spinner() {
   return (
     <svg
@@ -26,44 +33,63 @@ function LoginForm() {
   const message = searchParams.get("message");
   const linkExpired = searchParams.get("error") === "link_expired";
 
+  const [mode, setMode] = useState<"login" | "forgot">("login");
+
+  // Login state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
+
+  // Forgot password state
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotError, setForgotError] = useState("");
+  const [forgotSent, setForgotSent] = useState(false);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
-    setLoading(true);
+    setLoginError("");
+    setLoginLoading(true);
     try {
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+      const { error: authError } = await getSupabase().auth.signInWithPassword({ email, password });
       if (authError) throw authError;
       router.push("/dashboard");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Login failed. Please check your credentials.");
+      setLoginError(err instanceof Error ? err.message : "Login failed. Please check your credentials.");
     } finally {
-      setLoading(false);
+      setLoginLoading(false);
     }
   }
 
-  async function handleForgotPassword() {
-    if (!email) {
-      setError("Enter your email address above, then click Forgot password.");
-      return;
+  async function handleForgotSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setForgotError("");
+    setForgotLoading(true);
+    try {
+      const { error } = await getSupabase().auth.resetPasswordForEmail(forgotEmail, {
+        redirectTo: "https://www.elevatehealthtampa.com/auth/callback",
+      });
+      if (error) throw error;
+      setForgotSent(true);
+    } catch (err: unknown) {
+      setForgotError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setForgotLoading(false);
     }
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-    await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "https://www.elevatehealthtampa.com/auth/callback",
-    });
-    setError("");
-    alert("Check your email for a password reset link.");
+  }
+
+  function switchToForgot() {
+    // Pre-fill the forgot email with whatever is in the login email field
+    setForgotEmail(email);
+    setForgotError("");
+    setForgotSent(false);
+    setMode("forgot");
+  }
+
+  function switchToLogin() {
+    setLoginError("");
+    setMode("login");
   }
 
   return (
@@ -73,86 +99,155 @@ function LoginForm() {
           <Link href="/">
             <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{ height: "70px", width: "auto" }} />
           </Link>
-          <p className="text-gray-500 text-sm mt-2">Sign in to your student portal</p>
+          <p className="text-gray-500 text-sm mt-2">
+            {mode === "login" ? "Sign in to your student portal" : "Reset your password"}
+          </p>
         </div>
 
-        {message && (
-          <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-3 mb-5">
-            <p className="text-green-700 text-sm">{message}</p>
-          </div>
-        )}
+        {/* ── Login mode ── */}
+        {mode === "login" && (
+          <>
+            {message && (
+              <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-3 mb-5">
+                <p className="text-green-700 text-sm">{message}</p>
+              </div>
+            )}
 
-        {linkExpired && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 mb-5">
-            <p className="text-yellow-700 text-sm">
-              That reset link has expired. Enter your email and click &ldquo;Forgot password?&rdquo; to get a new one.
-            </p>
-          </div>
-        )}
+            {linkExpired && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 mb-5">
+                <p className="text-yellow-700 text-sm">
+                  That reset link has expired. Use &ldquo;Forgot password?&rdquo; below to get a new one.
+                </p>
+              </div>
+            )}
 
-        <form onSubmit={handleLogin} className="flex flex-col gap-5">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-            />
-          </div>
+            <form onSubmit={handleLogin} className="flex flex-col gap-5">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                />
+              </div>
 
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    onClick={switchToForgot}
+                    className="text-xs text-teal-600 hover:underline"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+                <input
+                  id="password"
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                />
+              </div>
+
+              {loginError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                  <p className="text-red-700 text-sm">{loginError}</p>
+                </div>
+              )}
+
               <button
-                type="button"
-                onClick={handleForgotPassword}
-                className="text-xs text-teal-600 hover:underline"
+                type="submit"
+                disabled={loginLoading}
+                className="w-full bg-teal-500 hover:bg-teal-700 disabled:opacity-60 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
               >
-                Forgot password?
+                {loginLoading ? <><Spinner /> Signing in…</> : "Log In"}
               </button>
-            </div>
-            <input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-            />
-          </div>
+            </form>
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
-          )}
+            <p className="text-center text-sm text-gray-400 mt-6">
+              Having trouble?{" "}
+              <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 hover:underline">
+                Contact support
+              </a>
+            </p>
+          </>
+        )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-teal-500 hover:bg-teal-700 disabled:opacity-60 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
-          >
-            {loading ? <><Spinner /> Signing in…</> : "Log In"}
-          </button>
-        </form>
+        {/* ── Forgot password mode ── */}
+        {mode === "forgot" && (
+          <>
+            {forgotSent ? (
+              <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-5 text-center">
+                <svg className="w-8 h-8 text-green-500 mx-auto mb-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+                <p className="text-green-700 font-semibold mb-1">Check your email</p>
+                <p className="text-green-600 text-sm">
+                  We sent a password reset link to <strong>{forgotEmail}</strong>
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleForgotSubmit} className="flex flex-col gap-5">
+                <p className="text-sm text-gray-500 -mt-2">
+                  Enter your email address and we&apos;ll send you a link to reset your password.
+                </p>
 
-        <p className="text-center text-sm text-gray-400 mt-6">
-          Having trouble?{" "}
-          <a href="mailto:support@elevatehealth.com" className="text-teal-600 hover:underline">
-            Contact support
-          </a>
-        </p>
+                <div>
+                  <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Email Address
+                  </label>
+                  <input
+                    id="forgot-email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    required
+                    autoFocus
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  />
+                </div>
+
+                {forgotError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                    <p className="text-red-700 text-sm">{forgotError}</p>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={forgotLoading}
+                  className="w-full bg-teal-500 hover:bg-teal-700 disabled:opacity-60 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  {forgotLoading ? <><Spinner /> Sending…</> : "Send Reset Link"}
+                </button>
+              </form>
+            )}
+
+            <button
+              type="button"
+              onClick={switchToLogin}
+              className="block w-full text-center text-sm text-teal-600 hover:underline mt-6"
+            >
+              ← Back to login
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
