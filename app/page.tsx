@@ -254,18 +254,36 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Hard white separator — prevents any hero compositing bleed */}
-      <div style={{ display: "block", height: "20px", backgroundColor: "white", position: "relative", zIndex: 1 }} />
-
       {/* ── VSL ── */}
-      <section className="bg-white pt-0 pb-16 px-4 sm:px-6" style={{ position: "relative", zIndex: 1, backgroundColor: "white" }}>
+      <section
+        style={{
+          backgroundColor: "white",
+          position: "relative",
+          zIndex: 10,
+          isolation: "isolate",
+          transform: "translateZ(0)",
+          overflow: "hidden",
+          paddingTop: "64px",
+          paddingBottom: "64px",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+        }}
+      >
         <div className="max-w-3xl mx-auto text-center">
-          <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden" }} className="rounded-2xl mb-6">
+          <div
+            style={{
+              position: "relative",
+              paddingBottom: "56.25%",
+              height: 0,
+              overflow: "hidden",
+              backgroundColor: "white",
+              marginBottom: "24px",
+            }}
+          >
             <iframe
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
               src="https://www.youtube.com/embed/0U9BqwknHXM"
               title="Elevate Pain-Free Program"
-              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />

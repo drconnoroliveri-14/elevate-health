@@ -17,3 +17,10 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Ensure iframes always form their own compositing layer and stacking context */
+iframe {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+}

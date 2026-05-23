@@ -141,12 +141,21 @@ export default async function ModulePage({
       </div>
 
       {/* Video */}
-      <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden" }} className="rounded-2xl mb-8">
+      <div
+        style={{
+          position: "relative",
+          paddingBottom: "56.25%",
+          height: 0,
+          overflow: "hidden",
+          backgroundColor: "white",
+          isolation: "isolate",
+          marginBottom: "32px",
+        }}
+      >
         <iframe
-          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
           src={`https://www.youtube.com/embed/${content.videoId}`}
           title={content.title}
-          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         />
