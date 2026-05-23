@@ -64,9 +64,21 @@ function Ad1() {
         position: "relative",
       }}
     >
-      {/* Logo — bottom right */}
+      {/* Logo — top right */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo.PNG" alt="Elevate Health" height={24} style={{ position: "absolute", bottom: 16, right: 16, width: "auto", zIndex: 10 }} />
+      <img
+        src="/logo.PNG"
+        alt="Elevate Health"
+        style={{
+          position: "absolute",
+          top: "12px",
+          right: "12px",
+          height: "28px",
+          width: "auto",
+          filter: "brightness(0) invert(1)",
+          zIndex: 10,
+        }}
+      />
 
       {/* Subtle background pattern */}
       <div style={{
@@ -140,9 +152,21 @@ function Ad2() {
         position: "relative",
       }}
     >
-      {/* Logo — bottom right */}
+      {/* Logo — top right */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo.PNG" alt="Elevate Health" height={24} style={{ position: "absolute", bottom: 16, right: 16, width: "auto", zIndex: 10 }} />
+      <img
+        src="/logo.PNG"
+        alt="Elevate Health"
+        style={{
+          position: "absolute",
+          top: "12px",
+          right: "12px",
+          height: "28px",
+          width: "auto",
+          filter: "brightness(0) invert(1)",
+          zIndex: 10,
+        }}
+      />
 
       {/* Background gradients simulating body/spine imagery */}
       <div style={{
@@ -242,9 +266,20 @@ function Ad3() {
         position: "relative",
       }}
     >
-      {/* Logo — bottom right */}
+      {/* Logo — top right (no filter: white bg ad) */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo.PNG" alt="Elevate Health" height={24} style={{ position: "absolute", bottom: 16, right: 16, width: "auto", zIndex: 10 }} />
+      <img
+        src="/logo.PNG"
+        alt="Elevate Health"
+        style={{
+          position: "absolute",
+          top: "12px",
+          right: "12px",
+          height: "28px",
+          width: "auto",
+          zIndex: 10,
+        }}
+      />
 
       {/* Top teal bar */}
       <div style={{ height: 10, background: `linear-gradient(90deg, ${TEAL}, ${TEAL_LIGHT})` }} />
