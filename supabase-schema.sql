@@ -97,6 +97,7 @@ create policy "Admins can view all progress"
 -- Run these two statements in the Supabase SQL editor to add the new columns:
 alter table profiles add column if not exists has_nutrition_course boolean default false;
 alter table profiles add column if not exists has_consultation boolean default false;
+alter table profiles add column if not exists consultation_booked boolean default false;
 
 -- Shopping list progress (interactive checklist in nutrition course)
 create table if not exists shopping_list_progress (

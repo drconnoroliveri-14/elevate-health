@@ -8,6 +8,7 @@ export type Profile = {
   purchased_at: string;
   has_nutrition_course: boolean;
   has_consultation: boolean;
+  consultation_booked: boolean;
   created_at: string;
 };
 

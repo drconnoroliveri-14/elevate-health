@@ -16,17 +16,18 @@ export default async function ConsultationPage() {
 
   const { data: profileRows } = await supabaseAdmin
     .from("profiles")
-    .select("has_consultation, full_name")
+    .select("has_consultation, consultation_booked, full_name")
     .eq("id", user.id)
     .limit(1);
 
-  const profile = (profileRows as Pick<Profile, "has_consultation" | "full_name">[] | null)?.[0] ?? null;
+  const profile = (profileRows as Pick<Profile, "has_consultation" | "consultation_booked" | "full_name">[] | null)?.[0] ?? null;
 
   if (!profile?.has_consultation) {
     redirect("/dashboard");
   }
 
   const firstName = profile.full_name?.split(" ")[0] || "there";
+  const alreadyBooked = !!profile.consultation_booked;
 
   return (
     <div>
@@ -65,21 +66,44 @@ export default async function ConsultationPage() {
         </div>
       </div>
 
-      {/* Book button */}
-      <div className="text-center mb-8">
-        <a
-          href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 bg-teal-500 hover:bg-teal-700 text-white font-bold text-lg px-10 py-5 rounded-2xl transition-colors shadow-lg"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5m-9-6h.008v.008H12V12zm0 3h.008v.008H12V15zm0 3h.008v.008H12V18zm3-6h.008v.008H15V12zm0 3h.008v.008H15V15zm0 3h.008v.008H15V18zm-6 0h.008v.008H9V18zm0-3h.008v.008H9V15z" />
-          </svg>
-          Book Your Session Now →
-        </a>
-        <p className="text-xs text-gray-400 mt-3">You will receive a Zoom link automatically after booking.</p>
-      </div>
+      {/* Book button or Already Booked state */}
+      {alreadyBooked ? (
+        <div className="text-center mb-8 bg-green-50 border border-green-200 rounded-2xl p-8">
+          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation is Scheduled!</h3>
+          <p className="text-gray-500 text-sm mb-6">
+            Check your email for your Zoom link and calendar confirmation. If you need to reschedule please email droliveri@elevatehealthtampa.com
+          </p>
+          <a
+            href="mailto:droliveri@elevatehealthtampa.com"
+            className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+            Email Dr. Oliveri
+          </a>
+        </div>
+      ) : (
+        <div className="text-center mb-8">
+          <a
+            href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-teal-500 hover:bg-teal-700 text-white font-bold text-lg px-10 py-5 rounded-2xl transition-colors shadow-lg"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5m-9-6h.008v.008H12V12zm0 3h.008v.008H12V15zm0 3h.008v.008H12V18zm3-6h.008v.008H15V12zm0 3h.008v.008H15V15zm0 3h.008v.008H15V18zm-6 0h.008v.008H9V18zm0-3h.008v.008H9V15z" />
+            </svg>
+            Book Your Session Now →
+          </a>
+          <p className="text-xs text-gray-400 mt-3">You will receive a Zoom link automatically after booking.</p>
+        </div>
+      )}
 
       {/* Two column info */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
