@@ -191,6 +191,26 @@ export default function DashboardShell({
           })}
         </ul>
 
+        {/* Upgrade link — only shown if missing at least one upsell */}
+        {(!profile?.has_nutrition_course || !profile?.has_consultation) && (
+          <div className="mt-3 px-1">
+            <Link
+              href="/dashboard/upgrades"
+              onClick={() => setSidebarOpen(false)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+                pathname === "/dashboard/upgrades"
+                  ? "bg-yellow-400/20 text-yellow-200"
+                  : "text-yellow-300 hover:bg-yellow-400/10"
+              }`}
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+              </svg>
+              <span className="text-sm font-semibold flex-1">Upgrade My Program</span>
+            </Link>
+          </div>
+        )}
+
         {/* Bonuses + purchased add-ons */}
         <div className="mt-4 pt-4 border-t border-teal-600 space-y-1">
           <Link

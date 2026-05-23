@@ -69,6 +69,18 @@ export async function POST(req: NextRequest) {
     expand: ["line_items"],
   });
 
+  // ── Dashboard upgrade (post-purchase upsell) ─────────────────────────────
+  // These sessions are created by /api/upgrades/checkout for existing students.
+  // Just update the profile flag — no new user creation, no welcome email.
+  if (session.metadata?.source === "dashboard_upgrade") {
+    const { userId, upgrade } = session.metadata;
+    if (userId && (upgrade === "nutrition" || upgrade === "consultation")) {
+      const field = upgrade === "nutrition" ? "has_nutrition_course" : "has_consultation";
+      await supabaseAdmin.from("profiles").update({ [field]: true }).eq("id", userId);
+    }
+    return NextResponse.json({ received: true });
+  }
+
   const lineItemPriceIds = (session.line_items?.data ?? []).map(
     (item) => item.price?.id
   );
