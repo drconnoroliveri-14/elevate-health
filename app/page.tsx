@@ -252,7 +252,7 @@ export default function LandingPage() {
       {/* ── VSL ── */}
       <section className="bg-white py-16 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden" }} className="rounded-2xl shadow-xl mb-6">
+          <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden" }} className="rounded-2xl mb-6">
             <iframe
               style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
               src="https://www.youtube.com/embed/0U9BqwknHXM"
