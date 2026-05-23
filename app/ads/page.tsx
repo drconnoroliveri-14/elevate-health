@@ -266,14 +266,14 @@ function Ad3() {
         position: "relative",
       }}
     >
-      {/* Logo — top right (no filter: white bg ad) */}
+      {/* Logo — bottom right (no filter: white bg ad) */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/logo.PNG"
         alt="Elevate Health"
         style={{
           position: "absolute",
-          top: "12px",
+          bottom: "12px",
           right: "12px",
           height: "84px",
           width: "auto",
