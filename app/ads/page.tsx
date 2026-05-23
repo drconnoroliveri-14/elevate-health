@@ -196,7 +196,7 @@ function Ad2() {
           gap: 10,
           alignSelf: "flex-start",
         }}>
-          <span style={{ color: GOLD, fontSize: 22, fontWeight: 900 }}>✓ Done Completely From Home — No Gym, No Equipment</span>
+          <span style={{ color: GOLD, fontSize: 22, fontWeight: 900 }}>✓ Done Completely From Home</span>
         </div>
 
         {/* Teal divider */}
