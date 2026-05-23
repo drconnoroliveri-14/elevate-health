@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import EnrollSection from "@/app/components/EnrollSection";
 
 const MODULES = [
   { num: 1, title: "Understanding Your Pain", desc: "The root causes of neck, mid back, and lower back pain. How posture, muscle imbalances, and movement patterns create chronic pain. Your baseline pain assessment." },
@@ -22,16 +22,6 @@ const TESTIMONIALS = [
   { quote: "I had chronic lower back pain for 6 years. After 8 weeks I was completely pain-free.", name: "Michael R.", age: 52 },
   { quote: "My neck pain from desk work is completely gone. I do 20 minutes a day.", name: "Sarah K.", age: 38 },
   { quote: "Avoided surgery thanks to this program. My orthopedic surgeon was shocked.", name: "David L.", age: 61 },
-];
-
-const INCLUDES = [
-  "7 chiropractic care rehabilitation modules",
-  "Lifetime access + all future updates",
-  "90-day personal pain-free protocol",
-  "Pain Tracking Journal ($47 value)",
-  "Posture Correction Quick Reference Guide ($37 value)",
-  "90-day pain-free guarantee",
-  "Secure checkout · Instant delivery",
 ];
 
 function StarRow() {
@@ -68,91 +58,11 @@ function ShieldIcon() {
   );
 }
 
-function Spinner() {
-  return (
-    <svg
-      className="animate-spin h-5 w-5 text-white inline-block"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v8H4z"
-      />
-    </svg>
-  );
-}
-
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
 export default function LandingPage() {
-  const [leadName, setLeadName] = useState("");
-  const [leadEmail, setLeadEmail] = useState("");
-  const [leadLoading, setLeadLoading] = useState(false);
-  const [leadCaptured, setLeadCaptured] = useState(false);
-  const [leadError, setLeadError] = useState("");
-
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [checkoutError, setCheckoutError] = useState("");
-
-  async function handleLeadSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLeadError("");
-    setLeadLoading(true);
-    try {
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          full_name: leadName,
-          email: leadEmail,
-          source: "landing-page",
-        }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Something went wrong. Please try again.");
-      }
-      setLeadCaptured(true);
-      setTimeout(() => scrollToId("pricing-card"), 300);
-    } catch (err: unknown) {
-      setLeadError(
-        err instanceof Error ? err.message : "Something went wrong."
-      );
-    } finally {
-      setLeadLoading(false);
-    }
-  }
-
-  async function handleCheckout() {
-    setCheckoutError("");
-    setCheckoutLoading(true);
-    try {
-      const res = await fetch("/api/checkout", { method: "POST" });
-      const data = await res.json();
-      if (!res.ok || !data.url)
-        throw new Error(data.error || "Could not start checkout.");
-      window.location.href = data.url;
-    } catch (err: unknown) {
-      setCheckoutError(
-        err instanceof Error ? err.message : "Could not start checkout."
-      );
-      setCheckoutLoading(false);
-    }
-  }
-
   return (
     <div className="min-h-screen font-sans">
       {/* ── NAV ── */}
@@ -412,133 +322,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── ENROLL ── */}
-      <section id="enroll" className="bg-white py-20 px-4 sm:px-6">
-        <div className="max-w-xl mx-auto">
-          {/* Lead capture */}
-          {!leadCaptured ? (
-            <div className="bg-teal-50 border border-teal-200 rounded-2xl p-8 mb-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-1 text-center">
-                Get Instant Access — Start Pain-Free Today
-              </h3>
-              <p className="text-sm text-gray-500 text-center mb-6">
-                Enter your details to unlock your free Back Pain Relief Guide — then enroll below.
-              </p>
-              <form onSubmit={handleLeadSubmit} className="flex flex-col gap-4">
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  value={leadName}
-                  onChange={(e) => setLeadName(e.target.value)}
-                  required
-                  className="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  value={leadEmail}
-                  onChange={(e) => setLeadEmail(e.target.value)}
-                  required
-                  className="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-                {leadError && (
-                  <p className="text-red-600 text-sm">{leadError}</p>
-                )}
-                <button
-                  type="submit"
-                  disabled={leadLoading}
-                  className="bg-teal-500 hover:bg-teal-700 disabled:opacity-60 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  {leadLoading ? (
-                    <>
-                      <Spinner /> Sending…
-                    </>
-                  ) : (
-                    "Get My Free Back Pain Relief Guide"
-                  )}
-                </button>
-              </form>
-            </div>
-          ) : (
-            <div className="bg-teal-50 border border-teal-500 rounded-2xl p-5 mb-8 text-center">
-              <p className="text-teal-700 font-semibold">
-                ✓ Your guide is on its way! Now unlock the full program below.
-              </p>
-            </div>
-          )}
-
-          {/* Pricing card */}
-          <div
-            id="pricing-card"
-            className="bg-white border-2 border-teal-500 rounded-2xl shadow-xl p-8"
-          >
-            <p className="text-center text-sm font-semibold text-teal-600 uppercase tracking-widest mb-2">
-              Elevate Pain-Free Program
-            </p>
-            <div className="text-center mb-2">
-              <span className="text-2xl text-gray-400 line-through mr-2">$281</span>
-              <span className="text-6xl font-bold text-teal-500">$97</span>
-            </div>
-            <p className="text-center text-orange-600 text-sm font-semibold mb-2">
-              Limited time offer — save $184 today.
-            </p>
-            <p className="text-center text-gray-400 text-sm mb-8">
-              One-time payment
-            </p>
-
-            <ul className="space-y-3 mb-8">
-              {INCLUDES.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-start gap-3 text-sm text-gray-700"
-                >
-                  <svg
-                    className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4.5 12.75l6 6 9-13.5"
-                    />
-                  </svg>
-                  {item}
-                </li>
-              ))}
-            </ul>
-
-            {checkoutError && (
-              <p className="text-red-600 text-sm text-center mb-4">
-                {checkoutError}
-              </p>
-            )}
-
-            <button
-              onClick={handleCheckout}
-              disabled={checkoutLoading}
-              className="w-full bg-teal-500 hover:bg-teal-700 disabled:opacity-60 text-white font-bold text-lg py-4 rounded-xl transition-colors flex items-center justify-center gap-2"
-            >
-              {checkoutLoading ? (
-                <>
-                  <Spinner /> Redirecting…
-                </>
-              ) : (
-                "Yes, I Want to Live Pain-Free →"
-              )}
-            </button>
-
-            <p className="text-center text-xs text-gray-500 mt-3 font-medium">
-              $281 total value ($197 program + $47 journal + $37 guide)
-            </p>
-            <p className="text-center text-xs text-gray-400 mt-2">
-              One-time payment · Lifetime access · Instant delivery · Secure
-              checkout
-            </p>
-          </div>
-        </div>
-      </section>
+      <EnrollSection />
 
       {/* ── FOOTER ── */}
       <footer className="bg-teal-700 text-white py-10 px-4 sm:px-6">

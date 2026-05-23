@@ -11,6 +11,8 @@ export async function POST(req: NextRequest) {
   let email: string | undefined;
   let fullName: string | undefined;
 
+  let upsells: string[] = [];
+
   try {
     const body = await req.json().catch(() => ({}));
     email =
@@ -19,14 +21,25 @@ export async function POST(req: NextRequest) {
         : undefined;
     fullName =
       typeof body.full_name === "string" ? body.full_name.trim() : undefined;
+    upsells = Array.isArray(body.upsells) ? body.upsells : [];
   } catch {
     // Body is optional — proceed without it
+  }
+
+  const lineItems: { price: string; quantity: number }[] = [
+    { price: process.env.STRIPE_PRICE_ID!, quantity: 1 },
+  ];
+  if (upsells.includes("upsell1") && process.env.STRIPE_UPSELL_1_PRICE_ID) {
+    lineItems.push({ price: process.env.STRIPE_UPSELL_1_PRICE_ID, quantity: 1 });
+  }
+  if (upsells.includes("upsell2") && process.env.STRIPE_UPSELL_2_PRICE_ID) {
+    lineItems.push({ price: process.env.STRIPE_UPSELL_2_PRICE_ID, quantity: 1 });
   }
 
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      line_items: [{ price: process.env.STRIPE_PRICE_ID!, quantity: 1 }],
+      line_items: lineItems,
       success_url: successUrl,
       cancel_url: cancelUrl,
       ...(email && { customer_email: email }),
