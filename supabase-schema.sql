@@ -97,3 +97,20 @@ create policy "Admins can view all progress"
 -- Run these two statements in the Supabase SQL editor to add the new columns:
 alter table profiles add column if not exists has_nutrition_course boolean default false;
 alter table profiles add column if not exists has_consultation boolean default false;
+
+-- Shopping list progress (interactive checklist in nutrition course)
+create table if not exists shopping_list_progress (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users not null,
+  item_key text not null,
+  checked boolean default false,
+  updated_at timestamptz default now(),
+  unique(user_id, item_key)
+);
+
+alter table shopping_list_progress enable row level security;
+
+create policy "Users can manage own shopping list"
+  on shopping_list_progress for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);

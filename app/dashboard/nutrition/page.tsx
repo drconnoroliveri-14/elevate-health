@@ -4,6 +4,7 @@ import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { Profile } from "@/types";
 import PrintButton from "./PrintButton";
+import ShoppingList from "./ShoppingList";
 
 const ANTI_INFLAMMATORY_FOODS = [
   { name: "Wild Salmon", description: "Rich in EPA and DHA omega-3 fatty acids that directly suppress spinal inflammatory cytokines.", how: "Aim for 3–4 servings per week. Bake, grill, or poach — avoid frying." },
@@ -108,12 +109,6 @@ const SUPPLEMENTS = [
   { name: "Collagen Peptides", dosage: "10–15g daily (look for Type I & II hydrolyzed collagen)", timing: "In the morning with vitamin C for better synthesis", reason: "Provides the building blocks for disc cartilage, ligaments, and tendons. Vitamin C is required for collagen cross-linking." },
 ];
 
-const SHOPPING_LIST = {
-  "Proteins": ["Wild salmon (fresh or frozen)", "Sardines in olive oil (canned)", "Pasture-raised eggs", "Organic chicken breast", "Cod or other white fish", "Firm tofu"],
-  "Produce": ["Spinach", "Kale", "Broccoli", "Sweet potatoes", "Avocados", "Blueberries (fresh or frozen)", "Pineapple", "Ginger root", "Garlic", "Cherry tomatoes", "Lemons", "Mango (fresh or frozen)"],
-  "Pantry": ["Extra virgin olive oil", "Turmeric powder", "Black pepper", "Bone broth (cartons)", "Walnuts", "Almonds", "Chia seeds", "Whole grain bread", "Brown rice", "Quinoa", "Tart cherry juice (100% pure)", "Dark chocolate 85%+"],
-  "Supplements": ["Omega-3 fish oil capsules", "Curcumin with piperine", "Magnesium glycinate", "Vitamin D3 + K2", "Hydrolyzed collagen peptides"],
-};
 
 export default async function NutritionPage() {
   const cookieStore = cookies();
@@ -280,27 +275,13 @@ export default async function NutritionPage() {
         <p className="text-xs text-gray-400 mt-3">* Consult your healthcare provider before starting any supplement protocol.</p>
       </section>
 
-      {/* Shopping List */}
+      {/* Shopping List — interactive, saves to Supabase */}
       <section className="mb-10">
         <h2 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
           <span className="flex-shrink-0 w-7 h-7 rounded-full bg-teal-500 text-white text-sm font-bold flex items-center justify-center">5</span>
           Anti-Inflammatory Shopping List
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {Object.entries(SHOPPING_LIST).map(([category, items]) => (
-            <div key={category} className="bg-white border border-gray-200 rounded-xl p-4">
-              <p className="font-bold text-sm text-teal-700 mb-3 uppercase tracking-wide">{category}</p>
-              <ul className="space-y-1.5">
-                {items.map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-xs text-gray-700">
-                    <span className="flex-shrink-0 w-4 h-4 border border-teal-400 rounded" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <ShoppingList userId={user.id} />
       </section>
 
       {/* Footer note */}

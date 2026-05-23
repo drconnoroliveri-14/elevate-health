@@ -42,9 +42,19 @@ export function nurtureEmail1(firstName: string) {
       <p>Hey ${firstName || "there"},</p>
       <p>Here is your free <strong>Back Pain Relief Guide</strong>.</p>
       <p>It covers the 3 root causes of chronic neck and back pain — and why most people never fix them.</p>
+
+      <p style="text-align:center;margin:28px 0;">
+        <a href="${SITE_URL}/back-pain-guide" style="background:#0F6E56;color:#fff;padding:16px 36px;border-radius:10px;text-decoration:none;font-weight:800;font-size:16px;display:inline-block;line-height:1.3;">
+          Access Your Free Back Pain Relief Guide →
+        </a>
+      </p>
+      <p style="text-align:center;color:#6b7280;font-size:13px;margin:-12px 0 24px;">
+        Click the button above, then use <strong>Print → Save as PDF</strong> to save it to your device.
+      </p>
+
       <p>The full <strong>Elevate Pain-Free Program</strong> goes 10x deeper with 7 chiropractic care modules you can do at home in just 20 minutes a day.</p>
       <p>I will share more over the next few days.</p>
-      <p>To your health,<br>The Elevate Health Team</p>
+      <p>To your health,<br>Dr. Connor Oliveri, DC<br>Elevate Health</p>
       <p style="text-align:center;margin-top:32px;">
         <a href="${SITE_URL}/#enroll" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
           See the Full Program — $97 Today
