@@ -253,6 +253,18 @@ export default function DashboardShell({
         >
           Log Out →
         </button>
+        <div className="pt-1 border-t border-teal-600/50">
+          <Link
+            href="/dashboard/refund"
+            onClick={() => setSidebarOpen(false)}
+            className="w-full flex items-center gap-2 text-xs text-red-400 hover:text-red-300 transition-colors py-1"
+          >
+            <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            Request Refund
+          </Link>
+        </div>
       </div>
     </aside>
   );
