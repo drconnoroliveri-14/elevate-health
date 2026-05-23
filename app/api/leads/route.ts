@@ -3,7 +3,8 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { resend } from "@/lib/resend";
 import { nurtureEmail1 } from "@/lib/emails";
 
-const FROM = "Elevate Health <hello@mail.elevatehealth.com>";
+const FROM = "Dr. Connor Oliveri <droliveri@elevatehealthtampa.com>";
+const REPLY_TO = "droliveri@elevatehealthtampa.com";
 
 export async function POST(req: NextRequest) {
   let email: string;
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
 
   const { error: sendError } = await resend.emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to: email,
     subject: emailContent.subject,
     html: emailContent.html,

@@ -14,9 +14,8 @@ import {
 // Next.js App Router does not pre-parse the body; we read it raw here.
 export const dynamic = "force-dynamic";
 
-// Resend shared sender — works without domain verification.
-// Swap to "Elevate Health <hello@mail.elevatehealth.com>" once that domain is verified in Resend.
-const FROM = "Elevate Health <onboarding@resend.dev>";
+const FROM = "Dr. Connor Oliveri <droliveri@elevatehealthtampa.com>";
+const REPLY_TO = "droliveri@elevatehealthtampa.com";
 
 function daysFromNow(days: number): string {
   return new Date(Date.now() + days * 86_400_000).toISOString();
@@ -172,6 +171,7 @@ export async function POST(req: NextRequest) {
   const welcome = welcomeEmail({ firstName, email, tempPassword });
   const { error: welcomeErr } = await resend.emails.send({
     from: FROM,
+    replyTo: REPLY_TO,
     to: email,
     subject: welcome.subject,
     html: welcome.html,
@@ -193,6 +193,7 @@ export async function POST(req: NextRequest) {
     `.trim();
     const { error: consultErr } = await resend.emails.send({
       from: FROM,
+      replyTo: REPLY_TO,
       to: email,
       subject: "Your 1-on-1 Consultation is Confirmed — Here is How to Book",
       html: consultHtml,
@@ -210,6 +211,7 @@ export async function POST(req: NextRequest) {
   ) => {
     const { error } = await resend.emails.send({
       from: FROM,
+      replyTo: REPLY_TO,
       to: email,
       subject,
       html,
