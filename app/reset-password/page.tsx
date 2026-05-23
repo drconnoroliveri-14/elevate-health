@@ -1,10 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import Image from "next/image";
+
+function getSupabase() {
+  return createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -13,6 +20,51 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [sessionReady, setSessionReady] = useState(false);
+  const [sessionError, setSessionError] = useState("");
+
+  useEffect(() => {
+    // Parse the URL hash for legacy implicit-flow tokens
+    // e.g. #access_token=xxx&refresh_token=yyy&type=recovery
+    const hash = window.location.hash.slice(1); // strip leading #
+    if (!hash) {
+      // PKCE flow: session was already set server-side via exchangeCodeForSession;
+      // just verify we have an active session.
+      getSupabase()
+        .auth.getSession()
+        .then(({ data }) => {
+          if (data.session) {
+            setSessionReady(true);
+          } else {
+            setSessionError("This reset link has expired. Please request a new one.");
+          }
+        });
+      return;
+    }
+
+    const params = new URLSearchParams(hash);
+    const accessToken = params.get("access_token");
+    const refreshToken = params.get("refresh_token");
+
+    if (!accessToken || !refreshToken) {
+      setSessionError("This reset link has expired. Please request a new one.");
+      return;
+    }
+
+    // Establish a client-side session from the implicit-flow tokens
+    getSupabase()
+      .auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
+      .then(({ error: sessionErr }) => {
+        if (sessionErr) {
+          console.error("[reset-password] setSession error:", sessionErr.message);
+          setSessionError("This reset link has expired. Please request a new one.");
+        } else {
+          // Clear the hash so tokens are not visible in the address bar
+          history.replaceState(null, "", window.location.pathname);
+          setSessionReady(true);
+        }
+      });
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -29,11 +81,7 @@ export default function ResetPasswordPage() {
 
     setLoading(true);
     try {
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
-      const { error: updateError } = await supabase.auth.updateUser({ password });
+      const { error: updateError } = await getSupabase().auth.updateUser({ password });
       if (updateError) throw updateError;
       setSuccess(true);
       setTimeout(() => router.push("/login?message=Password+updated!+Please+log+in."), 2000);
@@ -55,7 +103,19 @@ export default function ResetPasswordPage() {
           <p className="text-gray-500 text-sm mt-1">Choose something you&apos;ll remember.</p>
         </div>
 
-        {success ? (
+        {sessionError ? (
+          <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-4 text-center">
+            <p className="text-red-700 text-sm mb-3">{sessionError}</p>
+            <Link href="/login" className="text-teal-600 hover:underline text-sm font-medium">
+              Back to login →
+            </Link>
+          </div>
+        ) : !sessionReady ? (
+          <div className="flex items-center justify-center py-8 text-gray-400 text-sm">
+            <div className="animate-spin h-5 w-5 border-2 border-teal-500 border-t-transparent rounded-full mr-2" />
+            Verifying your link…
+          </div>
+        ) : success ? (
           <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-4 text-center">
             <p className="text-green-700 font-medium">Password updated!</p>
             <p className="text-green-600 text-sm mt-1">Redirecting you to login…</p>
@@ -110,11 +170,13 @@ export default function ResetPasswordPage() {
           </form>
         )}
 
-        <p className="text-center text-sm text-gray-400 mt-6">
-          <Link href="/login" className="text-teal-600 hover:underline">
-            Back to login
-          </Link>
-        </p>
+        {!sessionError && (
+          <p className="text-center text-sm text-gray-400 mt-6">
+            <Link href="/login" className="text-teal-600 hover:underline">
+              Back to login
+            </Link>
+          </p>
+        )}
       </div>
     </div>
   );
