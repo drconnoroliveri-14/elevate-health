@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const STEPS = [
   {
@@ -22,7 +23,7 @@ export default function SuccessPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-16">
       <Link href="/" className="mb-10">
-        <img src="/logo.PNG" alt="Elevate Health" style={{ height: "70px", width: "auto" }} />
+        <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{ height: "70px", width: "auto" }} />
       </Link>
 
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8 sm:p-12">

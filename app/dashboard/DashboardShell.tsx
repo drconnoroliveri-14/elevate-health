@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
@@ -133,7 +134,7 @@ export default function DashboardShell({
       {/* Logo */}
       <div className="px-5 py-5 border-b border-teal-600">
         <Link href="/dashboard">
-          <img src="/logo.PNG" alt="Elevate Health" style={{height: '70px', width: 'auto'}} />
+          <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} />
         </Link>
       </div>
 
@@ -279,7 +280,7 @@ export default function DashboardShell({
           <button onClick={() => setSidebarOpen(true)} aria-label="Open menu">
             <MenuIcon />
           </button>
-          <img src="/logo.PNG" alt="Elevate Health" style={{height: '70px', width: 'auto'}} />
+          <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} />
           {sidebarOpen && (
             <button
               onClick={() => setSidebarOpen(false)}

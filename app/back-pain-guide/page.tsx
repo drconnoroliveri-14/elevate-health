@@ -151,7 +151,7 @@ export default function BackPainGuidePage() {
             </p>
           </div>
           <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.8, marginBottom: 16 }}>
-            The same physics apply to the lower back. Sitting in a slumped position for 8 hours per day increases lumbar disc pressure by up to 40% compared to standing — slowly compressing and desiccating the discs that serve as your spine's shock absorbers.
+            The same physics apply to the lower back. Sitting in a slumped position for 8 hours per day increases lumbar disc pressure by up to 40% compared to standing — slowly compressing and desiccating the discs that serve as your spine&apos;s shock absorbers.
           </p>
           <div style={{ background: "#f0fdf4", borderLeft: "4px solid #0F6E56", padding: "12px 16px", borderRadius: "0 8px 8px 0", fontSize: 13, color: "#065f46", lineHeight: 1.6 }}>
             <strong>Key insight:</strong> Your spine accumulates damage from poor posture the same way a metal bar accumulates metal fatigue from repeated bending — one small bend barely matters, but thousands of them cause the bar to fail.

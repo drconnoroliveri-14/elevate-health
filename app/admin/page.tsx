@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Card from "@/components/Card";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 
@@ -197,7 +198,7 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
             <Link href="/">
-              <img src="/logo.PNG" alt="Elevate Health" style={{height: '70px', width: 'auto'}} />
+              <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} />
             </Link>
             <p className="text-teal-200 text-xs mt-0.5">Admin Dashboard</p>
           </div>

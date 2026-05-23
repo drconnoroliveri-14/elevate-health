@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const LAST_UPDATED = "May 2025";
 const CONTACT_EMAIL = "support@elevatehealth.com";
@@ -25,7 +26,7 @@ export default function TermsPage() {
       <nav className="bg-teal-700 text-white px-4 sm:px-8 py-4">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <img src="/logo.PNG" alt="Elevate Health" style={{height: '70px', width: 'auto'}} />
+            <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} />
           </Link>
           <Link
             href="/"

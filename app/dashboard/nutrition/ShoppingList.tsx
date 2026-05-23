@@ -51,7 +51,7 @@ export default function ShoppingList({ userId }: Props) {
       setChecked((prev) => {
         const next = new Set(prev);
         const newVal = !next.has(key);
-        newVal ? next.add(key) : next.delete(key);
+        if (newVal) { next.add(key); } else { next.delete(key); }
         save(key, newVal);
         return next;
       });
