@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/auth-helpers-nextjs";
 
-const SITE_URL = "https://elevate-health-lyart.vercel.app";
+const SITE_URL = "https://www.elevatehealthtampa.com";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

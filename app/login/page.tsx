@@ -60,7 +60,7 @@ function LoginForm() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
     await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "https://elevate-health-lyart.vercel.app/auth/callback",
+      redirectTo: "https://www.elevatehealthtampa.com/auth/callback",
     });
     setError("");
     alert("Check your email for a password reset link.");
