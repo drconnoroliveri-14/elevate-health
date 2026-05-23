@@ -24,7 +24,7 @@ const UPSELLS = [
   },
   {
     id: "upsell2" as const,
-    title: "1-on-1 15-Minute Virtual Chiropractic Consultation",
+    title: "1-on-1 15-Minute Virtual Consultation",
     description:
       "Get a private video call with Dr. Oliveri to review your specific pain pattern and get a personalized protocol recommendation.",
     price: 197,
