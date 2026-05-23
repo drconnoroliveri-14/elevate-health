@@ -172,6 +172,7 @@ export default function LandingPage() {
       <section
         className="relative text-white py-28 sm:py-36 px-4 sm:px-6 overflow-hidden"
         style={{
+          isolation: "isolate",
           backgroundColor: "#085041",
           backgroundImage: "linear-gradient(135deg, rgba(8,80,65,0.87) 0%, rgba(15,110,86,0.82) 100%), url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1920&q=80')",
           backgroundSize: "auto, cover",
@@ -214,7 +215,7 @@ export default function LandingPage() {
               <li
                 key={bullet}
                 className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-white"
-                style={{ background: "rgba(255,255,255,0.13)", backdropFilter: "blur(4px)" }}
+                style={{ background: "rgba(255,255,255,0.18)" }}
               >
                 <svg
                   className="w-4 h-4 flex-shrink-0"
@@ -253,8 +254,11 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Hard white separator — prevents any hero compositing bleed */}
+      <div style={{ display: "block", height: "20px", backgroundColor: "white", position: "relative", zIndex: 1 }} />
+
       {/* ── VSL ── */}
-      <section className="bg-white py-16 px-4 sm:px-6" style={{ position: "relative", zIndex: 1, backgroundColor: "white" }}>
+      <section className="bg-white pt-0 pb-16 px-4 sm:px-6" style={{ position: "relative", zIndex: 1, backgroundColor: "white" }}>
         <div className="max-w-3xl mx-auto text-center">
           <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden" }} className="rounded-2xl mb-6">
             <iframe
