@@ -84,11 +84,17 @@ function Ad1() {
           Elevate Health
         </p>
 
-        <h1 style={{ color: "white", fontSize: 88, fontWeight: 900, lineHeight: 1.05, marginBottom: 40, letterSpacing: "-2px" }}>
+        <h1 style={{ color: "white", fontSize: 88, fontWeight: 900, lineHeight: 1.05, marginBottom: 28, letterSpacing: "-2px" }}>
           Why does your back pain keep coming back?
         </h1>
 
-        <p style={{ color: "rgba(78,204,163,0.9)", fontSize: 34, fontWeight: 500, lineHeight: 1.4 }}>
+        <p style={{ color: "white", fontSize: 36, fontWeight: 700, lineHeight: 1.35, marginBottom: 16 }}>
+          (And how to fix it{" "}
+          <span style={{ color: GOLD, fontWeight: 900 }}>FROM HOME</span>
+          {" "}in 20 minutes a day)
+        </p>
+
+        <p style={{ color: "rgba(78,204,163,0.9)", fontSize: 28, fontWeight: 500, lineHeight: 1.4 }}>
           It&apos;s not your age. It&apos;s not your genetics.<br />Here&apos;s the real reason.
         </p>
 
@@ -175,12 +181,26 @@ function Ad2() {
           &ldquo;I eliminated 6 years of back pain in 8 weeks&rdquo;
         </h1>
 
-        <p style={{ color: TEAL_LIGHT, fontSize: 28, fontWeight: 600, marginBottom: 44 }}>
+        <p style={{ color: TEAL_LIGHT, fontSize: 28, fontWeight: 600, marginBottom: 32 }}>
           — Michael R., age 52
         </p>
 
+        {/* At-home badge */}
+        <div style={{
+          background: TEAL,
+          borderRadius: 10,
+          padding: "14px 24px",
+          marginBottom: 32,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 10,
+          alignSelf: "flex-start",
+        }}>
+          <span style={{ color: GOLD, fontSize: 22, fontWeight: 900 }}>✓ Done Completely From Home — No Gym, No Equipment</span>
+        </div>
+
         {/* Teal divider */}
-        <div style={{ width: "100%", height: 2, background: `linear-gradient(90deg, ${TEAL_LIGHT}, transparent)`, marginBottom: 44 }} />
+        <div style={{ width: "100%", height: 2, background: `linear-gradient(90deg, ${TEAL_LIGHT}, transparent)`, marginBottom: 32 }} />
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
           <div>
@@ -208,9 +228,9 @@ function Ad2() {
 /* ── Ad 3 — Direct Offer ───────────────────────────────────────────── */
 function Ad3() {
   const bullets = [
+    "100% At-Home — No gym or equipment needed",
     "Developed with licensed chiropractors",
-    "7 step-by-step video modules",
-    "Just 20 minutes a day — no equipment needed",
+    "Just 20 minutes a day from your living room",
     "90-day money-back guarantee",
   ];
 
@@ -238,8 +258,8 @@ function Ad3() {
         </div>
 
         {/* Headline */}
-        <h1 style={{ color: TEAL, fontSize: 78, fontWeight: 900, lineHeight: 1.08, marginBottom: 44, letterSpacing: "-2px" }}>
-          Finally. A back pain solution that actually works.
+        <h1 style={{ color: TEAL, fontSize: 74, fontWeight: 900, lineHeight: 1.08, marginBottom: 40, letterSpacing: "-2px" }}>
+          The At-Home Fix for Chronic Neck &amp; Back Pain
         </h1>
 
         {/* Bullets */}
