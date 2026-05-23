@@ -5,8 +5,8 @@ import { supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   const successUrl =
-    "https://elevate-health-lyart.vercel.app/success?session_id={CHECKOUT_SESSION_ID}";
-  const cancelUrl = "https://elevate-health-lyart.vercel.app";
+    "https://www.elevatehealthtampa.com/success?session_id={CHECKOUT_SESSION_ID}";
+  const cancelUrl = "https://www.elevatehealthtampa.com";
 
   let email: string | undefined;
   let fullName: string | undefined;
