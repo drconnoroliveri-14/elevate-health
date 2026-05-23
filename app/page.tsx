@@ -252,13 +252,15 @@ export default function LandingPage() {
       {/* ── VSL ── */}
       <section className="bg-white py-16 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-xl mb-6 bg-gray-900 flex flex-col items-center justify-center gap-4">
-            <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
-              <svg className="w-10 h-10 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
-            <p className="text-white/60 text-sm font-medium tracking-wide">Your Sales Video Goes Here</p>
+          <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden" }} className="rounded-2xl shadow-xl mb-6">
+            <iframe
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+              src="https://www.youtube.com/embed/0U9BqwknHXM"
+              title="Elevate Pain-Free Program"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
           <p className="text-gray-500 text-base">
             Join{" "}

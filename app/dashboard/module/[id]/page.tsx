@@ -23,7 +23,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "How to assess your own posture",
       "Your baseline pain score",
     ],
-    videoId: "dQw4w9WgXcQ",
+    videoId: "_d2OvP7Jsnc",
   },
   2: {
     title: "Neck Pain Relief Protocol",
@@ -35,7 +35,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "Posture correction for desk workers",
       "Cervical mobility daily routine",
     ],
-    videoId: "9bZkp7q19f0",
+    videoId: "BLzHnmCpRC4",
   },
   3: {
     title: "Mid Back Pain Relief Protocol",
@@ -47,7 +47,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "Scapular stability exercises",
       "Desk posture reset routine",
     ],
-    videoId: "tgbNymZ7vqY",
+    videoId: "HciAoN6girc",
   },
   4: {
     title: "Lower Back Pain Relief Protocol",
@@ -59,7 +59,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "Hip flexor release sequence",
       "Lumbar stabilization routine",
     ],
-    videoId: "ZZ5LpwO-An4",
+    videoId: "QiBj1BGQWJk",
   },
   5: {
     title: "Posture Correction & Alignment",
@@ -71,7 +71,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "Sleep position guide for pain relief",
       "Movement pattern corrections",
     ],
-    videoId: "Ke90Tje7VS0",
+    videoId: "s1xkIjAFyc8",
   },
   6: {
     title: "Strengthening for a Pain-Free Life",
@@ -83,7 +83,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "Progressive overload for beginners",
       "3-day weekly strength routine",
     ],
-    videoId: "HQmmM_qwG4k",
+    videoId: "z5gjRENPjCM",
   },
   7: {
     title: "Your Personal 90-Day Pain-Free Protocol",
@@ -95,7 +95,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "Pain tracking system",
       "How to progress safely long-term",
     ],
-    videoId: "uelHwf8o7_U",
+    videoId: "H7Xzy9hOba4",
   },
 };
 
@@ -141,13 +141,14 @@ export default async function ModulePage({
       </div>
 
       {/* Video */}
-      <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg mb-8">
+      <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden" }} className="rounded-2xl shadow-lg mb-8">
         <iframe
+          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
           src={`https://www.youtube.com/embed/${content.videoId}`}
           title={content.title}
+          frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          className="absolute inset-0 w-full h-full"
         />
       </div>
 
