@@ -48,14 +48,6 @@ function DownloadButton({ adId }: { adId: string }) {
   );
 }
 
-function LogoText({ color = "white", size = 18 }: { color?: string; size?: number }) {
-  return (
-    <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, fontSize: size, color, letterSpacing: "-0.5px" }}>
-      ELEVATE <span style={{ color: TEAL_LIGHT }}>HEALTH</span>
-    </span>
-  );
-}
-
 /* ── Ad 1 — Curiosity Hook ─────────────────────────────────────────── */
 function Ad1() {
   return (
@@ -80,9 +72,11 @@ function Ad1() {
 
       {/* Main content */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "80px 90px 40px", position: "relative" }}>
-        <p style={{ color: TEAL_LIGHT, fontSize: 22, fontWeight: 700, letterSpacing: 4, textTransform: "uppercase", marginBottom: 36 }}>
-          Elevate Health
-        </p>
+        {/* Logo */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 36 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.PNG" alt="Elevate Health" height={50} style={{ width: "auto" }} />
+        </div>
 
         <h1 style={{ color: "white", fontSize: 88, fontWeight: 900, lineHeight: 1.05, marginBottom: 28, letterSpacing: "-2px" }}>
           Why does your back pain keep coming back?
@@ -112,7 +106,8 @@ function Ad1() {
         gap: 24,
       }}>
         <div>
-          <LogoText color={TEAL} size={22} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.PNG" alt="Elevate Health" height={50} style={{ width: "auto", marginBottom: 6 }} />
           <p style={{ color: "#4b5563", fontSize: 19, marginTop: 6 }}>7-Module At-Home Rehab Program</p>
           <p style={{ color: "#6b7280", fontSize: 16, marginTop: 4 }}>$97 &nbsp;·&nbsp; 90-Day Money-Back Guarantee</p>
         </div>
@@ -204,7 +199,8 @@ function Ad2() {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
           <div>
-            <LogoText color="white" size={24} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.PNG" alt="Elevate Health" height={50} style={{ width: "auto", marginBottom: 8 }} />
             <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 18, marginTop: 6 }}>The Elevate Pain-Free Program</p>
             <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, marginTop: 4 }}>$97 Today · 90-Day Money Back Guarantee</p>
           </div>
@@ -253,8 +249,9 @@ function Ad3() {
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "52px 90px 48px" }}>
         {/* Logo */}
-        <div style={{ marginBottom: 44 }}>
-          <LogoText color={TEAL} size={26} />
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 44 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.PNG" alt="Elevate Health" height={50} style={{ width: "auto" }} />
         </div>
 
         {/* Headline */}
