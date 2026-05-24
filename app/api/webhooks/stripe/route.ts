@@ -187,6 +187,7 @@ export async function POST(req: NextRequest) {
     to: email,
     subject: welcome.subject,
     html: welcome.html,
+    text: welcome.text,
   });
   if (welcomeErr) console.error("[stripe-webhook] Welcome email failed:", welcomeErr);
   await logEmail(email, "welcome", welcomeErr ? "failed" : "sent");
@@ -201,14 +202,28 @@ export async function POST(req: NextRequest) {
       <a href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation">https://calendly.com/drconnoroliveri/15min-pain-free-consultation</a></p>
       <p>You will receive a Zoom link automatically after booking.</p>
       <p>If you have any questions reply to this email. We look forward to speaking with you.</p>
-      <p>— Dr. Oliveri &amp; The Elevate Health Team</p>
+      <p>— Dr. Connor Oliveri &amp; The Elevate Health Team</p>
     `.trim();
+    const consultText = `Hi ${firstName || "there"},
+
+Congratulations on securing your private 15-minute Pain Relief Consultation with Dr. Oliveri.
+
+Click the link below to choose your preferred time.
+
+Booking Link: https://calendly.com/drconnoroliveri/15min-pain-free-consultation
+
+You will receive a Zoom link automatically after booking.
+
+If you have any questions reply to this email. We look forward to speaking with you.
+
+— Dr. Connor Oliveri & The Elevate Health Team`;
     const { error: consultErr } = await resend.emails.send({
       from: FROM,
       replyTo: REPLY_TO,
       to: email,
       subject: "Your 1-on-1 Consultation is Confirmed — Here is How to Book",
       html: consultHtml,
+      text: consultText,
     });
     await logEmail(email, "consultation_confirmation", consultErr ? "failed" : "sent");
     if (consultErr) console.error("[stripe-webhook] Consultation email failed:", consultErr);
@@ -219,6 +234,7 @@ export async function POST(req: NextRequest) {
     type: string,
     subject: string,
     html: string,
+    text: string,
     daysDelay: number
   ) => {
     const { error } = await resend.emails.send({
@@ -227,6 +243,7 @@ export async function POST(req: NextRequest) {
       to: email,
       subject,
       html,
+      text,
       scheduledAt: daysFromNow(daysDelay),
     });
     await logEmail(email, type, error ? "failed" : "sent");
@@ -239,10 +256,10 @@ export async function POST(req: NextRequest) {
   const d90 = day90Email(firstName);
 
   await Promise.all([
-    scheduleEmail("post_day3", d3.subject, d3.html, 3),
-    scheduleEmail("post_day14", d14.subject, d14.html, 14),
-    scheduleEmail("post_day30", d30.subject, d30.html, 30),
-    scheduleEmail("post_day90", d90.subject, d90.html, 90),
+    scheduleEmail("post_day3", d3.subject, d3.html, d3.text, 3),
+    scheduleEmail("post_day14", d14.subject, d14.html, d14.text, 14),
+    scheduleEmail("post_day30", d30.subject, d30.html, d30.text, 30),
+    scheduleEmail("post_day90", d90.subject, d90.html, d90.text, 90),
   ]);
 
   return NextResponse.json({ received: true }, { status: 200 });
