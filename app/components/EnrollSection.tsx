@@ -296,7 +296,7 @@ export default function EnrollSection() {
             <p className="text-center text-xs font-semibold text-teal-700 uppercase tracking-wider mb-4">What happens after purchase</p>
             <div className="flex flex-col sm:flex-row gap-4">
               {[
-                { emoji: "📧", title: "Check Your Email", sub: "Your login credentials are sent instantly after purchase" },
+                { emoji: "📧", title: "Check Your Email", sub: "Your login credentials are sent instantly after purchase. If you added a Virtual Consultation, your booking link will also be included." },
                 { emoji: "🔐", title: "Access Your Dashboard", sub: "Log in to your personal pain-free portal" },
                 { emoji: "🎯", title: "Start Module 1", sub: "Begin your at-home rehabilitation immediately" },
               ].map((step, i) => (
