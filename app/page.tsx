@@ -132,7 +132,7 @@ export default function LandingPage() {
           <ul className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
             {[
               "Developed by Licensed Chiropractors",
-              "Step-by-step video exercises — no equipment needed",
+              "Step-by-step video exercises",
               "90-day pain-free guarantee",
             ].map((bullet) => (
               <li
