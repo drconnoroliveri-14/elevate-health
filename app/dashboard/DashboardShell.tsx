@@ -372,11 +372,13 @@ export default function DashboardShell({
       {/* Main content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Mobile topbar */}
-        <div className="md:hidden flex items-center gap-3 px-4 py-3 bg-teal-700 text-white">
+        <div className="md:hidden relative flex items-center px-4 py-3 bg-teal-700 text-white">
           <button onClick={() => setSidebarOpen(true)} aria-label="Open menu">
             <MenuIcon />
           </button>
-          <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto', filter: 'brightness(0) invert(1)'}} />
+          <div className="absolute left-1/2 -translate-x-1/2">
+            <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto', filter: 'brightness(0) invert(1)'}} />
+          </div>
           {sidebarOpen && (
             <button
               onClick={() => setSidebarOpen(false)}
