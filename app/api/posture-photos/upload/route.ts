@@ -39,15 +39,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid view_type." }, { status: 400 });
   }
 
-  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-  const storagePath = `${user.id}/${photo_date}-${view_type}.${ext}`;
+  // Client always sends compressed JPEG blobs — always store as .jpg
+  const storagePath = `${user.id}/${photo_date}-${view_type}.jpg`;
 
   const arrayBuffer = await file.arrayBuffer();
 
   const { error: uploadError } = await supabaseAdmin.storage
     .from("posture-photos")
     .upload(storagePath, arrayBuffer, {
-      contentType: file.type || "image/jpeg",
+      contentType: "image/jpeg",
       upsert: true,
     });
 

@@ -249,15 +249,46 @@ export default function PostureTrackerPage() {
 
   // File select
   function handleFileSelect(view: "front" | "side" | "back", file: File) {
-    setPendingFiles(prev => ({ ...prev, [view]: file }));
+    // Generate preview immediately from original file
     const reader = new FileReader();
     reader.onload = e2 => setPendingPreviews(prev => ({ ...prev, [view]: e2.target?.result as string }));
     reader.readAsDataURL(file);
+    // Store original file — compression happens at upload time
+    setPendingFiles(prev => ({ ...prev, [view]: file }));
   }
 
   function clearPending(view: string) {
     setPendingFiles(prev => ({ ...prev, [view]: null }));
     setPendingPreviews(prev => ({ ...prev, [view]: null }));
+  }
+
+  // Compress image to max 1200px, JPEG 0.8 quality using Canvas API
+  async function compressImage(file: File): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        const MAX = 1200;
+        let { width, height } = img;
+        if (width > MAX || height > MAX) {
+          if (width > height) { height = Math.round((height * MAX) / width); width = MAX; }
+          else { width = Math.round((width * MAX) / height); height = MAX; }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) { reject(new Error("Canvas not available")); return; }
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(blob => {
+          if (blob) resolve(blob);
+          else reject(new Error("Compression failed"));
+        }, "image/jpeg", 0.8);
+      };
+      img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error("Image load failed")); };
+      img.src = objectUrl;
+    });
   }
 
   // Upload handler
@@ -271,11 +302,20 @@ export default function PostureTrackerPage() {
         ? Math.max(1, Math.floor((new Date(uploadDate + "T12:00:00").getTime() - new Date(purchasedAt).getTime()) / 86_400_000) + 1)
         : null;
 
+      // Compress all selected files before upload
+      const compressed = await Promise.all(
+        VIEWS.map(async v => {
+          if (!pendingFiles[v.key]) return { view: v.key, blob: null };
+          const blob = await compressImage(pendingFiles[v.key]!);
+          return { view: v.key, blob };
+        })
+      );
+
       const results = await Promise.all(
-        VIEWS.filter(v => pendingFiles[v.key]).map(v => {
+        compressed.filter(c => c.blob).map(({ view, blob }) => {
           const fd = new FormData();
-          fd.append("photo", pendingFiles[v.key]!);
-          fd.append("view_type", v.key);
+          fd.append("photo", blob!, `${view}.jpg`);
+          fd.append("view_type", view);
           fd.append("photo_date", uploadDate);
           if (currentDay) fd.append("day_number", String(currentDay));
           if (notes.trim()) fd.append("notes", notes.trim());
@@ -422,9 +462,15 @@ export default function PostureTrackerPage() {
                 <input
                   ref={fileRefs[v.key]}
                   type="file"
-                  accept="image/jpeg,image/png,image/heic,image/*"
+                  accept="image/*,image/heic,image/heif"
+                  capture="environment"
                   className="hidden"
-                  onChange={e => { const f = e.target.files?.[0]; if (f) handleFileSelect(v.key, f); }}
+                  onChange={e => {
+                    const f = e.target.files?.[0];
+                    if (f) handleFileSelect(v.key, f);
+                    // Reset value so same file can be re-selected
+                    e.target.value = "";
+                  }}
                 />
                 <button
                   type="button"
