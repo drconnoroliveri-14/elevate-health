@@ -1,5 +1,5 @@
 const BRAND_TEAL = "#0F6E56";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elevatehealth.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.elevatehealthtampa.com";
 
 function wrap(body: string) {
   return `<!DOCTYPE html>
@@ -162,8 +162,7 @@ export function welcomeEmail({
     subject: "You are in! Here is how to get started",
     html: wrap(`
       <p>Hey ${firstName || "there"}, welcome to the <strong>Elevate Pain-Free Program</strong>!</p>
-      <p>Your 7-module rehabilitation program is ready. Module 1 is unlocked and waiting for you right now.</p>
-      <p>A new module unlocks every 7 days as you progress through the program.</p>
+      <p>Your 7-module rehabilitation program is ready. All modules are unlocked and waiting for you right now.</p>
       <table style="background:#f3f4f6;border-radius:8px;padding:16px 24px;margin:24px 0;width:100%;">
         <tr><td style="padding:4px 0;font-size:14px;"><strong>Login URL:</strong> <a href="${SITE_URL}/login">${SITE_URL}/login</a></td></tr>
         <tr><td style="padding:4px 0;font-size:14px;"><strong>Email:</strong> ${email}</td></tr>
