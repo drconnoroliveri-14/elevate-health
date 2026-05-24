@@ -107,8 +107,19 @@ export default function LandingPage() {
           </h1>
 
           {/* Styled subtitle */}
-          <p className="text-lg sm:text-xl font-medium mb-8 mt-6 tracking-wide" style={{ color: "rgba(255,255,255,0.60)" }}>
-            From Home, Without Surgery or Medication
+          <p className="mb-8 mt-6">
+            <span
+              className="inline-block font-bold text-xl sm:text-2xl"
+              style={{
+                background: "#F5C842",
+                color: "#1a1a1a",
+                padding: "6px 16px",
+                borderRadius: "999px",
+                boxShadow: "0 4px 16px rgba(245,200,66,0.45)",
+              }}
+            >
+              From Home, Without Surgery or Medication
+            </span>
           </p>
 
           {/* Body copy */}
@@ -119,7 +130,7 @@ export default function LandingPage() {
           {/* Trust pill badges */}
           <ul className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
             {[
-              "Developed with licensed chiropractors",
+              "Developed by Licensed Chiropractors",
               "Step-by-step video exercises — no equipment needed",
               "90-day pain-free guarantee",
             ].map((bullet) => (
