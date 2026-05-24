@@ -85,7 +85,7 @@ export async function POST() {
 
   if (!paymentIntentId) {
     return NextResponse.json(
-      { error: "Could not locate your payment. Please contact droliveri@elevatehealthtampa.com for a manual refund." },
+      { error: "Could not locate your payment. Please contact management@elevatehealthtampa.com for a manual refund." },
       { status: 400 }
     );
   }
@@ -96,7 +96,7 @@ export async function POST() {
     const msg = err instanceof Error ? err.message : "Stripe refund failed.";
     console.error("[refund] Stripe refund error:", msg);
     return NextResponse.json(
-      { error: `Refund failed: ${msg}. Please contact droliveri@elevatehealthtampa.com.` },
+      { error: `Refund failed: ${msg}. Please contact management@elevatehealthtampa.com.` },
       { status: 400 }
     );
   }

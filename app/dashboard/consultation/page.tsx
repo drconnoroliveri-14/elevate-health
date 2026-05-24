@@ -160,7 +160,7 @@ export default async function ConsultationPage() {
       <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center">
         <p className="text-sm text-gray-500">
           Questions about your booking? Reply to your confirmation email or contact us at{" "}
-          <span className="text-teal-600 font-medium">support@elevatehealth.com</span>
+          <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 font-medium hover:underline">droliveri@elevatehealthtampa.com</a>
         </p>
       </div>
     </div>

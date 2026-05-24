@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const LAST_UPDATED = "May 2025";
-const CONTACT_EMAIL = "support@elevatehealth.com";
+const CONTACT_EMAIL = "info@elevatehealthtampa.com";
 
 function Section({
   title,
