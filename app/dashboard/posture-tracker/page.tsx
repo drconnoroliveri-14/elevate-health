@@ -265,28 +265,40 @@ export default function PostureTrackerPage() {
   // Compress image to max 1200px, JPEG 0.8 quality using Canvas API
   async function compressImage(file: File): Promise<Blob> {
     return new Promise((resolve, reject) => {
+      console.log("[compress] start:", file.name, file.size, file.type);
       const img = new Image();
       const objectUrl = URL.createObjectURL(file);
       img.onload = () => {
         URL.revokeObjectURL(objectUrl);
         const MAX = 1200;
-        let { width, height } = img;
+        // naturalWidth may be 0 on some Android browsers for HEIC — fallback to img.width
+        let width = img.naturalWidth || img.width || 800;
+        let height = img.naturalHeight || img.height || 1067;
         if (width > MAX || height > MAX) {
           if (width > height) { height = Math.round((height * MAX) / width); width = MAX; }
           else { width = Math.round((width * MAX) / height); height = MAX; }
         }
+        console.log("[compress] canvas size:", width, "x", height);
         const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext("2d");
-        if (!ctx) { reject(new Error("Canvas not available")); return; }
+        if (!ctx) { reject(new Error("Canvas not available on this device")); return; }
         ctx.drawImage(img, 0, 0, width, height);
         canvas.toBlob(blob => {
-          if (blob) resolve(blob);
-          else reject(new Error("Compression failed"));
+          if (blob) {
+            console.log("[compress] output size:", blob.size, "bytes");
+            resolve(blob);
+          } else {
+            reject(new Error("Canvas toBlob returned null"));
+          }
         }, "image/jpeg", 0.8);
       };
-      img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error("Image load failed")); };
+      img.onerror = (e) => {
+        URL.revokeObjectURL(objectUrl);
+        console.error("[compress] image load error:", e);
+        reject(new Error(`Could not load image: ${file.name} (${file.type})`));
+      };
       img.src = objectUrl;
     });
   }
@@ -302,28 +314,43 @@ export default function PostureTrackerPage() {
         ? Math.max(1, Math.floor((new Date(uploadDate + "T12:00:00").getTime() - new Date(purchasedAt).getTime()) / 86_400_000) + 1)
         : null;
 
-      // Compress all selected files before upload
-      const compressed = await Promise.all(
-        VIEWS.map(async v => {
-          if (!pendingFiles[v.key]) return { view: v.key, blob: null };
-          const blob = await compressImage(pendingFiles[v.key]!);
-          return { view: v.key, blob };
-        })
-      );
+      // Compress each file individually — catch per-file errors
+      const compressed: Array<{ view: string; blob: Blob }> = [];
+      for (const v of VIEWS) {
+        const file = pendingFiles[v.key];
+        if (!file) continue;
+        try {
+          const blob = await compressImage(file);
+          compressed.push({ view: v.key, blob });
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : "Compression failed";
+          console.error(`[upload] compress error for ${v.key}:`, err);
+          throw new Error(`Could not process ${v.label}: ${msg}`);
+        }
+      }
 
-      const results = await Promise.all(
-        compressed.filter(c => c.blob).map(({ view, blob }) => {
-          const fd = new FormData();
-          fd.append("photo", blob!, `${view}.jpg`);
-          fd.append("view_type", view);
-          fd.append("photo_date", uploadDate);
-          if (currentDay) fd.append("day_number", String(currentDay));
-          if (notes.trim()) fd.append("notes", notes.trim());
-          return fetch("/api/posture-photos/upload", { method: "POST", body: fd });
-        })
-      );
+      // Upload sequentially so errors are easier to diagnose
+      for (const { view, blob } of compressed) {
+        console.log(`[upload] uploading ${view}: ${blob.size} bytes`);
+        const fd = new FormData();
+        fd.append("photo", blob, `${view}.jpg`);
+        fd.append("view_type", view);
+        fd.append("photo_date", uploadDate);
+        if (currentDay) fd.append("day_number", String(currentDay));
+        if (notes.trim()) fd.append("notes", notes.trim());
 
-      if (!results.every(r => r.ok)) throw new Error("One or more uploads failed. Please try again.");
+        const res = await fetch("/api/posture-photos/upload", { method: "POST", body: fd });
+        if (!res.ok) {
+          let apiError = `Server error (${res.status})`;
+          try {
+            const body = await res.json();
+            apiError = body.error ?? apiError;
+          } catch { /* response was not JSON */ }
+          console.error(`[upload] ${view} failed:`, res.status, apiError);
+          throw new Error(`Upload failed for ${view} view: ${apiError}`);
+        }
+        console.log(`[upload] ${view} uploaded ok`);
+      }
 
       setUploadMsg("Photos saved!");
       setPendingFiles({ front: null, side: null, back: null });

@@ -3,6 +3,9 @@ import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { supabaseAdmin } from "@/lib/supabase";
 
+// Next.js App Router streams multipart natively — no bodyParser config needed.
+export const dynamic = "force-dynamic";
+
 async function getAuthUser() {
   const cookieStore = cookies();
   const supabase = createServerClient(
@@ -15,14 +18,21 @@ async function getAuthUser() {
 }
 
 export async function POST(req: NextRequest) {
+  // ── 1. Auth check ────────────────────────────────────────────────────────
   const user = await getAuthUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!user) {
+    console.error("[posture-upload] No authenticated user");
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  console.log("[posture-upload] user.id:", user.id);
 
+  // ── 2. Parse multipart form ───────────────────────────────────────────────
   let formData: FormData;
   try {
     formData = await req.formData();
-  } catch {
-    return NextResponse.json({ error: "Invalid form data." }, { status: 400 });
+  } catch (err) {
+    console.error("[posture-upload] formData parse error:", err);
+    return NextResponse.json({ error: "Could not parse form data." }, { status: 400 });
   }
 
   const file = formData.get("photo") as File | null;
@@ -31,20 +41,47 @@ export async function POST(req: NextRequest) {
   const day_number = formData.get("day_number") ? Number(formData.get("day_number")) : null;
   const notes = (formData.get("notes") as string | null) || null;
 
+  console.log("[posture-upload] fields:", {
+    hasFile: !!file,
+    fileName: file?.name,
+    fileSize: file?.size,
+    fileType: file?.type,
+    view_type,
+    photo_date,
+    day_number,
+  });
+
   if (!file || !view_type || !photo_date) {
-    return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    const missing = [!file && "photo", !view_type && "view_type", !photo_date && "photo_date"].filter(Boolean);
+    console.error("[posture-upload] Missing fields:", missing);
+    return NextResponse.json({ error: `Missing required fields: ${missing.join(", ")}` }, { status: 400 });
   }
 
   if (!["front", "side", "back"].includes(view_type)) {
-    return NextResponse.json({ error: "Invalid view_type." }, { status: 400 });
+    console.error("[posture-upload] Invalid view_type:", view_type);
+    return NextResponse.json({ error: `Invalid view_type: ${view_type}` }, { status: 400 });
   }
 
-  // Client always sends compressed JPEG blobs — always store as .jpg
+  // ── 3. Read file buffer ───────────────────────────────────────────────────
+  let arrayBuffer: ArrayBuffer;
+  try {
+    arrayBuffer = await file.arrayBuffer();
+  } catch (err) {
+    console.error("[posture-upload] arrayBuffer error:", err);
+    return NextResponse.json({ error: "Could not read file data." }, { status: 400 });
+  }
+  console.log("[posture-upload] buffer size:", arrayBuffer.byteLength, "bytes");
+
+  if (arrayBuffer.byteLength === 0) {
+    console.error("[posture-upload] Empty file buffer");
+    return NextResponse.json({ error: "Uploaded file is empty." }, { status: 400 });
+  }
+
+  // ── 4. Upload to Supabase Storage ─────────────────────────────────────────
   const storagePath = `${user.id}/${photo_date}-${view_type}.jpg`;
+  console.log("[posture-upload] uploading to storage path:", storagePath);
 
-  const arrayBuffer = await file.arrayBuffer();
-
-  const { error: uploadError } = await supabaseAdmin.storage
+  const { data: storageData, error: uploadError } = await supabaseAdmin.storage
     .from("posture-photos")
     .upload(storagePath, arrayBuffer, {
       contentType: "image/jpeg",
@@ -52,34 +89,49 @@ export async function POST(req: NextRequest) {
     });
 
   if (uploadError) {
-    console.error("[posture-photos upload]", uploadError);
-    return NextResponse.json({ error: "Storage upload failed." }, { status: 500 });
+    console.error("[posture-upload] Storage upload error:", {
+      message: uploadError.message,
+      name: uploadError.name,
+      cause: (uploadError as { cause?: unknown }).cause,
+    });
+    return NextResponse.json(
+      { error: `Storage upload failed: ${uploadError.message}` },
+      { status: 500 }
+    );
   }
+  console.log("[posture-upload] storage upload ok:", storageData?.path);
 
+  // ── 5. Insert DB record ───────────────────────────────────────────────────
   const { data, error: dbError } = await supabaseAdmin
     .from("posture_photos")
     .upsert(
-      {
-        user_id: user.id,
-        photo_url: storagePath,
-        photo_date,
-        day_number,
-        view_type,
-        notes,
-      },
+      { user_id: user.id, photo_url: storagePath, photo_date, day_number, view_type, notes },
       { onConflict: "user_id,photo_date,view_type" }
     )
     .select()
     .single();
 
   if (dbError) {
-    console.error("[posture-photos db insert]", dbError);
-    return NextResponse.json({ error: "Could not save photo record." }, { status: 500 });
+    console.error("[posture-upload] DB upsert error:", {
+      message: dbError.message,
+      code: dbError.code,
+      details: dbError.details,
+    });
+    return NextResponse.json(
+      { error: `Database error: ${dbError.message}` },
+      { status: 500 }
+    );
   }
 
-  const { data: signed } = await supabaseAdmin.storage
+  // ── 6. Generate signed URL ────────────────────────────────────────────────
+  const { data: signed, error: signedErr } = await supabaseAdmin.storage
     .from("posture-photos")
     .createSignedUrl(storagePath, 3600);
 
+  if (signedErr) {
+    console.error("[posture-upload] Signed URL error:", signedErr.message);
+  }
+
+  console.log("[posture-upload] success for", storagePath);
   return NextResponse.json({ ...data, signed_url: signed?.signedUrl ?? null });
 }
