@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 
 const today = () => new Date().toISOString().split("T")[0];
 
@@ -98,6 +99,21 @@ export default function PostureGuidePage() {
   return (
     <div>
       <style>{`@media print { aside, nav, .no-print { display: none !important; } }`}</style>
+
+      {/* Photo Tracker Card */}
+      <div className="bg-teal-50 border border-teal-300 rounded-2xl p-5 mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="text-3xl flex-shrink-0">📸</div>
+        <div className="flex-1">
+          <p className="font-bold text-teal-900 mb-0.5">90-Day Posture Photo Tracker</p>
+          <p className="text-sm text-teal-700">Upload your posture photos every 30 days and track your transformation with posture analysis tools.</p>
+        </div>
+        <Link
+          href="/dashboard/posture-tracker"
+          className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors whitespace-nowrap"
+        >
+          Open Photo Tracker →
+        </Link>
+      </div>
 
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>

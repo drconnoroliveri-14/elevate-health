@@ -139,3 +139,32 @@ create policy "Users can manage own journal"
 -- Migration: add login tracking columns to profiles
 alter table profiles add column if not exists login_dates jsonb default '[]'::jsonb;
 alter table profiles add column if not exists last_login timestamptz;
+
+-- ── Posture Photo Tracker ────────────────────────────────────────────────────
+-- Run these statements in the Supabase SQL editor:
+create table if not exists posture_photos (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  photo_url text not null,
+  photo_date date not null,
+  day_number int,
+  view_type text check (view_type in ('front', 'side', 'back')),
+  notes text,
+  created_at timestamptz default now(),
+  unique(user_id, photo_date, view_type)
+);
+alter table posture_photos enable row level security;
+create policy "Users can manage own posture photos"
+  on posture_photos for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+-- Supabase Storage bucket setup (do this in the Supabase dashboard):
+-- 1. Go to Storage → New bucket
+-- 2. Name: posture-photos
+-- 3. Public: OFF (private)
+-- 4. Click Create bucket
+-- 5. Go to Storage → Policies → posture-photos bucket
+-- 6. Add a policy for all operations with this expression:
+--    (auth.uid()::text = (storage.foldername(name))[1])
+-- This ensures users can only access their own folder (/{userId}/...).
