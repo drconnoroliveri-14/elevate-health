@@ -168,7 +168,7 @@ export default function LandingPage() {
             <button
               onClick={() => scrollToId("enroll")}
               className="relative font-extrabold text-xl px-12 py-5 rounded-2xl shadow-2xl transition-transform hover:scale-105 active:scale-100 duration-150"
-              style={{ background: "#F5C842", color: "#085041" }}
+              style={{ background: "#F5C842", color: "#1a1a1a" }}
             >
               Yes, I Want to Live Pain-Free →
             </button>
