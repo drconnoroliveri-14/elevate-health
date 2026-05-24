@@ -297,7 +297,7 @@ export default function EnrollSection() {
             <div className="flex flex-col sm:flex-row gap-4">
               {[
                 { emoji: "📧", title: "Check Your Email", sub: "Your login credentials are sent instantly after purchase. If you added a Virtual Consultation, your booking link will also be included." },
-                { emoji: "🔐", title: "Access Your Dashboard", sub: "Log in to your personal pain-free portal" },
+                { emoji: "🔐", title: "Access Your Dashboard", sub: "Log in to your personal pain-free portal. If you added the Nutrition for Inflammation course, it will be waiting for you in your dashboard." },
                 { emoji: "🎯", title: "Start Module 1", sub: "Begin your at-home rehabilitation immediately" },
               ].map((step, i) => (
                 <div key={step.title} className="flex-1 flex flex-col items-center text-center gap-1">
