@@ -50,7 +50,7 @@ export default async function RefundPage() {
 
   const metDays = daysSincePurchase >= 90;
   const metModules = modulesCompleted >= 7;
-  const metLogins = uniqueLoginDays >= 10;
+  const metLogins = uniqueLoginDays >= 30;
   const allMet = metDays && metModules && metLogins;
 
   // All criteria met — show the refund form
@@ -96,9 +96,9 @@ export default async function RefundPage() {
       progress: `${modulesCompleted} of 7 modules complete`,
     },
     {
-      label: "Active for 10+ days",
+      label: "Active for 30+ days",
       met: metLogins,
-      progress: `${uniqueLoginDays} of 10 days logged in`,
+      progress: `${uniqueLoginDays} of 30 days logged in`,
     },
   ];
 
