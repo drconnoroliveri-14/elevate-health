@@ -64,22 +64,6 @@ function Ad1() {
         position: "relative",
       }}
     >
-      {/* Logo — top right */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/logo.PNG"
-        alt="Elevate Health"
-        style={{
-          position: "absolute",
-          top: "12px",
-          right: "12px",
-          height: "84px",
-          width: "auto",
-          filter: "brightness(0) invert(1)",
-          zIndex: 10,
-        }}
-      />
-
       {/* Subtle background pattern */}
       <div style={{
         position: "absolute", inset: 0,
@@ -152,22 +136,6 @@ function Ad2() {
         position: "relative",
       }}
     >
-      {/* Logo — top right */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/logo.PNG"
-        alt="Elevate Health"
-        style={{
-          position: "absolute",
-          top: "12px",
-          right: "12px",
-          height: "84px",
-          width: "auto",
-          filter: "brightness(0) invert(1)",
-          zIndex: 10,
-        }}
-      />
-
       {/* Background gradients simulating body/spine imagery */}
       <div style={{
         position: "absolute", inset: 0,
@@ -267,20 +235,6 @@ function Ad3() {
       }}
     >
       {/* Logo — bottom right (no filter: white bg ad) */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/logo.PNG"
-        alt="Elevate Health"
-        style={{
-          position: "absolute",
-          bottom: "12px",
-          right: "12px",
-          height: "84px",
-          width: "auto",
-          zIndex: 10,
-        }}
-      />
-
       {/* Top teal bar */}
       <div style={{ height: 10, background: `linear-gradient(90deg, ${TEAL}, ${TEAL_LIGHT})` }} />
 
