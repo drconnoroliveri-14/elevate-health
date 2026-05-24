@@ -97,7 +97,7 @@ function LoginForm() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         <div className="text-center mb-8">
           <Link href="/">
-            <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{ height: "70px", width: "auto" }} />
+            <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized className="mx-auto block" style={{ height: "70px", width: "auto" }} />
           </Link>
           <p className="text-gray-500 text-sm mt-2">
             {mode === "login" ? "Sign in to your student portal" : "Reset your password"}
