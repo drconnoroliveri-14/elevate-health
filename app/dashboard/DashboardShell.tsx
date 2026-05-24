@@ -273,6 +273,40 @@ export default function DashboardShell({
         >
           Log Out →
         </button>
+
+        {/* Book In-Person Visit */}
+        <div className="pt-2 border-t border-teal-600/50">
+          <div className="flex items-center gap-1.5 mb-1">
+            <svg className="w-3 h-3 text-teal-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+            </svg>
+            <span className="text-teal-400 text-xs font-semibold uppercase tracking-wider">Book In-Person Visit</span>
+          </div>
+          <p className="text-teal-300/70 text-xs mb-2">Select your nearest location:</p>
+          <div className="flex flex-col gap-1.5">
+            <a
+              href="https://elevatehealthfacilities.com/booking-dr-connor/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setSidebarOpen(false)}
+              className="w-full text-left bg-white/95 hover:bg-teal-50 border border-teal-400 text-teal-700 rounded-lg px-3 py-2 transition-colors"
+            >
+              <p className="text-xs font-bold leading-tight">📍 South Tampa</p>
+              <p className="text-xs text-gray-500 leading-tight">Elevate Health Facilities</p>
+            </a>
+            <a
+              href="https://northtampachiropractor.com/appointments/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setSidebarOpen(false)}
+              className="w-full text-left bg-white/95 hover:bg-teal-50 border border-teal-400 text-teal-700 rounded-lg px-3 py-2 transition-colors"
+            >
+              <p className="text-xs font-bold leading-tight">📍 North Tampa</p>
+              <p className="text-xs text-gray-500 leading-tight">North Tampa Chiropractor</p>
+            </a>
+          </div>
+        </div>
+
         <div className="pt-1 border-t border-teal-600/50">
           <Link
             href="/dashboard/refund"
