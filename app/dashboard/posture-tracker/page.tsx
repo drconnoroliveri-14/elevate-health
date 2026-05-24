@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 
+// ── Types ─────────────────────────────────────────────────────────────────────
+
 interface PosturePhoto {
   id: string;
   photo_url: string;
@@ -12,6 +14,10 @@ interface PosturePhoto {
   notes: string | null;
 }
 
+type AnalysisSet = Record<"front" | "side" | "back", PosturePhoto | null>;
+
+// ── Constants ─────────────────────────────────────────────────────────────────
+
 const VIEWS: Array<{ key: "front" | "side" | "back"; label: string }> = [
   { key: "front", label: "Front View" },
   { key: "side", label: "Side View" },
@@ -19,6 +25,9 @@ const VIEWS: Array<{ key: "front" | "side" | "back"; label: string }> = [
 ];
 
 const MILESTONES = [1, 30, 60, 90];
+
+const CANVAS_W = 400;
+const CANVAS_H = 533;
 
 const VIEW_TIPS: Record<string, string> = {
   front: "Front view: Use the horizontal lines to check shoulder and hip levelness — both sides should be at the same height.",
@@ -31,6 +40,8 @@ const SILHOUETTE_INSTRUCTIONS: Record<string, string> = {
   side: "Stand sideways to the camera. Keep your arms relaxed at your sides.",
   back: "Turn your back to the camera. Keep your feet shoulder-width apart.",
 };
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function todayStr() { return new Date().toISOString().split("T")[0]; }
 
@@ -59,6 +70,20 @@ function getPhotosNearMilestone(photos: PosturePhoto[], purchasedAt: string, mil
   return photos.filter(p => Math.abs(new Date(p.photo_date + "T12:00:00").getTime() - target) <= 7 * 86_400_000);
 }
 
+// Picks the most recent date's photos and returns a front/side/back set
+function buildAnalysisSet(allPhotos: PosturePhoto[]): AnalysisSet | null {
+  if (allPhotos.length === 0) return null;
+  const sorted = [...allPhotos].sort((a, b) => b.photo_date.localeCompare(a.photo_date));
+  const date = sorted[0].photo_date;
+  const set: AnalysisSet = { front: null, side: null, back: null };
+  for (const p of allPhotos.filter(x => x.photo_date === date)) {
+    set[p.view_type] = p;
+  }
+  return set;
+}
+
+// ── Icons ─────────────────────────────────────────────────────────────────────
+
 function CameraIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -68,109 +93,65 @@ function CameraIcon({ className }: { className?: string }) {
   );
 }
 
-// SVG posture silhouette for the pre-upload modal
+// ── PostureSilhouette ─────────────────────────────────────────────────────────
+
 function PostureSilhouette({ view }: { view: "front" | "side" | "back" }) {
   return (
     <svg viewBox="0 0 120 240" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      {/* Plumb line */}
       <line x1="60" y1="0" x2="60" y2="240" stroke="#99f6e4" strokeWidth="1" strokeDasharray="6 4" />
-
       {view === "front" && (
         <>
-          {/* Head */}
           <circle cx="60" cy="22" r="14" stroke="#0d9488" strokeWidth="2.5" />
-          {/* Neck */}
           <line x1="60" y1="36" x2="60" y2="50" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Shoulders */}
           <line x1="28" y1="58" x2="92" y2="58" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Shoulder level label */}
           <text x="4" y="56" fill="#0d9488" fontSize="7" fontFamily="sans-serif">─ shoulders</text>
-          {/* Torso */}
           <line x1="60" y1="50" x2="60" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Left arm */}
           <line x1="28" y1="58" x2="20" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Right arm */}
           <line x1="92" y1="58" x2="100" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Hips */}
           <line x1="40" y1="118" x2="80" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Hip level label */}
           <text x="4" y="116" fill="#0d9488" fontSize="7" fontFamily="sans-serif">─ hips</text>
-          {/* Left leg upper */}
           <line x1="48" y1="118" x2="44" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Right leg upper */}
           <line x1="72" y1="118" x2="76" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Left leg lower */}
           <line x1="44" y1="170" x2="42" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Right leg lower */}
           <line x1="76" y1="170" x2="78" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Feet */}
           <line x1="36" y1="218" x2="50" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
           <line x1="70" y1="218" x2="84" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
         </>
       )}
-
       {view === "side" && (
         <>
-          {/* Head */}
           <circle cx="60" cy="22" r="14" stroke="#0d9488" strokeWidth="2.5" />
-          {/* Neck — slightly forward of plumb */}
           <line x1="60" y1="36" x2="60" y2="50" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Spine (ideal = aligned with plumb) */}
           <line x1="60" y1="50" x2="60" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Shoulder dot */}
           <circle cx="60" cy="58" r="4" fill="#0d9488" />
-          {/* Shoulder label */}
           <text x="66" y="60" fill="#0d9488" fontSize="7" fontFamily="sans-serif">shoulder</text>
-          {/* Hip dot */}
           <circle cx="60" cy="118" r="4" fill="#0d9488" />
-          {/* Hip label */}
           <text x="66" y="120" fill="#0d9488" fontSize="7" fontFamily="sans-serif">hip</text>
-          {/* One arm (front) */}
           <line x1="60" y1="58" x2="52" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Leg upper */}
           <line x1="60" y1="118" x2="60" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Knee dot */}
           <circle cx="60" cy="170" r="3" fill="#0d9488" />
-          {/* Knee label */}
           <text x="66" y="172" fill="#0d9488" fontSize="7" fontFamily="sans-serif">knee</text>
-          {/* Leg lower */}
           <line x1="60" y1="170" x2="60" y2="215" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Ankle dot */}
           <circle cx="60" cy="215" r="3" fill="#0d9488" />
-          {/* Ankle label */}
           <text x="66" y="217" fill="#0d9488" fontSize="7" fontFamily="sans-serif">ankle</text>
-          {/* Foot */}
           <line x1="60" y1="215" x2="76" y2="220" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
         </>
       )}
-
       {view === "back" && (
         <>
-          {/* Head */}
           <circle cx="60" cy="22" r="14" stroke="#0d9488" strokeWidth="2.5" />
-          {/* Neck */}
           <line x1="60" y1="36" x2="60" y2="50" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Shoulders */}
           <line x1="28" y1="58" x2="92" y2="58" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
           <text x="4" y="56" fill="#0d9488" fontSize="7" fontFamily="sans-serif">─ shoulders</text>
-          {/* Spine */}
           <line x1="60" y1="50" x2="60" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Left arm */}
           <line x1="28" y1="58" x2="20" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Right arm */}
           <line x1="92" y1="58" x2="100" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Hips */}
           <line x1="40" y1="118" x2="80" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
           <text x="4" y="116" fill="#0d9488" fontSize="7" fontFamily="sans-serif">─ hips</text>
-          {/* Left leg upper */}
           <line x1="48" y1="118" x2="44" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Right leg upper */}
           <line x1="72" y1="118" x2="76" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Left leg lower */}
           <line x1="44" y1="170" x2="42" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Right leg lower */}
           <line x1="76" y1="170" x2="78" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
-          {/* Feet */}
           <line x1="36" y1="218" x2="50" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
           <line x1="70" y1="218" x2="84" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
         </>
@@ -178,6 +159,194 @@ function PostureSilhouette({ view }: { view: "front" | "side" | "back" }) {
     </svg>
   );
 }
+
+// ── AnalysisCanvas ────────────────────────────────────────────────────────────
+// Self-contained canvas with auto-drawn draggable posture reference lines.
+
+function AnalysisCanvas({ photo, view }: { photo: PosturePhoto; view: "front" | "side" | "back" }) {
+  const [plumbX, setPlumbX] = useState(CANVAS_W / 2);
+  const [horizY1, setHorizY1] = useState(Math.round(CANVAS_H * 0.30));
+  const [horizY2, setHorizY2] = useState(Math.round(CANVAS_H * 0.60));
+  const [dragging, setDragging] = useState<"plumb" | "horiz1" | "horiz2" | null>(null);
+  const [imageVersion, setImageVersion] = useState(0);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  const draw = useCallback(() => {
+    const canvas = canvasRef.current;
+    const img = imgRef.current;
+    if (!canvas || !img) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+
+    // Draw photo
+    const scale = Math.min(CANVAS_W / img.naturalWidth, CANVAS_H / img.naturalHeight);
+    const ix = (CANVAS_W - img.naturalWidth * scale) / 2;
+    const iy = (CANVAS_H - img.naturalHeight * scale) / 2;
+    ctx.drawImage(img, ix, iy, img.naturalWidth * scale, img.naturalHeight * scale);
+
+    // ── Plumb line (red vertical) ──
+    ctx.save();
+    ctx.strokeStyle = "rgba(220,38,38,0.92)";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([10, 5]);
+    ctx.beginPath();
+    ctx.moveTo(plumbX, 0);
+    ctx.lineTo(plumbX, CANVAS_H);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = "bold 10px sans-serif";
+    ctx.fillStyle = "rgba(220,38,38,0.95)";
+    const plLabelX = plumbX > CANVAS_W - 80 ? plumbX - 80 : plumbX + 6;
+    ctx.fillText("Plumb Line", plLabelX, 16);
+    ctx.restore();
+
+    // ── Shoulder line (blue solid-ish) ──
+    ctx.save();
+    ctx.strokeStyle = "rgba(37,99,235,0.92)";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([10, 5]);
+    ctx.beginPath();
+    ctx.moveTo(0, horizY1);
+    ctx.lineTo(CANVAS_W, horizY1);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = "bold 10px sans-serif";
+    ctx.fillStyle = "rgba(37,99,235,0.95)";
+    const s1Y = horizY1 > 18 ? horizY1 - 5 : horizY1 + 14;
+    ctx.fillText("Shoulder Level", 6, s1Y);
+    ctx.restore();
+
+    // ── Hip line (blue, shorter dash) ──
+    ctx.save();
+    ctx.strokeStyle = "rgba(37,99,235,0.75)";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 6]);
+    ctx.beginPath();
+    ctx.moveTo(0, horizY2);
+    ctx.lineTo(CANVAS_W, horizY2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = "bold 10px sans-serif";
+    ctx.fillStyle = "rgba(37,99,235,0.9)";
+    const s2Y = horizY2 > 18 ? horizY2 - 5 : horizY2 + 14;
+    ctx.fillText("Hip Level", 6, s2Y);
+    ctx.restore();
+  }, [plumbX, horizY1, horizY2]);
+
+  // Load image when URL changes; reset line positions for new photo
+  useEffect(() => {
+    if (!photo.signed_url) return;
+    imgRef.current = null;
+    setPlumbX(CANVAS_W / 2);
+    setHorizY1(Math.round(CANVAS_H * 0.30));
+    setHorizY2(Math.round(CANVAS_H * 0.60));
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      imgRef.current = img;
+      setImageVersion(v => v + 1);
+    };
+    img.src = photo.signed_url;
+  }, [photo.signed_url]);
+
+  // Redraw whenever line positions or image changes
+  useEffect(() => {
+    draw();
+  }, [draw, imageVersion]);
+
+  function canvasPos(clientX: number, clientY: number) {
+    const rect = canvasRef.current!.getBoundingClientRect();
+    return {
+      x: (clientX - rect.left) * (CANVAS_W / rect.width),
+      y: (clientY - rect.top) * (CANVAS_H / rect.height),
+    };
+  }
+
+  function hitTest(x: number, y: number): "plumb" | "horiz1" | "horiz2" | null {
+    if (Math.abs(x - plumbX) < 16) return "plumb";
+    if (Math.abs(y - horizY1) < 16) return "horiz1";
+    if (Math.abs(y - horizY2) < 16) return "horiz2";
+    return null;
+  }
+
+  function onMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
+    const { x, y } = canvasPos(e.clientX, e.clientY);
+    setDragging(hitTest(x, y));
+  }
+
+  function onMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
+    if (!dragging) return;
+    const { x, y } = canvasPos(e.clientX, e.clientY);
+    if (dragging === "plumb") setPlumbX(Math.max(0, Math.min(CANVAS_W, x)));
+    else if (dragging === "horiz1") setHorizY1(Math.max(0, Math.min(CANVAS_H, y)));
+    else if (dragging === "horiz2") setHorizY2(Math.max(0, Math.min(CANVAS_H, y)));
+  }
+
+  function onTouchStart(e: React.TouchEvent<HTMLCanvasElement>) {
+    const t = e.touches[0];
+    const { x, y } = canvasPos(t.clientX, t.clientY);
+    const hit = hitTest(x, y);
+    if (hit) { e.preventDefault(); setDragging(hit); }
+  }
+
+  function onTouchMove(e: React.TouchEvent<HTMLCanvasElement>) {
+    if (!dragging) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    const { x, y } = canvasPos(t.clientX, t.clientY);
+    if (dragging === "plumb") setPlumbX(Math.max(0, Math.min(CANVAS_W, x)));
+    else if (dragging === "horiz1") setHorizY1(Math.max(0, Math.min(CANVAS_H, y)));
+    else if (dragging === "horiz2") setHorizY2(Math.max(0, Math.min(CANVAS_H, y)));
+  }
+
+  function handleDownload() {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const link = document.createElement("a");
+    link.download = `posture-${view}-${photo.photo_date}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }
+
+  return (
+    <div>
+      <div className="rounded-xl overflow-hidden bg-gray-900">
+        <canvas
+          ref={canvasRef}
+          width={CANVAS_W}
+          height={CANVAS_H}
+          className="w-full h-auto block"
+          style={{ cursor: dragging ? "grabbing" : "grab" }}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={() => setDragging(null)}
+          onMouseLeave={() => setDragging(null)}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={() => setDragging(null)}
+        />
+      </div>
+      <p className="text-xs font-medium text-teal-700 mt-2 leading-snug">
+        {VIEW_TIPS[view]}
+      </p>
+      <div className="flex items-center justify-between mt-1">
+        <p className="text-xs text-gray-400">Drag lines to adjust</p>
+        <button
+          onClick={handleDownload}
+          className="text-xs text-teal-500 hover:text-teal-700 font-medium transition-colors"
+        >
+          ⬇ Save image
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function PostureTrackerPage() {
   const [photos, setPhotos] = useState<PosturePhoto[]>([]);
@@ -192,10 +361,10 @@ export default function PostureTrackerPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
 
-  // Pre-upload silhouette modal state
+  // Pre-upload silhouette modal
   const [uploadModalView, setUploadModalView] = useState<"front" | "side" | "back" | null>(null);
 
-  // Hidden file inputs — one for gallery, one for camera per view
+  // Hidden file inputs — gallery (no capture) and camera (with capture) per view
   const frontRef = useRef<HTMLInputElement>(null);
   const sideRef = useRef<HTMLInputElement>(null);
   const backRef = useRef<HTMLInputElement>(null);
@@ -206,23 +375,14 @@ export default function PostureTrackerPage() {
   const backCameraRef = useRef<HTMLInputElement>(null);
   const cameraRefs = { front: frontCameraRef, side: sideCameraRef, back: backCameraRef };
 
-  // Analysis state
-  const [analysisPhoto, setAnalysisPhoto] = useState<PosturePhoto | null>(null);
-  const [showPlumb, setShowPlumb] = useState(false);
-  const [showHoriz, setShowHoriz] = useState(false);
-  const [showHoriz2, setShowHoriz2] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
-  const [overlayOpacity, setOverlayOpacity] = useState(40);
-  const [plumbX, setPlumbX] = useState(200);
-  const [horizY, setHorizY] = useState(160);
-  const [horizY2, setHorizY2] = useState(320);
-  const [dragging, setDragging] = useState<"plumb" | "horiz1" | "horiz2" | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const loadedImgRef = useRef<HTMLImageElement | null>(null);
+  // Analysis — set of up to 3 photos (most recent date or just-uploaded)
+  const [analysisSet, setAnalysisSet] = useState<AnalysisSet | null>(null);
+  const [analysisDate, setAnalysisDate] = useState<string | null>(null);
 
   // Comparison state
   const [compareMs, setCompareMs] = useState<number | null>(null);
 
+  // ── Load data on mount ──
   useEffect(() => {
     async function load() {
       try {
@@ -230,10 +390,19 @@ export default function PostureTrackerPage() {
           fetch("/api/posture-photos"),
           fetch("/api/profile"),
         ]);
-        if (photosRes.ok) setPhotos(await photosRes.json());
         if (profileRes.ok) {
           const p = await profileRes.json();
           if (p.purchased_at) setPurchasedAt(p.purchased_at);
+        }
+        if (photosRes.ok) {
+          const allPhotos: PosturePhoto[] = await photosRes.json();
+          setPhotos(allPhotos);
+          // Auto-show analysis for most recent photos without scrolling
+          const set = buildAnalysisSet(allPhotos);
+          if (set) {
+            setAnalysisSet(set);
+            setAnalysisDate(allPhotos.sort((a, b) => b.photo_date.localeCompare(a.photo_date))[0].photo_date);
+          }
         }
       } finally {
         setLoading(false);
@@ -242,184 +411,7 @@ export default function PostureTrackerPage() {
     load();
   }, []);
 
-  // Draw canvas
-  const redraw = useCallback(() => {
-    const canvas = canvasRef.current;
-    const img = loadedImgRef.current;
-    if (!canvas || !img) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw image centered/fitted
-    const scale = Math.min(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
-    const ix = (canvas.width - img.naturalWidth * scale) / 2;
-    const iy = (canvas.height - img.naturalHeight * scale) / 2;
-    ctx.drawImage(img, ix, iy, img.naturalWidth * scale, img.naturalHeight * scale);
-
-    // Plumb line (red dashed vertical)
-    if (showPlumb) {
-      ctx.save();
-      ctx.strokeStyle = "rgba(220,38,38,0.9)";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([10, 5]);
-      ctx.beginPath();
-      ctx.moveTo(plumbX, 0);
-      ctx.lineTo(plumbX, canvas.height);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      // Label background
-      const labelW = 74;
-      const labelH = 16;
-      const labelX = Math.min(plumbX + 6, canvas.width - labelW - 4);
-      ctx.fillStyle = "rgba(220,38,38,0.15)";
-      ctx.fillRect(labelX, 6, labelW, labelH);
-      ctx.font = "bold 10px sans-serif";
-      ctx.fillStyle = "rgba(220,38,38,1)";
-      ctx.fillText("◄ Plumb Line ►", labelX + 4, 18);
-      ctx.restore();
-    }
-
-    // Shoulder horizontal line (blue dashed)
-    if (showHoriz) {
-      ctx.save();
-      ctx.strokeStyle = "rgba(37,99,235,0.9)";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([10, 5]);
-      ctx.beginPath();
-      ctx.moveTo(0, horizY);
-      ctx.lineTo(canvas.width, horizY);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      const labelW = 96;
-      const labelH = 16;
-      const labelY = Math.max(horizY - 18, 4);
-      ctx.fillStyle = "rgba(37,99,235,0.15)";
-      ctx.fillRect(4, labelY, labelW, labelH);
-      ctx.font = "bold 10px sans-serif";
-      ctx.fillStyle = "rgba(37,99,235,1)";
-      ctx.fillText("▲ Shoulder Level ▼", 8, labelY + 12);
-      ctx.restore();
-    }
-
-    // Hip horizontal line (purple dashed)
-    if (showHoriz2) {
-      ctx.save();
-      ctx.strokeStyle = "rgba(124,58,237,0.9)";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([10, 5]);
-      ctx.beginPath();
-      ctx.moveTo(0, horizY2);
-      ctx.lineTo(canvas.width, horizY2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      const labelW = 80;
-      const labelH = 16;
-      const labelY = Math.max(horizY2 - 18, 4);
-      ctx.fillStyle = "rgba(124,58,237,0.15)";
-      ctx.fillRect(4, labelY, labelW, labelH);
-      ctx.font = "bold 10px sans-serif";
-      ctx.fillStyle = "rgba(124,58,237,1)";
-      ctx.fillText("▲ Hip Level ▼", 8, labelY + 12);
-      ctx.restore();
-    }
-
-    // Ideal posture overlay (green figure)
-    if (showOverlay) {
-      ctx.save();
-      ctx.globalAlpha = overlayOpacity / 100;
-      ctx.strokeStyle = "#16a34a";
-      ctx.lineWidth = 3;
-      ctx.setLineDash([]);
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-
-      const cx = canvas.width / 2;
-      const h = canvas.height;
-      const w = canvas.width;
-      const headR = h * 0.07;
-      const headCy = h * 0.1;
-      const shoulderY = headCy + headR * 1.6;
-      const sw = w * 0.22;
-      const hipY = shoulderY + h * 0.28;
-      const hw = w * 0.14;
-      const kneeY = hipY + h * 0.22;
-      const ankleY = kneeY + h * 0.19;
-
-      ctx.beginPath(); ctx.arc(cx, headCy, headR, 0, Math.PI * 2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx, headCy + headR); ctx.lineTo(cx, hipY); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx - sw, shoulderY); ctx.lineTo(cx + sw, shoulderY); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx - sw, shoulderY); ctx.lineTo(cx - sw * 0.85, (shoulderY + hipY) / 2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx + sw, shoulderY); ctx.lineTo(cx + sw * 0.85, (shoulderY + hipY) / 2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx - hw, hipY); ctx.lineTo(cx + hw, hipY); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx - hw * 0.6, hipY); ctx.lineTo(cx - hw * 0.4, kneeY); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx + hw * 0.6, hipY); ctx.lineTo(cx + hw * 0.4, kneeY); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx - hw * 0.4, kneeY); ctx.lineTo(cx - hw * 0.35, ankleY); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx + hw * 0.4, kneeY); ctx.lineTo(cx + hw * 0.35, ankleY); ctx.stroke();
-
-      ctx.restore();
-    }
-  }, [showPlumb, showHoriz, showHoriz2, showOverlay, overlayOpacity, plumbX, horizY, horizY2]);
-
-  // Load photo into canvas when analysisPhoto changes
-  useEffect(() => {
-    if (!analysisPhoto?.signed_url) { loadedImgRef.current = null; return; }
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => { loadedImgRef.current = img; redraw(); };
-    img.src = analysisPhoto.signed_url;
-  }, [analysisPhoto, redraw]);
-
-  // Redraw when tool state changes
-  useEffect(() => {
-    if (loadedImgRef.current) redraw();
-  }, [redraw]);
-
-  // Canvas coordinate helpers
-  function canvasPos(clientX: number, clientY: number) {
-    const canvas = canvasRef.current!;
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: (clientX - rect.left) * (canvas.width / rect.width),
-      y: (clientY - rect.top) * (canvas.height / rect.height),
-    };
-  }
-
-  function onMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
-    const { x, y } = canvasPos(e.clientX, e.clientY);
-    if (showPlumb && Math.abs(x - plumbX) < 14) setDragging("plumb");
-    else if (showHoriz && Math.abs(y - horizY) < 14) setDragging("horiz1");
-    else if (showHoriz2 && Math.abs(y - horizY2) < 14) setDragging("horiz2");
-  }
-  function onMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
-    if (!dragging) return;
-    const { x, y } = canvasPos(e.clientX, e.clientY);
-    if (dragging === "plumb") setPlumbX(Math.max(0, x));
-    if (dragging === "horiz1") setHorizY(Math.max(0, y));
-    if (dragging === "horiz2") setHorizY2(Math.max(0, y));
-  }
-  function onMouseUp() { setDragging(null); }
-
-  function onTouchStart(e: React.TouchEvent<HTMLCanvasElement>) {
-    const t = e.touches[0];
-    const { x, y } = canvasPos(t.clientX, t.clientY);
-    if (showPlumb && Math.abs(x - plumbX) < 22) { e.preventDefault(); setDragging("plumb"); }
-    else if (showHoriz && Math.abs(y - horizY) < 22) { e.preventDefault(); setDragging("horiz1"); }
-    else if (showHoriz2 && Math.abs(y - horizY2) < 22) { e.preventDefault(); setDragging("horiz2"); }
-  }
-  function onTouchMove(e: React.TouchEvent<HTMLCanvasElement>) {
-    if (!dragging) return;
-    e.preventDefault();
-    const t = e.touches[0];
-    const { x, y } = canvasPos(t.clientX, t.clientY);
-    if (dragging === "plumb") setPlumbX(Math.max(0, x));
-    if (dragging === "horiz1") setHorizY(Math.max(0, y));
-    if (dragging === "horiz2") setHorizY2(Math.max(0, y));
-  }
-  function onTouchEnd() { setDragging(null); }
-
-  // File select
+  // ── File select ──
   function handleFileSelect(view: "front" | "side" | "back", file: File) {
     const reader = new FileReader();
     reader.onload = e2 => setPendingPreviews(prev => ({ ...prev, [view]: e2.target?.result as string }));
@@ -433,7 +425,7 @@ export default function PostureTrackerPage() {
     setPendingPreviews(prev => ({ ...prev, [view]: null }));
   }
 
-  // Compress image to max 1200px, JPEG 0.8 quality using Canvas API
+  // ── Compress image ──
   async function compressImage(file: File): Promise<Blob> {
     return new Promise((resolve, reject) => {
       console.log("[compress] start:", file.name, file.size, file.type);
@@ -448,62 +440,48 @@ export default function PostureTrackerPage() {
           if (width > height) { height = Math.round((height * MAX) / width); width = MAX; }
           else { width = Math.round((width * MAX) / height); height = MAX; }
         }
-        console.log("[compress] canvas size:", width, "x", height);
         const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = width; canvas.height = height;
         const ctx = canvas.getContext("2d");
-        if (!ctx) { reject(new Error("Canvas not available on this device")); return; }
+        if (!ctx) { reject(new Error("Canvas not available")); return; }
         ctx.drawImage(img, 0, 0, width, height);
         canvas.toBlob(blob => {
-          if (blob) {
-            console.log("[compress] output size:", blob.size, "bytes");
-            resolve(blob);
-          } else {
-            reject(new Error("Canvas toBlob returned null"));
-          }
+          if (blob) { console.log("[compress] output:", blob.size, "bytes"); resolve(blob); }
+          else reject(new Error("Canvas toBlob returned null"));
         }, "image/jpeg", 0.8);
       };
       img.onerror = (e) => {
         URL.revokeObjectURL(objectUrl);
-        console.error("[compress] image load error:", e);
         reject(new Error(`Could not load image: ${file.name} (${file.type})`));
+        console.error("[compress] error:", e);
       };
       img.src = objectUrl;
     });
   }
 
-  // Upload handler
+  // ── Upload handler ──
   async function handleUpload() {
     const hasAny = VIEWS.some(v => pendingFiles[v.key]);
     if (!hasAny) { setUploadMsg("Please select at least one photo to upload."); return; }
     setUploading(true);
     setUploadMsg("");
 
-    // Remember first view for auto-analysis after upload
-    const firstView = VIEWS.find(v => pendingFiles[v.key])?.key ?? null;
-
     try {
       const currentDay = purchasedAt
         ? Math.max(1, Math.floor((new Date(uploadDate + "T12:00:00").getTime() - new Date(purchasedAt).getTime()) / 86_400_000) + 1)
         : null;
 
-      // Compress each file individually
       const compressed: Array<{ view: string; blob: Blob }> = [];
       for (const v of VIEWS) {
         const file = pendingFiles[v.key];
         if (!file) continue;
         try {
-          const blob = await compressImage(file);
-          compressed.push({ view: v.key, blob });
+          compressed.push({ view: v.key, blob: await compressImage(file) });
         } catch (err) {
-          const msg = err instanceof Error ? err.message : "Compression failed";
-          console.error(`[upload] compress error for ${v.key}:`, err);
-          throw new Error(`Could not process ${v.label}: ${msg}`);
+          throw new Error(`Could not process ${v.label}: ${err instanceof Error ? err.message : "Compression failed"}`);
         }
       }
 
-      // Upload sequentially so errors are easier to diagnose
       for (const { view, blob } of compressed) {
         console.log(`[upload] uploading ${view}: ${blob.size} bytes`);
         const fd = new FormData();
@@ -516,14 +494,10 @@ export default function PostureTrackerPage() {
         const res = await fetch("/api/posture-photos/upload", { method: "POST", body: fd });
         if (!res.ok) {
           let apiError = `Server error (${res.status})`;
-          try {
-            const body = await res.json();
-            apiError = body.error ?? apiError;
-          } catch { /* response was not JSON */ }
-          console.error(`[upload] ${view} failed:`, res.status, apiError);
+          try { const body = await res.json(); apiError = body.error ?? apiError; } catch { /* not JSON */ }
           throw new Error(`Upload failed for ${view} view: ${apiError}`);
         }
-        console.log(`[upload] ${view} uploaded ok`);
+        console.log(`[upload] ${view} ok`);
       }
 
       setUploadMsg("Photos saved!");
@@ -531,29 +505,28 @@ export default function PostureTrackerPage() {
       setPendingPreviews({ front: null, side: null, back: null });
       setNotes("");
 
-      // Refresh photo list
+      // Refresh and auto-show analysis for uploaded date
       const res = await fetch("/api/posture-photos");
       if (res.ok) {
         const allPhotos: PosturePhoto[] = await res.json();
         setPhotos(allPhotos);
 
-        // Auto-open analysis on the first uploaded photo
-        if (firstView) {
-          const uploaded = allPhotos.find(p => p.view_type === firstView && p.photo_date === uploadDate);
-          if (uploaded) {
-            setAnalysisPhoto(uploaded);
-            setShowPlumb(true);
-            setShowHoriz(true);
-            setShowHoriz2(true);
-            setShowOverlay(false);
-            setPlumbX(200);
-            setHorizY(Math.round(533 * 0.28));
-            setHorizY2(Math.round(533 * 0.58));
-            setTimeout(() => {
-              document.getElementById("analysis-section")?.scrollIntoView({ behavior: "smooth" });
-            }, 400);
-          }
+        // Build set from just-uploaded date
+        const datePhotos = allPhotos.filter(p => p.photo_date === uploadDate);
+        if (datePhotos.length > 0) {
+          const set: AnalysisSet = { front: null, side: null, back: null };
+          for (const p of datePhotos) set[p.view_type] = p;
+          setAnalysisSet(set);
+          setAnalysisDate(uploadDate);
+        } else {
+          const set = buildAnalysisSet(allPhotos);
+          if (set) setAnalysisSet(set);
         }
+
+        // Scroll to analysis section
+        setTimeout(() => {
+          document.getElementById("analysis-section")?.scrollIntoView({ behavior: "smooth" });
+        }, 350);
       }
     } catch (err) {
       setUploadMsg(err instanceof Error ? err.message : "Upload failed.");
@@ -563,53 +536,38 @@ export default function PostureTrackerPage() {
     }
   }
 
-  // Open analysis with pre-set lines from timeline
-  function openAnalysis(photo: PosturePhoto) {
-    setAnalysisPhoto(photo);
-    setShowPlumb(true);
-    setShowHoriz(true);
-    setShowHoriz2(true);
-    setShowOverlay(false);
-    setPlumbX(200);
-    setHorizY(Math.round(533 * 0.28));
-    setHorizY2(Math.round(533 * 0.58));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  // Delete handler
+  // ── Delete handler ──
   async function handleDelete(id: string) {
     if (!confirm("Delete this photo? This cannot be undone.")) return;
     await fetch(`/api/posture-photos/${id}`, { method: "DELETE" });
-    setPhotos(prev => prev.filter(p => p.id !== id));
-    if (analysisPhoto?.id === id) setAnalysisPhoto(null);
+    setPhotos(prev => {
+      const next = prev.filter(p => p.id !== id);
+      const set = buildAnalysisSet(next);
+      setAnalysisSet(set);
+      if (set) {
+        const dates = next.map(p => p.photo_date).sort((a, b) => b.localeCompare(a));
+        setAnalysisDate(dates[0] ?? null);
+      }
+      return next;
+    });
   }
 
-  // Download annotated canvas
-  function handleDownload() {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const link = document.createElement("a");
-    link.download = `posture-analysis-${analysisPhoto?.photo_date ?? todayStr()}.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  }
-
-  // Computed values
+  // ── Computed ──
   const currentDay = purchasedAt ? calcDayNumber(purchasedAt) : null;
   const progressPct = currentDay ? Math.min(100, Math.round((currentDay / 90) * 100)) : 0;
   const streak = purchasedAt
     ? MILESTONES.filter(ms => getPhotosNearMilestone(photos, purchasedAt, ms).length > 0).length
     : 0;
-
   const nextMilestone = purchasedAt
     ? MILESTONES.find(ms => daysUntilDate(milestoneDateStr(purchasedAt, ms)) >= 0)
     : null;
   const daysUntilNext = purchasedAt && nextMilestone
     ? Math.max(0, daysUntilDate(milestoneDateStr(purchasedAt, nextMilestone)))
     : null;
-
   const day1Photos = purchasedAt ? getPhotosNearMilestone(photos, purchasedAt, 1) : [];
   const comparePhotos = purchasedAt && compareMs ? getPhotosNearMilestone(photos, purchasedAt, compareMs) : [];
+
+  const hasAnalysis = analysisSet && Object.values(analysisSet).some(p => p !== null);
 
   if (loading) {
     return (
@@ -639,7 +597,6 @@ export default function PostureTrackerPage() {
                 <PostureSilhouette view={uploadModalView} />
               </div>
             </div>
-
             <div className="px-5 py-4">
               <ul className="text-sm text-gray-600 space-y-1.5 mb-5">
                 <li className="flex items-start gap-2">
@@ -655,7 +612,6 @@ export default function PostureTrackerPage() {
                   Use good lighting so your body outline is clear
                 </li>
               </ul>
-
               <div className="space-y-2">
                 <button
                   type="button"
@@ -752,7 +708,7 @@ export default function PostureTrackerPage() {
           </div>
         </div>
 
-        {/* Hidden file inputs — gallery (no capture) */}
+        {/* Hidden inputs — gallery */}
         {VIEWS.map(v => (
           <input
             key={`gallery-${v.key}`}
@@ -768,7 +724,7 @@ export default function PostureTrackerPage() {
           />
         ))}
 
-        {/* Hidden file inputs — camera (with capture) */}
+        {/* Hidden inputs — camera */}
         {VIEWS.map(v => (
           <input
             key={`camera-${v.key}`}
@@ -834,84 +790,60 @@ export default function PostureTrackerPage() {
         )}
       </div>
 
-      {/* ── Analysis Section ── */}
-      {analysisPhoto && (
+      {/* ── Posture Analysis ── */}
+      {hasAnalysis && (
         <div id="analysis-section" className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
-          <div className="flex items-center justify-between mb-1">
-            <h2 className="text-lg font-bold text-gray-900">Posture Analysis</h2>
-            <button onClick={() => { setAnalysisPhoto(null); loadedImgRef.current = null; }} className="text-gray-400 hover:text-gray-600 text-sm no-print">Close ×</button>
-          </div>
-
-          {/* View-specific tip */}
-          {analysisPhoto.view_type && (
-            <div className="bg-teal-50 border border-teal-200 rounded-xl px-4 py-2.5 mb-4">
-              <p className="text-xs text-teal-800 leading-relaxed">
-                <span className="font-bold">Tip: </span>{VIEW_TIPS[analysisPhoto.view_type]}
-              </p>
+          <div className="flex items-start justify-between mb-1">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">Posture Analysis</h2>
+              {analysisDate && (
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Photos from {formatDateDisplay(analysisDate)} · lines drawn automatically
+                </p>
+              )}
             </div>
-          )}
-
-          {/* Tools */}
-          <div className="flex flex-wrap gap-2 mb-4 no-print">
-            <button
-              onClick={() => setShowPlumb(v => !v)}
-              className={`text-xs font-semibold px-3 py-2 rounded-lg border-2 transition-colors ${showPlumb ? "border-red-400 bg-red-50 text-red-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
-            >
-              📏 Plumb Line
-            </button>
-            <button
-              onClick={() => setShowHoriz(v => !v)}
-              className={`text-xs font-semibold px-3 py-2 rounded-lg border-2 transition-colors ${showHoriz ? "border-blue-400 bg-blue-50 text-blue-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
-            >
-              ⬌ Shoulder Level
-            </button>
-            <button
-              onClick={() => setShowHoriz2(v => !v)}
-              className={`text-xs font-semibold px-3 py-2 rounded-lg border-2 transition-colors ${showHoriz2 ? "border-purple-400 bg-purple-50 text-purple-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
-            >
-              ⬌ Hip Level
-            </button>
-            <button
-              onClick={() => setShowOverlay(v => !v)}
-              className={`text-xs font-semibold px-3 py-2 rounded-lg border-2 transition-colors ${showOverlay ? "border-green-400 bg-green-50 text-green-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
-            >
-              👤 Ideal Overlay
-            </button>
-            {showOverlay && (
-              <div className="flex items-center gap-2 text-xs text-gray-500">
-                <span>Opacity</span>
-                <input type="range" min={10} max={80} value={overlayOpacity} onChange={e => setOverlayOpacity(Number(e.target.value))} className="w-20 accent-teal-500" />
-                <span>{overlayOpacity}%</span>
-              </div>
-            )}
-            <button onClick={handleDownload} className="ml-auto text-xs font-semibold px-3 py-2 rounded-lg border-2 border-gray-200 text-gray-600 hover:border-gray-300 transition-colors">
-              ⬇ Save Analysis
-            </button>
           </div>
 
-          <div className="rounded-xl overflow-hidden bg-black flex justify-center" style={{ maxHeight: 520 }}>
-            <canvas
-              ref={canvasRef}
-              width={400}
-              height={533}
-              className="w-full h-auto"
-              style={{ cursor: dragging ? "grabbing" : (showPlumb || showHoriz || showHoriz2 ? "grab" : "default"), maxHeight: 520 }}
-              onMouseDown={onMouseDown}
-              onMouseMove={onMouseMove}
-              onMouseUp={onMouseUp}
-              onMouseLeave={onMouseUp}
-              onTouchStart={onTouchStart}
-              onTouchMove={onTouchMove}
-              onTouchEnd={onTouchEnd}
-            />
+          {/* Legend */}
+          <div className="flex flex-wrap gap-3 text-xs text-gray-500 mb-5 mt-3">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-6 h-0.5 bg-red-500" style={{ borderTop: "2px dashed #ef4444" }} />
+              Plumb Line
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-6 h-0.5" style={{ borderTop: "2px dashed #2563eb" }} />
+              Shoulder Level
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-6 h-0.5" style={{ borderTop: "2px dashed #2563eb", opacity: 0.7 }} />
+              Hip Level
+            </span>
           </div>
-          <p className="text-xs text-gray-400 text-center mt-2">
-            {showPlumb && "Red dashed: drag to align with ear → shoulder → hip → ankle. "}
-            {showHoriz && "Blue dashed: drag to check shoulder levelness. "}
-            {showHoriz2 && "Purple dashed: drag to check hip levelness. "}
-            {showOverlay && "Green outline: ideal posture reference at adjustable opacity. "}
-            {!showPlumb && !showHoriz && !showHoriz2 && !showOverlay && "Enable tools above to analyze your posture."}
-          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {VIEWS.map(v => {
+              const photo = analysisSet![v.key];
+              if (!photo) {
+                return (
+                  <div key={v.key} className="flex flex-col">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{v.label}</p>
+                    <div className="rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center aspect-[3/4]">
+                      <div className="text-center px-4">
+                        <CameraIcon className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                        <p className="text-xs text-gray-400">No {v.label.toLowerCase()} photo</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <div key={v.key} className="flex flex-col">
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{v.label}</p>
+                  <AnalysisCanvas photo={photo} view={v.key} />
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
@@ -952,13 +884,7 @@ export default function PostureTrackerPage() {
                             {photo?.signed_url ? (
                               <>
                                 <img src={photo.signed_url} alt={v.label} className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 no-print">
-                                  <button
-                                    onClick={() => openAnalysis(photo)}
-                                    className="bg-white text-teal-700 text-xs font-bold px-2 py-1 rounded shadow"
-                                  >
-                                    Analyze
-                                  </button>
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 no-print">
                                   <button
                                     onClick={() => handleDelete(photo.id)}
                                     className="bg-white text-red-500 text-xs font-bold px-2 py-1 rounded shadow"
