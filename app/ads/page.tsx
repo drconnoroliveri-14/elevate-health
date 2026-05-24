@@ -284,7 +284,7 @@ function Ad3() {
       {/* Top teal bar */}
       <div style={{ height: 10, background: `linear-gradient(90deg, ${TEAL}, ${TEAL_LIGHT})` }} />
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "52px 90px 48px", textAlign: "center", alignItems: "center" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "52px 90px 48px", textAlign: "center", alignItems: "center" }}>
         {/* Headline */}
         <h1 style={{ color: TEAL, fontSize: 74, fontWeight: 900, lineHeight: 1.08, marginBottom: 40, letterSpacing: "-2px" }}>
           The At-Home Fix for Chronic Neck &amp; Back Pain
