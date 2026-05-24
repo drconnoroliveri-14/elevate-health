@@ -6,12 +6,11 @@ import { supabaseAdmin } from "@/lib/supabase";
 export const dynamic = "force-dynamic";
 
 // Diagnostic endpoint: GET /api/journal/test
-// Returns full Supabase diagnostics — auth status, table existence check, and a test upsert.
-// Remove or restrict this route once the issue is resolved.
+// Returns full Supabase diagnostics — auth status, table existence, and a test upsert.
 export async function GET() {
   const results: Record<string, unknown> = {};
 
-  // 1. Check auth
+  // 1. Auth check
   const cookieStore = cookies();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -25,14 +24,10 @@ export async function GET() {
     authError: authError ? { message: authError.message } : null,
   };
 
-  if (!user) {
-    results.note = "Not authenticated — test upsert will use a placeholder user_id that will fail FK constraint. Sign in first.";
-  }
-
   const testUserId = user?.id ?? "00000000-0000-0000-0000-000000000000";
   const testDate = "1970-01-01";
 
-  // 2. Try selecting from pain_journal (checks table exists)
+  // 2. Table existence check
   const { data: selectData, error: selectError } = await supabaseAdmin
     .from("pain_journal")
     .select("id")
@@ -49,16 +44,20 @@ export async function GET() {
     } : null,
   };
 
-  // 3. Try upsert with test data
+  // 3. Test upsert with actual column names
   const { data: upsertData, error: upsertError } = await supabaseAdmin
     .from("pain_journal")
     .upsert(
       {
         user_id: testUserId,
         entry_date: testDate,
-        neck_pain: 0,
-        mid_back_pain: 0,
-        lower_back_pain: 0,
+        morning_neck: 0,
+        morning_mid_back: 0,
+        morning_lower_back: 0,
+        evening_neck: 0,
+        evening_mid_back: 0,
+        evening_lower_back: 0,
+        exercises_completed: false,
         notes: "diagnostic test row",
       },
       { onConflict: "user_id,entry_date" }
@@ -77,7 +76,7 @@ export async function GET() {
     } : null,
   };
 
-  // 4. Clean up test row if it was created
+  // 4. Clean up test row
   if (upsertData?.id) {
     const { error: deleteError } = await supabaseAdmin
       .from("pain_journal")
@@ -86,7 +85,7 @@ export async function GET() {
     results.cleanup = { success: !deleteError, error: deleteError?.message ?? null };
   }
 
-  // 5. Check env vars (masked)
+  // 5. Env var check
   results.env = {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ? "set" : "MISSING",
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? "set" : "MISSING",

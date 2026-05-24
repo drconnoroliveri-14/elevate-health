@@ -62,15 +62,32 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { entry_date, neck_pain, mid_back_pain, lower_back_pain, notes } = body as {
+  const {
+    entry_date,
+    morning_neck,
+    morning_mid_back,
+    morning_lower_back,
+    evening_neck,
+    evening_mid_back,
+    evening_lower_back,
+    exercises_completed,
+    notes,
+  } = body as {
     entry_date?: string;
-    neck_pain?: number | null;
-    mid_back_pain?: number | null;
-    lower_back_pain?: number | null;
+    morning_neck?: number | null;
+    morning_mid_back?: number | null;
+    morning_lower_back?: number | null;
+    evening_neck?: number | null;
+    evening_mid_back?: number | null;
+    evening_lower_back?: number | null;
+    exercises_completed?: boolean | null;
     notes?: string | null;
   };
 
-  console.log("[journal POST] payload:", { entry_date, neck_pain, mid_back_pain, lower_back_pain, notes });
+  console.log("[journal POST] payload:", {
+    entry_date, morning_neck, morning_mid_back, morning_lower_back,
+    evening_neck, evening_mid_back, evening_lower_back, exercises_completed, notes,
+  });
 
   if (!entry_date) {
     return NextResponse.json({ error: "entry_date is required." }, { status: 400 });
@@ -79,9 +96,13 @@ export async function POST(req: NextRequest) {
   const row = {
     user_id: user.id,
     entry_date,
-    neck_pain: neck_pain ?? null,
-    mid_back_pain: mid_back_pain ?? null,
-    lower_back_pain: lower_back_pain ?? null,
+    morning_neck: morning_neck ?? null,
+    morning_mid_back: morning_mid_back ?? null,
+    morning_lower_back: morning_lower_back ?? null,
+    evening_neck: evening_neck ?? null,
+    evening_mid_back: evening_mid_back ?? null,
+    evening_lower_back: evening_lower_back ?? null,
+    exercises_completed: exercises_completed ?? null,
     notes: notes ?? null,
   };
 
