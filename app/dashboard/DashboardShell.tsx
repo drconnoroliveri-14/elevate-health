@@ -372,7 +372,7 @@ export default function DashboardShell({
       {/* Main content */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Mobile topbar */}
-        <div className="md:hidden relative flex items-center px-4 py-3 bg-teal-700 text-white">
+        <div className="md:hidden relative flex items-center px-4 py-2 bg-teal-700 text-white" style={{ minHeight: "82px" }}>
           <button onClick={() => setSidebarOpen(true)} aria-label="Open menu">
             <MenuIcon />
           </button>
