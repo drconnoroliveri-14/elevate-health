@@ -291,10 +291,28 @@ export default function EnrollSection() {
             )}
           </button>
 
-          <p className="text-center text-xs text-gray-500 mt-3 font-medium">
-            $281 total value ($197 program + $47 journal + $37 guide)
-          </p>
-          <p className="text-center text-xs text-gray-400 mt-2">
+          {/* What happens next */}
+          <div className="mt-5 rounded-xl p-4" style={{ background: "#E1F5EE" }}>
+            <p className="text-center text-xs font-semibold text-teal-700 uppercase tracking-wider mb-4">What happens after purchase</p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              {[
+                { emoji: "📧", title: "Check Your Email", sub: "Your login credentials are sent instantly after purchase" },
+                { emoji: "🔐", title: "Access Your Dashboard", sub: "Log in to your personal pain-free portal" },
+                { emoji: "🎯", title: "Start Module 1", sub: "Begin your at-home rehabilitation immediately" },
+              ].map((step, i) => (
+                <div key={step.title} className="flex-1 flex flex-col items-center text-center gap-1">
+                  <div className="w-7 h-7 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center mb-1 flex-shrink-0">
+                    {i + 1}
+                  </div>
+                  <span className="text-lg leading-none">{step.emoji}</span>
+                  <p className="text-sm font-bold text-gray-800 leading-snug">{step.title}</p>
+                  <p className="text-xs text-gray-500 leading-snug">{step.sub}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-center text-xs text-gray-400 mt-4">
             One-time payment · Lifetime access · Instant delivery · Secure checkout
           </p>
         </div>
