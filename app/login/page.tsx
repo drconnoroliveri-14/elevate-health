@@ -100,7 +100,7 @@ function LoginForm() {
             <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized className="mx-auto block" style={{ height: "70px", width: "auto" }} />
           </Link>
           <p className="text-gray-500 text-sm mt-2">
-            {mode === "login" ? "Sign in to access your dashboard and pain-free modules" : "Reset your password"}
+            {mode === "login" ? "Sign in to access your dashboard and pain-free modules!" : "Reset your password"}
           </p>
         </div>
 
