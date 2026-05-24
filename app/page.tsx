@@ -340,7 +340,7 @@ export default function LandingPage() {
       {/* ── FOOTER ── */}
       <footer className="bg-teal-700 text-white py-10 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} />
+          <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto', filter: 'brightness(0) invert(1)'}} />
           <p className="text-teal-200 text-sm">
             © {new Date().getFullYear()} Elevate Health. All rights reserved.
           </p>
