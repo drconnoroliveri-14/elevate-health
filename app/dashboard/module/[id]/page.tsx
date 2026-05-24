@@ -147,6 +147,7 @@ export default async function ModulePage({
           paddingBottom: "56.25%",
           height: 0,
           overflow: "hidden",
+          width: "100%",
           backgroundColor: "white",
           isolation: "isolate",
           marginBottom: "32px",
