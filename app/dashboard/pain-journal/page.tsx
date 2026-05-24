@@ -344,56 +344,75 @@ export default function PainJournalPage() {
         ) : entries.length === 0 ? (
           <p className="text-sm text-gray-400">No entries yet. Log your first entry above.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[640px]">
-              <thead>
-                <tr className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                  <th className="pb-3 pr-3">Date</th>
-                  <th className="pb-3 pr-2 text-center" colSpan={3}>🌅 Morning</th>
-                  <th className="pb-3 pr-2 text-center" colSpan={3}>🌙 Evening</th>
-                  <th className="pb-3 pr-3 text-center">Ex.</th>
-                  <th className="pb-3 flex-1">Notes</th>
-                  <th className="pb-3 no-print" />
-                </tr>
-                <tr className="text-left text-xs text-gray-400 border-b border-gray-100">
-                  <th className="pb-2 pr-3" />
-                  <th className="pb-2 pr-2">Neck</th>
-                  <th className="pb-2 pr-2">Mid</th>
-                  <th className="pb-2 pr-3">Low</th>
-                  <th className="pb-2 pr-2">Neck</th>
-                  <th className="pb-2 pr-2">Mid</th>
-                  <th className="pb-2 pr-3">Low</th>
-                  <th className="pb-2 pr-3" />
-                  <th className="pb-2" />
-                  <th className="pb-2 no-print" />
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {entries.map((e) => (
-                  <tr key={e.id} className="hover:bg-gray-50">
-                    <td className="py-3 pr-3 font-medium text-gray-800 whitespace-nowrap">{formatDate(e.entry_date)}</td>
-                    <td className="py-3 pr-2"><PainBadge value={e.morning_neck} /></td>
-                    <td className="py-3 pr-2"><PainBadge value={e.morning_mid_back} /></td>
-                    <td className="py-3 pr-3"><PainBadge value={e.morning_lower_back} /></td>
-                    <td className="py-3 pr-2"><PainBadge value={e.evening_neck} /></td>
-                    <td className="py-3 pr-2"><PainBadge value={e.evening_mid_back} /></td>
-                    <td className="py-3 pr-3"><PainBadge value={e.evening_lower_back} /></td>
-                    <td className="py-3 pr-3 text-center text-xs">{e.exercises_completed ? "✓" : "—"}</td>
-                    <td className="py-3 text-gray-500 max-w-[180px] truncate">{e.notes ?? "—"}</td>
-                    <td className="py-3 no-print">
-                      <button
-                        onClick={() => handleDelete(e.id)}
-                        disabled={deleteId === e.id}
-                        className="text-xs text-red-400 hover:text-red-600 disabled:opacity-40 transition-colors"
-                        title="Delete entry"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-4">
+            {entries.map((e) => (
+              <div key={e.id} className="border border-gray-100 rounded-xl p-4 hover:bg-gray-50 transition-colors">
+                {/* Header row */}
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-bold text-gray-900">{formatDate(e.entry_date)}</span>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${e.exercises_completed ? "bg-teal-100 text-teal-700" : "bg-gray-100 text-gray-400"}`}>
+                      {e.exercises_completed ? "✓ Exercises done" : "No exercises"}
+                    </span>
+                    <button
+                      onClick={() => handleDelete(e.id)}
+                      disabled={deleteId === e.id}
+                      className="no-print text-xs text-red-400 hover:text-red-600 disabled:opacity-40 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+
+                {/* Pain scores grid */}
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  {/* Morning */}
+                  <div className="bg-amber-50 rounded-lg p-3">
+                    <p className="text-xs font-semibold text-amber-700 mb-2">🌅 Morning</p>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600">Neck</span>
+                        <PainBadge value={e.morning_neck} />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600">Mid Back</span>
+                        <PainBadge value={e.morning_mid_back} />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600">Lower Back</span>
+                        <PainBadge value={e.morning_lower_back} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Evening */}
+                  <div className="bg-indigo-50 rounded-lg p-3">
+                    <p className="text-xs font-semibold text-indigo-700 mb-2">🌙 Evening</p>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600">Neck</span>
+                        <PainBadge value={e.evening_neck} />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600">Mid Back</span>
+                        <PainBadge value={e.evening_mid_back} />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-600">Lower Back</span>
+                        <PainBadge value={e.evening_lower_back} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Notes */}
+                {e.notes && (
+                  <p className="text-xs text-gray-500 italic border-t border-gray-100 pt-2 mt-1">
+                    &ldquo;{e.notes}&rdquo;
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
