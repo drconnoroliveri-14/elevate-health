@@ -35,7 +35,27 @@ export async function POST() {
     return NextResponse.json({ error: "No purchase found for this account." }, { status: 400 });
   }
 
-  // ── 3. Issue Stripe refund ────────────────────────────────────────────────
+  // ── 3. Check qualification criteria ──────────────────────────────────────
+  const { data: moduleProgressRows } = await supabaseAdmin
+    .from("module_progress")
+    .select("completed_at")
+    .eq("user_id", user.id);
+
+  const daysSincePurchase = Math.floor(
+    (Date.now() - new Date(profile.purchased_at).getTime()) / 86_400_000
+  );
+  const modulesCompleted = (moduleProgressRows ?? []).filter((r) => r.completed_at != null).length;
+  const loginDates: string[] = Array.isArray(profile.login_dates) ? profile.login_dates : [];
+  const uniqueLoginDays = loginDates.length;
+
+  if (daysSincePurchase < 90 || modulesCompleted < 7 || uniqueLoginDays < 10) {
+    return NextResponse.json(
+      { error: "You do not meet the refund qualification criteria. Please complete all 7 modules and log in for at least 10 days within your 90-day guarantee period." },
+      { status: 403 }
+    );
+  }
+
+  // ── 4. Issue Stripe refund ────────────────────────────────────────────────
   let paymentIntentId: string | null = null;
 
   // Try to get the payment intent from the stored checkout session
