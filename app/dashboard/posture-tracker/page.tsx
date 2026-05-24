@@ -463,7 +463,6 @@ export default function PostureTrackerPage() {
                   ref={fileRefs[v.key]}
                   type="file"
                   accept="image/*,image/heic,image/heif"
-                  capture="environment"
                   className="hidden"
                   onChange={e => {
                     const f = e.target.files?.[0];
