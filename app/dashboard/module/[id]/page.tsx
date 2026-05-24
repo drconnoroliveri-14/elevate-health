@@ -35,7 +35,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "Posture correction for desk workers",
       "Cervical mobility daily routine",
     ],
-    videoId: "BLzHnmCpRC4",
+    videoId: "dwtHwryVgpk",
   },
   3: {
     title: "Mid Back Pain Relief Protocol",
