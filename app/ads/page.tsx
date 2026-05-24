@@ -284,14 +284,14 @@ function Ad3() {
       {/* Top teal bar */}
       <div style={{ height: 10, background: `linear-gradient(90deg, ${TEAL}, ${TEAL_LIGHT})` }} />
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "52px 90px 48px" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "52px 90px 48px", textAlign: "center", alignItems: "center" }}>
         {/* Headline */}
         <h1 style={{ color: TEAL, fontSize: 74, fontWeight: 900, lineHeight: 1.08, marginBottom: 40, letterSpacing: "-2px" }}>
           The At-Home Fix for Chronic Neck &amp; Back Pain
         </h1>
 
         {/* Bullets */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 18, marginBottom: 52 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18, marginBottom: 52 }}>
           {bullets.map((b) => (
             <div key={b} style={{ display: "flex", alignItems: "center", gap: 16 }}>
               <div style={{
@@ -314,15 +314,16 @@ function Ad3() {
           borderRadius: 20,
           padding: "36px 44px",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-between",
           gap: 24,
+          width: "100%",
         }}>
-          <div>
+          <div style={{ textAlign: "center" }}>
             <p style={{ color: "#ef4444", fontSize: 16, fontWeight: 700, textTransform: "uppercase", letterSpacing: 2, marginBottom: 6 }}>
               ⚡ Limited Time Offer
             </p>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 16 }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 16, justifyContent: "center" }}>
               <span style={{ color: "#9ca3af", fontSize: 32, textDecoration: "line-through", fontWeight: 500 }}>$297</span>
               <span style={{ color: TEAL, fontSize: 72, fontWeight: 900, lineHeight: 1, letterSpacing: "-2px" }}>$97</span>
             </div>
