@@ -72,7 +72,8 @@ export default function LandingPage() {
           <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} />
           <button
             onClick={() => scrollToId("enroll")}
-            className="bg-teal-500 hover:bg-teal-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            className="text-sm font-bold px-5 py-2.5 rounded-lg transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
           >
             Yes, I Want to Live Pain-Free →
           </button>
