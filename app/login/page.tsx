@@ -180,7 +180,7 @@ function LoginForm() {
 
             <p className="text-center text-sm text-gray-400 mt-6">
               Having trouble?{" "}
-              <a href="mailto:management@elevatehealthtampa.com" className="text-teal-600 hover:underline">
+              <a href="mailto:info@elevatehealthtampa.com" className="text-teal-600 hover:underline">
                 Contact support
               </a>
             </p>
