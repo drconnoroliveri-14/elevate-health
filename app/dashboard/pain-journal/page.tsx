@@ -129,11 +129,21 @@ export default function PainJournalPage() {
           notes: notes.trim() || null,
         }),
       });
-      if (!res.ok) throw new Error("Save failed.");
+      if (!res.ok) {
+        let apiError = `Server error (${res.status})`;
+        try {
+          const body = await res.json();
+          apiError = body.error ?? apiError;
+          if (body.details) apiError += ` — ${body.details}`;
+          if (body.hint) apiError += ` (hint: ${body.hint})`;
+        } catch { /* not JSON */ }
+        console.error("[pain-journal] save error:", apiError);
+        throw new Error(apiError);
+      }
       setSaveMsg("Entry saved!");
       await fetchEntries();
-    } catch {
-      setSaveMsg("Could not save. Please try again.");
+    } catch (err) {
+      setSaveMsg(err instanceof Error ? err.message : "Could not save. Please try again.");
     } finally {
       setSaving(false);
       setTimeout(() => setSaveMsg(""), 3000);
