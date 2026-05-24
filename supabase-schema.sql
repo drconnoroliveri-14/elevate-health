@@ -115,3 +115,27 @@ create policy "Users can manage own shopping list"
   on shopping_list_progress for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+-- Pain journal (interactive pain tracking tool)
+create table if not exists pain_journal (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users not null,
+  entry_date date not null,
+  neck_pain smallint check (neck_pain between 0 and 10),
+  mid_back_pain smallint check (mid_back_pain between 0 and 10),
+  lower_back_pain smallint check (lower_back_pain between 0 and 10),
+  notes text,
+  created_at timestamptz default now(),
+  unique(user_id, entry_date)
+);
+
+alter table pain_journal enable row level security;
+
+create policy "Users can manage own journal"
+  on pain_journal for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+-- Migration: add login tracking columns to profiles
+alter table profiles add column if not exists login_dates jsonb default '[]'::jsonb;
+alter table profiles add column if not exists last_login timestamptz;
