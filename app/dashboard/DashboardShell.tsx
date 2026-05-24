@@ -284,7 +284,7 @@ export default function DashboardShell({
               className="w-full text-left bg-white/95 hover:bg-teal-50 border border-teal-400 text-teal-700 rounded-lg px-3 py-2 transition-colors"
             >
               <p className="text-xs font-bold leading-tight">📍 South Tampa</p>
-              <p className="text-xs text-gray-500 leading-tight">Elevate Health Facilities</p>
+              <p className="text-xs text-gray-500 leading-tight">Elevate Health</p>
             </a>
             <a
               href="https://northtampachiropractor.com/appointments/"
@@ -294,7 +294,7 @@ export default function DashboardShell({
               className="w-full text-left bg-white/95 hover:bg-teal-50 border border-teal-400 text-teal-700 rounded-lg px-3 py-2 transition-colors"
             >
               <p className="text-xs font-bold leading-tight">📍 North Tampa</p>
-              <p className="text-xs text-gray-500 leading-tight">North Tampa Chiropractor</p>
+              <p className="text-xs text-gray-500 leading-tight">North Tampa Spine & Joint Center</p>
             </a>
           </div>
         </div>
