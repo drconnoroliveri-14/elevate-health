@@ -20,6 +20,18 @@ const VIEWS: Array<{ key: "front" | "side" | "back"; label: string }> = [
 
 const MILESTONES = [1, 30, 60, 90];
 
+const VIEW_TIPS: Record<string, string> = {
+  front: "Front view: Use the horizontal lines to check shoulder and hip levelness — both sides should be at the same height.",
+  side: "Side view: Align the plumb line with your ear, shoulder, hip, and ankle — they should form a straight vertical line for ideal posture.",
+  back: "Back view: Check for shoulder and hip symmetry using the horizontal lines. The plumb line reveals any lateral spine curvature.",
+};
+
+const SILHOUETTE_INSTRUCTIONS: Record<string, string> = {
+  front: "Face the camera with your feet shoulder-width apart and arms at your sides.",
+  side: "Stand sideways to the camera. Keep your arms relaxed at your sides.",
+  back: "Turn your back to the camera. Keep your feet shoulder-width apart.",
+};
+
 function todayStr() { return new Date().toISOString().split("T")[0]; }
 
 function calcDayNumber(purchasedAt: string) {
@@ -56,6 +68,117 @@ function CameraIcon({ className }: { className?: string }) {
   );
 }
 
+// SVG posture silhouette for the pre-upload modal
+function PostureSilhouette({ view }: { view: "front" | "side" | "back" }) {
+  return (
+    <svg viewBox="0 0 120 240" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      {/* Plumb line */}
+      <line x1="60" y1="0" x2="60" y2="240" stroke="#99f6e4" strokeWidth="1" strokeDasharray="6 4" />
+
+      {view === "front" && (
+        <>
+          {/* Head */}
+          <circle cx="60" cy="22" r="14" stroke="#0d9488" strokeWidth="2.5" />
+          {/* Neck */}
+          <line x1="60" y1="36" x2="60" y2="50" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Shoulders */}
+          <line x1="28" y1="58" x2="92" y2="58" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Shoulder level label */}
+          <text x="4" y="56" fill="#0d9488" fontSize="7" fontFamily="sans-serif">─ shoulders</text>
+          {/* Torso */}
+          <line x1="60" y1="50" x2="60" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Left arm */}
+          <line x1="28" y1="58" x2="20" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Right arm */}
+          <line x1="92" y1="58" x2="100" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Hips */}
+          <line x1="40" y1="118" x2="80" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Hip level label */}
+          <text x="4" y="116" fill="#0d9488" fontSize="7" fontFamily="sans-serif">─ hips</text>
+          {/* Left leg upper */}
+          <line x1="48" y1="118" x2="44" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Right leg upper */}
+          <line x1="72" y1="118" x2="76" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Left leg lower */}
+          <line x1="44" y1="170" x2="42" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Right leg lower */}
+          <line x1="76" y1="170" x2="78" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Feet */}
+          <line x1="36" y1="218" x2="50" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="70" y1="218" x2="84" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+        </>
+      )}
+
+      {view === "side" && (
+        <>
+          {/* Head */}
+          <circle cx="60" cy="22" r="14" stroke="#0d9488" strokeWidth="2.5" />
+          {/* Neck — slightly forward of plumb */}
+          <line x1="60" y1="36" x2="60" y2="50" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Spine (ideal = aligned with plumb) */}
+          <line x1="60" y1="50" x2="60" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Shoulder dot */}
+          <circle cx="60" cy="58" r="4" fill="#0d9488" />
+          {/* Shoulder label */}
+          <text x="66" y="60" fill="#0d9488" fontSize="7" fontFamily="sans-serif">shoulder</text>
+          {/* Hip dot */}
+          <circle cx="60" cy="118" r="4" fill="#0d9488" />
+          {/* Hip label */}
+          <text x="66" y="120" fill="#0d9488" fontSize="7" fontFamily="sans-serif">hip</text>
+          {/* One arm (front) */}
+          <line x1="60" y1="58" x2="52" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Leg upper */}
+          <line x1="60" y1="118" x2="60" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Knee dot */}
+          <circle cx="60" cy="170" r="3" fill="#0d9488" />
+          {/* Knee label */}
+          <text x="66" y="172" fill="#0d9488" fontSize="7" fontFamily="sans-serif">knee</text>
+          {/* Leg lower */}
+          <line x1="60" y1="170" x2="60" y2="215" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Ankle dot */}
+          <circle cx="60" cy="215" r="3" fill="#0d9488" />
+          {/* Ankle label */}
+          <text x="66" y="217" fill="#0d9488" fontSize="7" fontFamily="sans-serif">ankle</text>
+          {/* Foot */}
+          <line x1="60" y1="215" x2="76" y2="220" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+        </>
+      )}
+
+      {view === "back" && (
+        <>
+          {/* Head */}
+          <circle cx="60" cy="22" r="14" stroke="#0d9488" strokeWidth="2.5" />
+          {/* Neck */}
+          <line x1="60" y1="36" x2="60" y2="50" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Shoulders */}
+          <line x1="28" y1="58" x2="92" y2="58" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          <text x="4" y="56" fill="#0d9488" fontSize="7" fontFamily="sans-serif">─ shoulders</text>
+          {/* Spine */}
+          <line x1="60" y1="50" x2="60" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Left arm */}
+          <line x1="28" y1="58" x2="20" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Right arm */}
+          <line x1="92" y1="58" x2="100" y2="100" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Hips */}
+          <line x1="40" y1="118" x2="80" y2="118" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          <text x="4" y="116" fill="#0d9488" fontSize="7" fontFamily="sans-serif">─ hips</text>
+          {/* Left leg upper */}
+          <line x1="48" y1="118" x2="44" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Right leg upper */}
+          <line x1="72" y1="118" x2="76" y2="170" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Left leg lower */}
+          <line x1="44" y1="170" x2="42" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Right leg lower */}
+          <line x1="76" y1="170" x2="78" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Feet */}
+          <line x1="36" y1="218" x2="50" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="70" y1="218" x2="84" y2="218" stroke="#0d9488" strokeWidth="2.5" strokeLinecap="round" />
+        </>
+      )}
+    </svg>
+  );
+}
+
 export default function PostureTrackerPage() {
   const [photos, setPhotos] = useState<PosturePhoto[]>([]);
   const [purchasedAt, setPurchasedAt] = useState<string | null>(null);
@@ -69,20 +192,31 @@ export default function PostureTrackerPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
 
+  // Pre-upload silhouette modal state
+  const [uploadModalView, setUploadModalView] = useState<"front" | "side" | "back" | null>(null);
+
+  // Hidden file inputs — one for gallery, one for camera per view
   const frontRef = useRef<HTMLInputElement>(null);
   const sideRef = useRef<HTMLInputElement>(null);
   const backRef = useRef<HTMLInputElement>(null);
   const fileRefs = { front: frontRef, side: sideRef, back: backRef };
 
+  const frontCameraRef = useRef<HTMLInputElement>(null);
+  const sideCameraRef = useRef<HTMLInputElement>(null);
+  const backCameraRef = useRef<HTMLInputElement>(null);
+  const cameraRefs = { front: frontCameraRef, side: sideCameraRef, back: backCameraRef };
+
   // Analysis state
   const [analysisPhoto, setAnalysisPhoto] = useState<PosturePhoto | null>(null);
   const [showPlumb, setShowPlumb] = useState(false);
   const [showHoriz, setShowHoriz] = useState(false);
+  const [showHoriz2, setShowHoriz2] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayOpacity, setOverlayOpacity] = useState(40);
   const [plumbX, setPlumbX] = useState(200);
-  const [horizY, setHorizY] = useState(200);
-  const [dragging, setDragging] = useState<"plumb" | "horiz" | null>(null);
+  const [horizY, setHorizY] = useState(160);
+  const [horizY2, setHorizY2] = useState(320);
+  const [dragging, setDragging] = useState<"plumb" | "horiz1" | "horiz2" | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const loadedImgRef = useRef<HTMLImageElement | null>(null);
 
@@ -134,14 +268,20 @@ export default function PostureTrackerPage() {
       ctx.moveTo(plumbX, 0);
       ctx.lineTo(plumbX, canvas.height);
       ctx.stroke();
-      // Label
-      ctx.font = "bold 11px sans-serif";
-      ctx.fillStyle = "rgba(220,38,38,0.9)";
-      ctx.fillText("◄ drag ►", plumbX + 6, 18);
+      ctx.setLineDash([]);
+      // Label background
+      const labelW = 74;
+      const labelH = 16;
+      const labelX = Math.min(plumbX + 6, canvas.width - labelW - 4);
+      ctx.fillStyle = "rgba(220,38,38,0.15)";
+      ctx.fillRect(labelX, 6, labelW, labelH);
+      ctx.font = "bold 10px sans-serif";
+      ctx.fillStyle = "rgba(220,38,38,1)";
+      ctx.fillText("◄ Plumb Line ►", labelX + 4, 18);
       ctx.restore();
     }
 
-    // Horizontal line (blue dashed)
+    // Shoulder horizontal line (blue dashed)
     if (showHoriz) {
       ctx.save();
       ctx.strokeStyle = "rgba(37,99,235,0.9)";
@@ -151,9 +291,37 @@ export default function PostureTrackerPage() {
       ctx.moveTo(0, horizY);
       ctx.lineTo(canvas.width, horizY);
       ctx.stroke();
-      ctx.font = "bold 11px sans-serif";
-      ctx.fillStyle = "rgba(37,99,235,0.9)";
-      ctx.fillText("▲ drag ▼", 6, horizY - 6);
+      ctx.setLineDash([]);
+      const labelW = 96;
+      const labelH = 16;
+      const labelY = Math.max(horizY - 18, 4);
+      ctx.fillStyle = "rgba(37,99,235,0.15)";
+      ctx.fillRect(4, labelY, labelW, labelH);
+      ctx.font = "bold 10px sans-serif";
+      ctx.fillStyle = "rgba(37,99,235,1)";
+      ctx.fillText("▲ Shoulder Level ▼", 8, labelY + 12);
+      ctx.restore();
+    }
+
+    // Hip horizontal line (purple dashed)
+    if (showHoriz2) {
+      ctx.save();
+      ctx.strokeStyle = "rgba(124,58,237,0.9)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([10, 5]);
+      ctx.beginPath();
+      ctx.moveTo(0, horizY2);
+      ctx.lineTo(canvas.width, horizY2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      const labelW = 80;
+      const labelH = 16;
+      const labelY = Math.max(horizY2 - 18, 4);
+      ctx.fillStyle = "rgba(124,58,237,0.15)";
+      ctx.fillRect(4, labelY, labelW, labelH);
+      ctx.font = "bold 10px sans-serif";
+      ctx.fillStyle = "rgba(124,58,237,1)";
+      ctx.fillText("▲ Hip Level ▼", 8, labelY + 12);
       ctx.restore();
     }
 
@@ -192,7 +360,7 @@ export default function PostureTrackerPage() {
 
       ctx.restore();
     }
-  }, [showPlumb, showHoriz, showOverlay, overlayOpacity, plumbX, horizY]);
+  }, [showPlumb, showHoriz, showHoriz2, showOverlay, overlayOpacity, plumbX, horizY, horizY2]);
 
   // Load photo into canvas when analysisPhoto changes
   useEffect(() => {
@@ -221,13 +389,15 @@ export default function PostureTrackerPage() {
   function onMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
     const { x, y } = canvasPos(e.clientX, e.clientY);
     if (showPlumb && Math.abs(x - plumbX) < 14) setDragging("plumb");
-    else if (showHoriz && Math.abs(y - horizY) < 14) setDragging("horiz");
+    else if (showHoriz && Math.abs(y - horizY) < 14) setDragging("horiz1");
+    else if (showHoriz2 && Math.abs(y - horizY2) < 14) setDragging("horiz2");
   }
   function onMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
     if (!dragging) return;
     const { x, y } = canvasPos(e.clientX, e.clientY);
     if (dragging === "plumb") setPlumbX(Math.max(0, x));
-    if (dragging === "horiz") setHorizY(Math.max(0, y));
+    if (dragging === "horiz1") setHorizY(Math.max(0, y));
+    if (dragging === "horiz2") setHorizY2(Math.max(0, y));
   }
   function onMouseUp() { setDragging(null); }
 
@@ -235,7 +405,8 @@ export default function PostureTrackerPage() {
     const t = e.touches[0];
     const { x, y } = canvasPos(t.clientX, t.clientY);
     if (showPlumb && Math.abs(x - plumbX) < 22) { e.preventDefault(); setDragging("plumb"); }
-    else if (showHoriz && Math.abs(y - horizY) < 22) { e.preventDefault(); setDragging("horiz"); }
+    else if (showHoriz && Math.abs(y - horizY) < 22) { e.preventDefault(); setDragging("horiz1"); }
+    else if (showHoriz2 && Math.abs(y - horizY2) < 22) { e.preventDefault(); setDragging("horiz2"); }
   }
   function onTouchMove(e: React.TouchEvent<HTMLCanvasElement>) {
     if (!dragging) return;
@@ -243,18 +414,18 @@ export default function PostureTrackerPage() {
     const t = e.touches[0];
     const { x, y } = canvasPos(t.clientX, t.clientY);
     if (dragging === "plumb") setPlumbX(Math.max(0, x));
-    if (dragging === "horiz") setHorizY(Math.max(0, y));
+    if (dragging === "horiz1") setHorizY(Math.max(0, y));
+    if (dragging === "horiz2") setHorizY2(Math.max(0, y));
   }
   function onTouchEnd() { setDragging(null); }
 
   // File select
   function handleFileSelect(view: "front" | "side" | "back", file: File) {
-    // Generate preview immediately from original file
     const reader = new FileReader();
     reader.onload = e2 => setPendingPreviews(prev => ({ ...prev, [view]: e2.target?.result as string }));
     reader.readAsDataURL(file);
-    // Store original file — compression happens at upload time
     setPendingFiles(prev => ({ ...prev, [view]: file }));
+    setUploadModalView(null);
   }
 
   function clearPending(view: string) {
@@ -271,7 +442,6 @@ export default function PostureTrackerPage() {
       img.onload = () => {
         URL.revokeObjectURL(objectUrl);
         const MAX = 1200;
-        // naturalWidth may be 0 on some Android browsers for HEIC — fallback to img.width
         let width = img.naturalWidth || img.width || 800;
         let height = img.naturalHeight || img.height || 1067;
         if (width > MAX || height > MAX) {
@@ -309,12 +479,16 @@ export default function PostureTrackerPage() {
     if (!hasAny) { setUploadMsg("Please select at least one photo to upload."); return; }
     setUploading(true);
     setUploadMsg("");
+
+    // Remember first view for auto-analysis after upload
+    const firstView = VIEWS.find(v => pendingFiles[v.key])?.key ?? null;
+
     try {
       const currentDay = purchasedAt
         ? Math.max(1, Math.floor((new Date(uploadDate + "T12:00:00").getTime() - new Date(purchasedAt).getTime()) / 86_400_000) + 1)
         : null;
 
-      // Compress each file individually — catch per-file errors
+      // Compress each file individually
       const compressed: Array<{ view: string; blob: Blob }> = [];
       for (const v of VIEWS) {
         const file = pendingFiles[v.key];
@@ -356,14 +530,50 @@ export default function PostureTrackerPage() {
       setPendingFiles({ front: null, side: null, back: null });
       setPendingPreviews({ front: null, side: null, back: null });
       setNotes("");
+
+      // Refresh photo list
       const res = await fetch("/api/posture-photos");
-      if (res.ok) setPhotos(await res.json());
+      if (res.ok) {
+        const allPhotos: PosturePhoto[] = await res.json();
+        setPhotos(allPhotos);
+
+        // Auto-open analysis on the first uploaded photo
+        if (firstView) {
+          const uploaded = allPhotos.find(p => p.view_type === firstView && p.photo_date === uploadDate);
+          if (uploaded) {
+            setAnalysisPhoto(uploaded);
+            setShowPlumb(true);
+            setShowHoriz(true);
+            setShowHoriz2(true);
+            setShowOverlay(false);
+            setPlumbX(200);
+            setHorizY(Math.round(533 * 0.28));
+            setHorizY2(Math.round(533 * 0.58));
+            setTimeout(() => {
+              document.getElementById("analysis-section")?.scrollIntoView({ behavior: "smooth" });
+            }, 400);
+          }
+        }
+      }
     } catch (err) {
       setUploadMsg(err instanceof Error ? err.message : "Upload failed.");
     } finally {
       setUploading(false);
-      setTimeout(() => setUploadMsg(""), 5000);
+      setTimeout(() => setUploadMsg(m => m === "Photos saved!" ? "" : m), 5000);
     }
+  }
+
+  // Open analysis with pre-set lines from timeline
+  function openAnalysis(photo: PosturePhoto) {
+    setAnalysisPhoto(photo);
+    setShowPlumb(true);
+    setShowHoriz(true);
+    setShowHoriz2(true);
+    setShowOverlay(false);
+    setPlumbX(200);
+    setHorizY(Math.round(533 * 0.28));
+    setHorizY2(Math.round(533 * 0.58));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   // Delete handler
@@ -412,6 +622,68 @@ export default function PostureTrackerPage() {
   return (
     <div className="space-y-8">
       <style>{`@media print { aside, nav, .no-print { display: none !important; } }`}</style>
+
+      {/* ── Pre-upload silhouette modal ── */}
+      {uploadModalView && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-4"
+          onClick={e => { if (e.target === e.currentTarget) setUploadModalView(null); }}
+        >
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div className="bg-teal-50 px-5 pt-5 pb-4 text-center">
+              <p className="text-xs font-semibold text-teal-600 uppercase tracking-wider mb-1">
+                {VIEWS.find(v => v.key === uploadModalView)?.label}
+              </p>
+              <p className="text-base font-bold text-teal-900 mb-3">Position yourself like this</p>
+              <div className="mx-auto" style={{ width: 110, height: 220 }}>
+                <PostureSilhouette view={uploadModalView} />
+              </div>
+            </div>
+
+            <div className="px-5 py-4">
+              <ul className="text-sm text-gray-600 space-y-1.5 mb-5">
+                <li className="flex items-start gap-2">
+                  <span className="text-teal-500 font-bold flex-shrink-0">•</span>
+                  Stand 6–8 feet from the camera so your full body is visible
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-teal-500 font-bold flex-shrink-0">•</span>
+                  {SILHOUETTE_INSTRUCTIONS[uploadModalView]}
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-teal-500 font-bold flex-shrink-0">•</span>
+                  Use good lighting so your body outline is clear
+                </li>
+              </ul>
+
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => cameraRefs[uploadModalView].current?.click()}
+                  className="w-full bg-teal-500 hover:bg-teal-700 text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+                >
+                  <CameraIcon className="w-5 h-5" />
+                  Open Camera
+                </button>
+                <button
+                  type="button"
+                  onClick={() => fileRefs[uploadModalView].current?.click()}
+                  className="w-full bg-white border-2 border-teal-400 hover:border-teal-600 text-teal-700 font-semibold py-3 rounded-xl transition-colors"
+                >
+                  Choose from Library
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setUploadModalView(null)}
+                  className="w-full text-gray-400 hover:text-gray-600 text-sm py-2 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Header ── */}
       <div>
@@ -480,27 +752,48 @@ export default function PostureTrackerPage() {
           </div>
         </div>
 
+        {/* Hidden file inputs — gallery (no capture) */}
+        {VIEWS.map(v => (
+          <input
+            key={`gallery-${v.key}`}
+            ref={fileRefs[v.key]}
+            type="file"
+            accept="image/*,image/heic,image/heif"
+            className="hidden"
+            onChange={e => {
+              const f = e.target.files?.[0];
+              if (f) handleFileSelect(v.key, f);
+              e.target.value = "";
+            }}
+          />
+        ))}
+
+        {/* Hidden file inputs — camera (with capture) */}
+        {VIEWS.map(v => (
+          <input
+            key={`camera-${v.key}`}
+            ref={cameraRefs[v.key]}
+            type="file"
+            accept="image/*,image/heic,image/heif"
+            capture="environment"
+            className="hidden"
+            onChange={e => {
+              const f = e.target.files?.[0];
+              if (f) handleFileSelect(v.key, f);
+              e.target.value = "";
+            }}
+          />
+        ))}
+
         {/* Three upload boxes */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
           {VIEWS.map(v => {
             const preview = pendingPreviews[v.key];
             return (
               <div key={v.key}>
-                <input
-                  ref={fileRefs[v.key]}
-                  type="file"
-                  accept="image/*,image/heic,image/heif"
-                  className="hidden"
-                  onChange={e => {
-                    const f = e.target.files?.[0];
-                    if (f) handleFileSelect(v.key, f);
-                    // Reset value so same file can be re-selected
-                    e.target.value = "";
-                  }}
-                />
                 <button
                   type="button"
-                  onClick={() => fileRefs[v.key].current?.click()}
+                  onClick={() => setUploadModalView(v.key)}
                   className={`w-full h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-all overflow-hidden relative ${preview ? "border-teal-500" : "border-gray-300 hover:border-teal-400 bg-gray-50"}`}
                   style={preview ? { backgroundImage: `url(${preview})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
                 >
@@ -535,9 +828,7 @@ export default function PostureTrackerPage() {
           {uploading ? "Uploading…" : "Save Photos"}
         </button>
         {uploadMsg && (
-          <p className={`mt-3 text-sm text-center font-medium ${uploadMsg.includes("saved") || uploadMsg.includes("saved") ? "text-teal-600" : uploadMsg === "Photos saved!" ? "text-teal-600" : "text-red-600"}`}
-            style={{ color: uploadMsg === "Photos saved!" ? "#0d9488" : undefined }}
-          >
+          <p className={`mt-3 text-sm text-center font-medium ${uploadMsg === "Photos saved!" ? "text-teal-600" : "text-red-600"}`}>
             {uploadMsg}
           </p>
         )}
@@ -545,14 +836,20 @@ export default function PostureTrackerPage() {
 
       {/* ── Analysis Section ── */}
       {analysisPhoto && (
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+        <div id="analysis-section" className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-1">
             <h2 className="text-lg font-bold text-gray-900">Posture Analysis</h2>
             <button onClick={() => { setAnalysisPhoto(null); loadedImgRef.current = null; }} className="text-gray-400 hover:text-gray-600 text-sm no-print">Close ×</button>
           </div>
-          <p className="text-xs text-gray-500 mb-4">
-            Drag the red line to align with your ear, shoulder, hip, and ankle to see your posture alignment.
-          </p>
+
+          {/* View-specific tip */}
+          {analysisPhoto.view_type && (
+            <div className="bg-teal-50 border border-teal-200 rounded-xl px-4 py-2.5 mb-4">
+              <p className="text-xs text-teal-800 leading-relaxed">
+                <span className="font-bold">Tip: </span>{VIEW_TIPS[analysisPhoto.view_type]}
+              </p>
+            </div>
+          )}
 
           {/* Tools */}
           <div className="flex flex-wrap gap-2 mb-4 no-print">
@@ -566,13 +863,19 @@ export default function PostureTrackerPage() {
               onClick={() => setShowHoriz(v => !v)}
               className={`text-xs font-semibold px-3 py-2 rounded-lg border-2 transition-colors ${showHoriz ? "border-blue-400 bg-blue-50 text-blue-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
             >
-              ⬌ Horizontal Line
+              ⬌ Shoulder Level
+            </button>
+            <button
+              onClick={() => setShowHoriz2(v => !v)}
+              className={`text-xs font-semibold px-3 py-2 rounded-lg border-2 transition-colors ${showHoriz2 ? "border-purple-400 bg-purple-50 text-purple-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
+            >
+              ⬌ Hip Level
             </button>
             <button
               onClick={() => setShowOverlay(v => !v)}
               className={`text-xs font-semibold px-3 py-2 rounded-lg border-2 transition-colors ${showOverlay ? "border-green-400 bg-green-50 text-green-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
             >
-              👤 Ideal Posture Overlay
+              👤 Ideal Overlay
             </button>
             {showOverlay && (
               <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -592,7 +895,7 @@ export default function PostureTrackerPage() {
               width={400}
               height={533}
               className="w-full h-auto"
-              style={{ cursor: dragging ? "grabbing" : (showPlumb || showHoriz ? "grab" : "default"), maxHeight: 520 }}
+              style={{ cursor: dragging ? "grabbing" : (showPlumb || showHoriz || showHoriz2 ? "grab" : "default"), maxHeight: 520 }}
               onMouseDown={onMouseDown}
               onMouseMove={onMouseMove}
               onMouseUp={onMouseUp}
@@ -603,10 +906,11 @@ export default function PostureTrackerPage() {
             />
           </div>
           <p className="text-xs text-gray-400 text-center mt-2">
-            {showPlumb && "Red dashed line: drag to align with ear → shoulder → hip → ankle. "}
-            {showHoriz && "Blue dashed line: drag to check shoulder and hip levelness. "}
-            {showOverlay && "Green outline: ideal posture reference at adjustable opacity."}
-            {!showPlumb && !showHoriz && !showOverlay && "Enable tools above to analyze your posture."}
+            {showPlumb && "Red dashed: drag to align with ear → shoulder → hip → ankle. "}
+            {showHoriz && "Blue dashed: drag to check shoulder levelness. "}
+            {showHoriz2 && "Purple dashed: drag to check hip levelness. "}
+            {showOverlay && "Green outline: ideal posture reference at adjustable opacity. "}
+            {!showPlumb && !showHoriz && !showHoriz2 && !showOverlay && "Enable tools above to analyze your posture."}
           </p>
         </div>
       )}
@@ -650,7 +954,7 @@ export default function PostureTrackerPage() {
                                 <img src={photo.signed_url} alt={v.label} className="w-full h-full object-cover" />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 no-print">
                                   <button
-                                    onClick={() => { setAnalysisPhoto(photo); setShowPlumb(false); setShowHoriz(false); setShowOverlay(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                                    onClick={() => openAnalysis(photo)}
                                     className="bg-white text-teal-700 text-xs font-bold px-2 py-1 rounded shadow"
                                   >
                                     Analyze
