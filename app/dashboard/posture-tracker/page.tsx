@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -15,6 +15,13 @@ interface PosturePhoto {
 }
 
 type AnalysisSet = Record<"front" | "side" | "back", PosturePhoto | null>;
+
+interface MilestoneSection {
+  date: string;
+  dayNumber: number | null;
+  photos: AnalysisSet;
+  notes: string | null;
+}
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -70,17 +77,30 @@ function getPhotosNearMilestone(photos: PosturePhoto[], purchasedAt: string, mil
   return photos.filter(p => Math.abs(new Date(p.photo_date + "T12:00:00").getTime() - target) <= 7 * 86_400_000);
 }
 
-// Picks the most recent date's photos and returns a front/side/back set
-function buildAnalysisSet(allPhotos: PosturePhoto[]): AnalysisSet | null {
-  if (allPhotos.length === 0) return null;
-  const sorted = [...allPhotos].sort((a, b) => b.photo_date.localeCompare(a.photo_date));
-  const date = sorted[0].photo_date;
-  const set: AnalysisSet = { front: null, side: null, back: null };
-  for (const p of allPhotos.filter(x => x.photo_date === date)) {
-    set[p.view_type] = p;
+// Group all photos by date, sorted chronologically oldest → newest
+function buildMilestoneSections(allPhotos: PosturePhoto[]): MilestoneSection[] {
+  const byDate: Record<string, PosturePhoto[]> = {};
+  for (const p of allPhotos) {
+    if (!byDate[p.photo_date]) byDate[p.photo_date] = [];
+    byDate[p.photo_date].push(p);
   }
-  return set;
+  const sections: MilestoneSection[] = [];
+  for (const date of Object.keys(byDate)) {
+    const datePhotos = byDate[date];
+    const set: AnalysisSet = { front: null, side: null, back: null };
+    let dayNumber: number | null = null;
+    let notes: string | null = null;
+    for (const p of datePhotos) {
+      set[p.view_type as "front" | "side" | "back"] = p;
+      if (p.day_number != null) dayNumber = p.day_number;
+      if (p.notes) notes = p.notes;
+    }
+    sections.push({ date, dayNumber, photos: set, notes });
+  }
+  return sections.sort((a, b) => a.date.localeCompare(b.date));
 }
+
+function milestoneAnchor(date: string) { return `milestone-${date}`; }
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
@@ -161,7 +181,6 @@ function PostureSilhouette({ view }: { view: "front" | "side" | "back" }) {
 }
 
 // ── AnalysisCanvas ────────────────────────────────────────────────────────────
-// Self-contained canvas with auto-drawn draggable posture reference lines.
 
 function AnalysisCanvas({ photo, view }: { photo: PosturePhoto; view: "front" | "side" | "back" }) {
   const [plumbX, setPlumbX] = useState(CANVAS_W / 2);
@@ -181,82 +200,61 @@ function AnalysisCanvas({ photo, view }: { photo: PosturePhoto; view: "front" | 
 
     ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
 
-    // Draw photo
     const scale = Math.min(CANVAS_W / img.naturalWidth, CANVAS_H / img.naturalHeight);
     const ix = (CANVAS_W - img.naturalWidth * scale) / 2;
     const iy = (CANVAS_H - img.naturalHeight * scale) / 2;
     ctx.drawImage(img, ix, iy, img.naturalWidth * scale, img.naturalHeight * scale);
 
-    // ── Plumb line (red vertical) ──
+    // Plumb line — red vertical
     ctx.save();
     ctx.strokeStyle = "rgba(220,38,38,0.92)";
     ctx.lineWidth = 2;
     ctx.setLineDash([10, 5]);
-    ctx.beginPath();
-    ctx.moveTo(plumbX, 0);
-    ctx.lineTo(plumbX, CANVAS_H);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(plumbX, 0); ctx.lineTo(plumbX, CANVAS_H); ctx.stroke();
     ctx.setLineDash([]);
     ctx.font = "bold 10px sans-serif";
     ctx.fillStyle = "rgba(220,38,38,0.95)";
-    const plLabelX = plumbX > CANVAS_W - 80 ? plumbX - 80 : plumbX + 6;
-    ctx.fillText("Plumb Line", plLabelX, 16);
+    ctx.fillText("Plumb Line", plumbX > CANVAS_W - 82 ? plumbX - 82 : plumbX + 5, 15);
     ctx.restore();
 
-    // ── Shoulder line (blue solid-ish) ──
+    // Shoulder line — blue
     ctx.save();
     ctx.strokeStyle = "rgba(37,99,235,0.92)";
     ctx.lineWidth = 2;
     ctx.setLineDash([10, 5]);
-    ctx.beginPath();
-    ctx.moveTo(0, horizY1);
-    ctx.lineTo(CANVAS_W, horizY1);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, horizY1); ctx.lineTo(CANVAS_W, horizY1); ctx.stroke();
     ctx.setLineDash([]);
     ctx.font = "bold 10px sans-serif";
     ctx.fillStyle = "rgba(37,99,235,0.95)";
-    const s1Y = horizY1 > 18 ? horizY1 - 5 : horizY1 + 14;
-    ctx.fillText("Shoulder Level", 6, s1Y);
+    ctx.fillText("Shoulder Level", 5, horizY1 > 18 ? horizY1 - 5 : horizY1 + 14);
     ctx.restore();
 
-    // ── Hip line (blue, shorter dash) ──
+    // Hip line — blue, shorter dash
     ctx.save();
     ctx.strokeStyle = "rgba(37,99,235,0.75)";
     ctx.lineWidth = 2;
     ctx.setLineDash([6, 6]);
-    ctx.beginPath();
-    ctx.moveTo(0, horizY2);
-    ctx.lineTo(CANVAS_W, horizY2);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, horizY2); ctx.lineTo(CANVAS_W, horizY2); ctx.stroke();
     ctx.setLineDash([]);
     ctx.font = "bold 10px sans-serif";
     ctx.fillStyle = "rgba(37,99,235,0.9)";
-    const s2Y = horizY2 > 18 ? horizY2 - 5 : horizY2 + 14;
-    ctx.fillText("Hip Level", 6, s2Y);
+    ctx.fillText("Hip Level", 5, horizY2 > 18 ? horizY2 - 5 : horizY2 + 14);
     ctx.restore();
   }, [plumbX, horizY1, horizY2]);
 
-  // Load image when URL changes; reset line positions for new photo
   useEffect(() => {
     if (!photo.signed_url) return;
     imgRef.current = null;
     setPlumbX(CANVAS_W / 2);
     setHorizY1(Math.round(CANVAS_H * 0.30));
     setHorizY2(Math.round(CANVAS_H * 0.60));
-
     const img = new Image();
     img.crossOrigin = "anonymous";
-    img.onload = () => {
-      imgRef.current = img;
-      setImageVersion(v => v + 1);
-    };
+    img.onload = () => { imgRef.current = img; setImageVersion(v => v + 1); };
     img.src = photo.signed_url;
   }, [photo.signed_url]);
 
-  // Redraw whenever line positions or image changes
-  useEffect(() => {
-    draw();
-  }, [draw, imageVersion]);
+  useEffect(() => { draw(); }, [draw, imageVersion]);
 
   function canvasPos(clientX: number, clientY: number) {
     const rect = canvasRef.current!.getBoundingClientRect();
@@ -277,7 +275,6 @@ function AnalysisCanvas({ photo, view }: { photo: PosturePhoto; view: "front" | 
     const { x, y } = canvasPos(e.clientX, e.clientY);
     setDragging(hitTest(x, y));
   }
-
   function onMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
     if (!dragging) return;
     const { x, y } = canvasPos(e.clientX, e.clientY);
@@ -285,14 +282,12 @@ function AnalysisCanvas({ photo, view }: { photo: PosturePhoto; view: "front" | 
     else if (dragging === "horiz1") setHorizY1(Math.max(0, Math.min(CANVAS_H, y)));
     else if (dragging === "horiz2") setHorizY2(Math.max(0, Math.min(CANVAS_H, y)));
   }
-
   function onTouchStart(e: React.TouchEvent<HTMLCanvasElement>) {
     const t = e.touches[0];
     const { x, y } = canvasPos(t.clientX, t.clientY);
     const hit = hitTest(x, y);
     if (hit) { e.preventDefault(); setDragging(hit); }
   }
-
   function onTouchMove(e: React.TouchEvent<HTMLCanvasElement>) {
     if (!dragging) return;
     e.preventDefault();
@@ -330,15 +325,10 @@ function AnalysisCanvas({ photo, view }: { photo: PosturePhoto; view: "front" | 
           onTouchEnd={() => setDragging(null)}
         />
       </div>
-      <p className="text-xs font-medium text-teal-700 mt-2 leading-snug">
-        {VIEW_TIPS[view]}
-      </p>
+      <p className="text-xs font-medium text-teal-700 mt-2 leading-snug">{VIEW_TIPS[view]}</p>
       <div className="flex items-center justify-between mt-1">
         <p className="text-xs text-gray-400">Drag lines to adjust</p>
-        <button
-          onClick={handleDownload}
-          className="text-xs text-teal-500 hover:text-teal-700 font-medium transition-colors"
-        >
+        <button onClick={handleDownload} className="text-xs text-teal-500 hover:text-teal-700 font-medium transition-colors">
           ⬇ Save image
         </button>
       </div>
@@ -364,7 +354,7 @@ export default function PostureTrackerPage() {
   // Pre-upload silhouette modal
   const [uploadModalView, setUploadModalView] = useState<"front" | "side" | "back" | null>(null);
 
-  // Hidden file inputs — gallery (no capture) and camera (with capture) per view
+  // File inputs — gallery (no capture) and camera (with capture) per view
   const frontRef = useRef<HTMLInputElement>(null);
   const sideRef = useRef<HTMLInputElement>(null);
   const backRef = useRef<HTMLInputElement>(null);
@@ -375,12 +365,12 @@ export default function PostureTrackerPage() {
   const backCameraRef = useRef<HTMLInputElement>(null);
   const cameraRefs = { front: frontCameraRef, side: sideCameraRef, back: backCameraRef };
 
-  // Analysis — set of up to 3 photos (most recent date or just-uploaded)
-  const [analysisSet, setAnalysisSet] = useState<AnalysisSet | null>(null);
-  const [analysisDate, setAnalysisDate] = useState<string | null>(null);
+  // Comparison state — any two dates
+  const [compareA, setCompareA] = useState<string>("");
+  const [compareB, setCompareB] = useState<string>("");
 
-  // Comparison state
-  const [compareMs, setCompareMs] = useState<number | null>(null);
+  // Derive milestone sections from photos (stable reference when photos unchanged)
+  const milestoneSections = useMemo(() => buildMilestoneSections(photos), [photos]);
 
   // ── Load data on mount ──
   useEffect(() => {
@@ -395,14 +385,7 @@ export default function PostureTrackerPage() {
           if (p.purchased_at) setPurchasedAt(p.purchased_at);
         }
         if (photosRes.ok) {
-          const allPhotos: PosturePhoto[] = await photosRes.json();
-          setPhotos(allPhotos);
-          // Auto-show analysis for most recent photos without scrolling
-          const set = buildAnalysisSet(allPhotos);
-          if (set) {
-            setAnalysisSet(set);
-            setAnalysisDate(allPhotos.sort((a, b) => b.photo_date.localeCompare(a.photo_date))[0].photo_date);
-          }
+          setPhotos(await photosRes.json());
         }
       } finally {
         setLoading(false);
@@ -428,7 +411,6 @@ export default function PostureTrackerPage() {
   // ── Compress image ──
   async function compressImage(file: File): Promise<Blob> {
     return new Promise((resolve, reject) => {
-      console.log("[compress] start:", file.name, file.size, file.type);
       const img = new Image();
       const objectUrl = URL.createObjectURL(file);
       img.onload = () => {
@@ -446,15 +428,11 @@ export default function PostureTrackerPage() {
         if (!ctx) { reject(new Error("Canvas not available")); return; }
         ctx.drawImage(img, 0, 0, width, height);
         canvas.toBlob(blob => {
-          if (blob) { console.log("[compress] output:", blob.size, "bytes"); resolve(blob); }
+          if (blob) resolve(blob);
           else reject(new Error("Canvas toBlob returned null"));
         }, "image/jpeg", 0.8);
       };
-      img.onerror = (e) => {
-        URL.revokeObjectURL(objectUrl);
-        reject(new Error(`Could not load image: ${file.name} (${file.type})`));
-        console.error("[compress] error:", e);
-      };
+      img.onerror = e => { URL.revokeObjectURL(objectUrl); reject(new Error(`Could not load: ${file.name}`)); console.error(e); };
       img.src = objectUrl;
     });
   }
@@ -465,7 +443,6 @@ export default function PostureTrackerPage() {
     if (!hasAny) { setUploadMsg("Please select at least one photo to upload."); return; }
     setUploading(true);
     setUploadMsg("");
-
     try {
       const currentDay = purchasedAt
         ? Math.max(1, Math.floor((new Date(uploadDate + "T12:00:00").getTime() - new Date(purchasedAt).getTime()) / 86_400_000) + 1)
@@ -483,7 +460,6 @@ export default function PostureTrackerPage() {
       }
 
       for (const { view, blob } of compressed) {
-        console.log(`[upload] uploading ${view}: ${blob.size} bytes`);
         const fd = new FormData();
         fd.append("photo", blob, `${view}.jpg`);
         fd.append("view_type", view);
@@ -497,7 +473,6 @@ export default function PostureTrackerPage() {
           try { const body = await res.json(); apiError = body.error ?? apiError; } catch { /* not JSON */ }
           throw new Error(`Upload failed for ${view} view: ${apiError}`);
         }
-        console.log(`[upload] ${view} ok`);
       }
 
       setUploadMsg("Photos saved!");
@@ -505,29 +480,13 @@ export default function PostureTrackerPage() {
       setPendingPreviews({ front: null, side: null, back: null });
       setNotes("");
 
-      // Refresh and auto-show analysis for uploaded date
       const res = await fetch("/api/posture-photos");
-      if (res.ok) {
-        const allPhotos: PosturePhoto[] = await res.json();
-        setPhotos(allPhotos);
+      if (res.ok) setPhotos(await res.json());
 
-        // Build set from just-uploaded date
-        const datePhotos = allPhotos.filter(p => p.photo_date === uploadDate);
-        if (datePhotos.length > 0) {
-          const set: AnalysisSet = { front: null, side: null, back: null };
-          for (const p of datePhotos) set[p.view_type] = p;
-          setAnalysisSet(set);
-          setAnalysisDate(uploadDate);
-        } else {
-          const set = buildAnalysisSet(allPhotos);
-          if (set) setAnalysisSet(set);
-        }
-
-        // Scroll to analysis section
-        setTimeout(() => {
-          document.getElementById("analysis-section")?.scrollIntoView({ behavior: "smooth" });
-        }, 350);
-      }
+      // Scroll to the newly uploaded milestone section
+      setTimeout(() => {
+        document.getElementById(milestoneAnchor(uploadDate))?.scrollIntoView({ behavior: "smooth" });
+      }, 400);
     } catch (err) {
       setUploadMsg(err instanceof Error ? err.message : "Upload failed.");
     } finally {
@@ -540,16 +499,7 @@ export default function PostureTrackerPage() {
   async function handleDelete(id: string) {
     if (!confirm("Delete this photo? This cannot be undone.")) return;
     await fetch(`/api/posture-photos/${id}`, { method: "DELETE" });
-    setPhotos(prev => {
-      const next = prev.filter(p => p.id !== id);
-      const set = buildAnalysisSet(next);
-      setAnalysisSet(set);
-      if (set) {
-        const dates = next.map(p => p.photo_date).sort((a, b) => b.localeCompare(a));
-        setAnalysisDate(dates[0] ?? null);
-      }
-      return next;
-    });
+    setPhotos(prev => prev.filter(p => p.id !== id));
   }
 
   // ── Computed ──
@@ -564,10 +514,10 @@ export default function PostureTrackerPage() {
   const daysUntilNext = purchasedAt && nextMilestone
     ? Math.max(0, daysUntilDate(milestoneDateStr(purchasedAt, nextMilestone)))
     : null;
-  const day1Photos = purchasedAt ? getPhotosNearMilestone(photos, purchasedAt, 1) : [];
-  const comparePhotos = purchasedAt && compareMs ? getPhotosNearMilestone(photos, purchasedAt, compareMs) : [];
 
-  const hasAnalysis = analysisSet && Object.values(analysisSet).some(p => p !== null);
+  // Comparison resolved sections
+  const sectionA = milestoneSections.find(s => s.date === compareA) ?? null;
+  const sectionB = milestoneSections.find(s => s.date === compareB) ?? null;
 
   if (loading) {
     return (
@@ -628,11 +578,7 @@ export default function PostureTrackerPage() {
                 >
                   Choose from Library
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setUploadModalView(null)}
-                  className="w-full text-gray-400 hover:text-gray-600 text-sm py-2 transition-colors"
-                >
+                <button type="button" onClick={() => setUploadModalView(null)} className="w-full text-gray-400 hover:text-gray-600 text-sm py-2 transition-colors">
                   Cancel
                 </button>
               </div>
@@ -650,9 +596,7 @@ export default function PostureTrackerPage() {
           <div className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2 mb-2">
-                <span className="text-sm font-semibold text-gray-700">
-                  Day {Math.min(currentDay ?? 1, 90)} of 90
-                </span>
+                <span className="text-sm font-semibold text-gray-700">Day {Math.min(currentDay ?? 1, 90)} of 90</span>
                 <span className="text-xs font-semibold text-teal-600 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded-full">
                   {streak}/4 milestones documented
                 </span>
@@ -708,40 +652,16 @@ export default function PostureTrackerPage() {
           </div>
         </div>
 
-        {/* Hidden inputs — gallery */}
+        {/* Hidden inputs */}
         {VIEWS.map(v => (
-          <input
-            key={`gallery-${v.key}`}
-            ref={fileRefs[v.key]}
-            type="file"
-            accept="image/*,image/heic,image/heif"
-            className="hidden"
-            onChange={e => {
-              const f = e.target.files?.[0];
-              if (f) handleFileSelect(v.key, f);
-              e.target.value = "";
-            }}
-          />
+          <input key={`gallery-${v.key}`} ref={fileRefs[v.key]} type="file" accept="image/*,image/heic,image/heif" className="hidden"
+            onChange={e => { const f = e.target.files?.[0]; if (f) handleFileSelect(v.key, f); e.target.value = ""; }} />
+        ))}
+        {VIEWS.map(v => (
+          <input key={`camera-${v.key}`} ref={cameraRefs[v.key]} type="file" accept="image/*,image/heic,image/heif" capture="environment" className="hidden"
+            onChange={e => { const f = e.target.files?.[0]; if (f) handleFileSelect(v.key, f); e.target.value = ""; }} />
         ))}
 
-        {/* Hidden inputs — camera */}
-        {VIEWS.map(v => (
-          <input
-            key={`camera-${v.key}`}
-            ref={cameraRefs[v.key]}
-            type="file"
-            accept="image/*,image/heic,image/heif"
-            capture="environment"
-            className="hidden"
-            onChange={e => {
-              const f = e.target.files?.[0];
-              if (f) handleFileSelect(v.key, f);
-              e.target.value = "";
-            }}
-          />
-        ))}
-
-        {/* Three upload boxes */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
           {VIEWS.map(v => {
             const preview = pendingPreviews[v.key];
@@ -753,23 +673,11 @@ export default function PostureTrackerPage() {
                   className={`w-full h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-all overflow-hidden relative ${preview ? "border-teal-500" : "border-gray-300 hover:border-teal-400 bg-gray-50"}`}
                   style={preview ? { backgroundImage: `url(${preview})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
                 >
-                  {!preview && (
-                    <>
-                      <CameraIcon className="w-8 h-8 text-gray-400" />
-                      <span className="text-sm font-semibold text-gray-600">{v.label}</span>
-                      <span className="text-xs text-gray-400">Tap to upload</span>
-                    </>
-                  )}
-                  {preview && (
-                    <span className="absolute inset-0 bg-black/20 flex items-end justify-center pb-2">
-                      <span className="text-white text-xs font-bold">{v.label} ✓</span>
-                    </span>
-                  )}
+                  {!preview && (<><CameraIcon className="w-8 h-8 text-gray-400" /><span className="text-sm font-semibold text-gray-600">{v.label}</span><span className="text-xs text-gray-400">Tap to upload</span></>)}
+                  {preview && <span className="absolute inset-0 bg-black/20 flex items-end justify-center pb-2"><span className="text-white text-xs font-bold">{v.label} ✓</span></span>}
                 </button>
                 {preview && (
-                  <button onClick={() => clearPending(v.key)} className="mt-1 w-full text-xs text-red-400 hover:text-red-600 text-center">
-                    Remove
-                  </button>
+                  <button onClick={() => clearPending(v.key)} className="mt-1 w-full text-xs text-red-400 hover:text-red-600 text-center">Remove</button>
                 )}
               </div>
             );
@@ -790,60 +698,163 @@ export default function PostureTrackerPage() {
         )}
       </div>
 
-      {/* ── Posture Analysis ── */}
-      {hasAnalysis && (
-        <div id="analysis-section" className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
-          <div className="flex items-start justify-between mb-1">
+      {/* ── Posture Analysis — all milestones chronologically ── */}
+      {milestoneSections.length > 0 && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Posture Analysis</h2>
-              {analysisDate && (
-                <p className="text-xs text-gray-400 mt-0.5">
-                  Photos from {formatDateDisplay(analysisDate)} · lines drawn automatically
-                </p>
-              )}
+              <h2 className="text-xl font-bold text-gray-900">Posture Analysis</h2>
+              <p className="text-sm text-gray-500 mt-0.5">All milestones · lines drawn automatically · drag to adjust</p>
             </div>
           </div>
 
           {/* Legend */}
-          <div className="flex flex-wrap gap-3 text-xs text-gray-500 mb-5 mt-3">
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block w-6 h-0.5 bg-red-500" style={{ borderTop: "2px dashed #ef4444" }} />
-              Plumb Line
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block w-6 h-0.5" style={{ borderTop: "2px dashed #2563eb" }} />
-              Shoulder Level
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block w-6 h-0.5" style={{ borderTop: "2px dashed #2563eb", opacity: 0.7 }} />
-              Hip Level
-            </span>
+          <div className="flex flex-wrap gap-4 text-xs text-gray-500">
+            <span className="flex items-center gap-1.5"><span className="w-5 inline-block" style={{ borderTop: "2px dashed #ef4444" }} />Plumb Line</span>
+            <span className="flex items-center gap-1.5"><span className="w-5 inline-block" style={{ borderTop: "2px dashed #2563eb" }} />Shoulder Level</span>
+            <span className="flex items-center gap-1.5"><span className="w-5 inline-block opacity-75" style={{ borderTop: "2px dashed #2563eb" }} />Hip Level</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {VIEWS.map(v => {
-              const photo = analysisSet![v.key];
-              if (!photo) {
-                return (
-                  <div key={v.key} className="flex flex-col">
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{v.label}</p>
-                    <div className="rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center aspect-[3/4]">
-                      <div className="text-center px-4">
-                        <CameraIcon className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                        <p className="text-xs text-gray-400">No {v.label.toLowerCase()} photo</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-              return (
-                <div key={v.key} className="flex flex-col">
-                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{v.label}</p>
-                  <AnalysisCanvas photo={photo} view={v.key} />
+          {milestoneSections.map((section) => (
+            <div
+              key={section.date}
+              id={milestoneAnchor(section.date)}
+              className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 scroll-mt-4"
+            >
+              {/* Section heading */}
+              <div className="flex items-start justify-between mb-5">
+                <div>
+                  <h3 className="text-base font-bold text-gray-900">
+                    {section.dayNumber != null ? `Day ${section.dayNumber}` : "Photos"} — {formatDateDisplay(section.date)}
+                  </h3>
+                  {section.notes && (
+                    <p className="text-sm text-gray-500 mt-1 italic">&ldquo;{section.notes}&rdquo;</p>
+                  )}
                 </div>
-              );
-            })}
+                {section.dayNumber != null && (
+                  <span className="text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200 px-2.5 py-1 rounded-full flex-shrink-0 ml-3">
+                    Day {section.dayNumber}
+                  </span>
+                )}
+              </div>
+
+              {/* 3 canvases */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                {VIEWS.map(v => {
+                  const photo = section.photos[v.key];
+                  return (
+                    <div key={v.key}>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{v.label}</p>
+                      {photo ? (
+                        <AnalysisCanvas photo={photo} view={v.key} />
+                      ) : (
+                        <div className="rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center aspect-[3/4]">
+                          <div className="text-center px-4">
+                            <CameraIcon className="w-7 h-7 text-gray-300 mx-auto mb-1.5" />
+                            <p className="text-xs text-gray-400">No {v.label.toLowerCase()}</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Delete row */}
+              <div className="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-2 no-print">
+                {VIEWS.map(v => {
+                  const photo = section.photos[v.key];
+                  if (!photo) return null;
+                  return (
+                    <button
+                      key={v.key}
+                      onClick={() => handleDelete(photo.id)}
+                      className="text-xs text-gray-400 hover:text-red-500 border border-gray-200 hover:border-red-300 rounded-lg px-3 py-1.5 transition-colors"
+                    >
+                      Delete {v.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ── Compare Milestones ── */}
+      {milestoneSections.length >= 2 && (
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-1">Compare Milestones</h2>
+          <p className="text-sm text-gray-500 mb-5">Select any two milestones to see a side-by-side before/after comparison</p>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
+            <div className="flex-1">
+              <label className="block text-xs font-medium text-gray-500 mb-1">Before</label>
+              <select
+                value={compareA}
+                onChange={e => setCompareA(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"
+              >
+                <option value="">Select milestone…</option>
+                {milestoneSections.map(s => (
+                  <option key={s.date} value={s.date}>
+                    {s.dayNumber != null ? `Day ${s.dayNumber}` : "Photos"} — {formatDateDisplay(s.date)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="sm:pt-5 text-gray-400 font-semibold text-lg select-none">vs</div>
+            <div className="flex-1">
+              <label className="block text-xs font-medium text-gray-500 mb-1">After</label>
+              <select
+                value={compareB}
+                onChange={e => setCompareB(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"
+              >
+                <option value="">Select milestone…</option>
+                {milestoneSections.map(s => (
+                  <option key={s.date} value={s.date}>
+                    {s.dayNumber != null ? `Day ${s.dayNumber}` : "Photos"} — {formatDateDisplay(s.date)}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
+
+          {sectionA && sectionB && compareA !== compareB && (
+            <div className="grid grid-cols-2 gap-4">
+              {([{ s: sectionA, label: "Before" }, { s: sectionB, label: "After" }] as const).map(({ s, label }) => (
+                <div key={s.date}>
+                  <div className="mb-2">
+                    <span className={`text-xs font-bold uppercase tracking-wider ${label === "Before" ? "text-gray-500" : "text-teal-600"}`}>{label}</span>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {s.dayNumber != null ? `Day ${s.dayNumber}` : "Photos"} · {formatDateDisplay(s.date)}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {VIEWS.map(v => {
+                      const photo = s.photos[v.key];
+                      return (
+                        <div key={v.key} className="aspect-[3/4] rounded-lg overflow-hidden bg-gray-100">
+                          {photo?.signed_url
+                            ? <img src={photo.signed_url} alt={v.label} className="w-full h-full object-cover" />
+                            : <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs text-center p-1">{v.label}</div>
+                          }
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1.5 text-center">
+                    {VIEWS.map(v => v.label).join(" · ")}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {(!sectionA || !sectionB || compareA === compareB) && compareA && compareB && compareA === compareB && (
+            <p className="text-sm text-amber-600 text-center py-2">Please select two different milestones to compare.</p>
+          )}
         </div>
       )}
 
@@ -864,7 +875,10 @@ export default function PostureTrackerPage() {
               <div key={ms} className={`rounded-2xl border-2 p-4 ${hasPhotos ? "border-teal-500" : "border-gray-200"}`}>
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <p className={`text-sm font-bold ${hasPhotos ? "text-teal-700" : "text-gray-700"}`}>Day {ms} Milestone</p>
+                    <div className="flex items-center gap-2">
+                      {hasPhotos && <span className="text-teal-500 text-base leading-none">✓</span>}
+                      <p className={`text-sm font-bold ${hasPhotos ? "text-teal-700" : "text-gray-700"}`}>Day {ms} Milestone</p>
+                    </div>
                     {msDate && <p className="text-xs text-gray-400 mt-0.5">{formatDateDisplay(msDate)}</p>}
                   </div>
                   {hasPhotos && (
@@ -885,12 +899,7 @@ export default function PostureTrackerPage() {
                               <>
                                 <img src={photo.signed_url} alt={v.label} className="w-full h-full object-cover" />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 no-print">
-                                  <button
-                                    onClick={() => handleDelete(photo.id)}
-                                    className="bg-white text-red-500 text-xs font-bold px-2 py-1 rounded shadow"
-                                  >
-                                    Del
-                                  </button>
+                                  <button onClick={() => handleDelete(photo.id)} className="bg-white text-red-500 text-xs font-bold px-2 py-1 rounded shadow">Del</button>
                                 </div>
                               </>
                             ) : (
@@ -900,24 +909,23 @@ export default function PostureTrackerPage() {
                         );
                       })}
                     </div>
-                    {ms > 1 && day1Photos.length > 0 && (
-                      <button
-                        onClick={() => setCompareMs(compareMs === ms ? null : ms)}
-                        className="w-full text-xs font-semibold text-teal-600 hover:text-teal-800 border border-teal-200 rounded-lg py-2 transition-colors no-print"
-                      >
-                        {compareMs === ms ? "Hide comparison" : "Compare with Day 1 →"}
-                      </button>
-                    )}
+                    <button
+                      onClick={() => {
+                        const date = msPhotos[0]?.photo_date;
+                        if (date) {
+                          document.getElementById(milestoneAnchor(date))?.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                      className="w-full text-xs font-semibold text-teal-600 hover:text-teal-800 border border-teal-200 rounded-lg py-2 transition-colors no-print"
+                    >
+                      View Analysis →
+                    </button>
                   </>
                 ) : (
                   <div className="flex flex-col items-center py-5 text-center">
                     <CameraIcon className="w-8 h-8 text-gray-300 mb-2" />
                     <p className="text-sm text-gray-500">
-                      {isPast
-                        ? `Upload photos for Day ${ms}`
-                        : du !== null && du > 0
-                        ? `${du} day${du !== 1 ? "s" : ""} away`
-                        : `Day ${ms} photos`}
+                      {isPast ? `Upload photos for Day ${ms}` : du !== null && du > 0 ? `${du} day${du !== 1 ? "s" : ""} away` : `Day ${ms} photos`}
                     </p>
                     {isPast && (
                       <button
@@ -934,36 +942,6 @@ export default function PostureTrackerPage() {
           })}
         </div>
       </div>
-
-      {/* ── Comparison View ── */}
-      {compareMs !== null && day1Photos.length > 0 && comparePhotos.length > 0 && (
-        <div className="bg-white border border-teal-200 rounded-2xl shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900">Day 1 → Day {compareMs} Comparison</h2>
-            <button onClick={() => setCompareMs(null)} className="text-gray-400 hover:text-gray-600 text-sm no-print">Close ×</button>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            {([{ label: "Day 1", ps: day1Photos }, { label: `Day ${compareMs}`, ps: comparePhotos }]).map(({ label, ps }) => (
-              <div key={label}>
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{label}</p>
-                <div className="grid grid-cols-3 gap-1">
-                  {VIEWS.map(v => {
-                    const photo = ps.find(p => p.view_type === v.key);
-                    return (
-                      <div key={v.key} className="aspect-[3/4] rounded-lg overflow-hidden bg-gray-100">
-                        {photo?.signed_url
-                          ? <img src={photo.signed_url} alt={v.label} className="w-full h-full object-cover" />
-                          : <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs text-center p-1">{v.label}</div>
-                        }
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* ── Accountability Section ── */}
       <div className="bg-teal-50 border border-teal-200 rounded-2xl p-6">
