@@ -147,7 +147,7 @@ export default async function ConsultationPage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation Was Cancelled</h3>
               <p className="text-gray-600 text-sm mb-6 max-w-sm mx-auto">
-                Your previously scheduled consultation has been cancelled. To reschedule please request a new appointment time through your original calendar invite and our team will move it to a time that works for you. Alternatively you can book a new time directly below.
+                Your previously scheduled consultation has been cancelled. We are sorry for the inconvenience. You can book a new time directly below.
               </p>
               <a
                 href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"

@@ -271,7 +271,7 @@ export function welcomeEmail({
           Go to My Program →
         </a>
       </p>
-      <p style="font-size:13px;color:#6b7280;margin-top:24px;">To ensure you receive all course updates please add droliveri@elevatehealthtampa.com to your contacts.</p>
+      <p style="font-size:13px;color:#6b7280;margin-top:24px;">To ensure you receive all course updates please add info@elevatehealthtampa.com to your contacts.</p>
     `),
     text: `Hey ${firstName || "there"}, welcome to the Elevate Pain-Free Program!
 
@@ -293,7 +293,7 @@ Elevate Health
 
 Go to My Program: ${SITE_URL}/login
 
-To ensure you receive all course updates please add droliveri@elevatehealthtampa.com to your contacts.`,
+To ensure you receive all course updates please add info@elevatehealthtampa.com to your contacts.`,
   };
 }
 

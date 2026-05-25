@@ -61,19 +61,23 @@ export async function POST(req: NextRequest) {
 
       const html = `
         <p>Hi ${firstName},</p>
-        <p>Your 15-minute consultation with Dr. Oliveri has been cancelled. Please use the link below to reschedule at a time that works for you.</p>
-        <p><strong>Booking Link:</strong><br>
-        <a href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation">https://calendly.com/drconnoroliveri/15min-pain-free-consultation</a></p>
-        <p>If you have any questions please contact us at <a href="mailto:droliveri@elevatehealthtampa.com">droliveri@elevatehealthtampa.com</a></p>
+        <p>Your 15-minute consultation with Dr. Oliveri has been cancelled. We are sorry for the inconvenience. You have two options to rebook:</p>
+        <p><strong>Option 1 — Rebook through your dashboard:</strong><br>
+        Log in to your dashboard at <a href="https://www.elevatehealthtampa.com/dashboard/consultation">https://www.elevatehealthtampa.com/dashboard/consultation</a> and click the booking button there.</p>
+        <p><strong>Option 2 — Book directly:</strong><br>
+        Use this link to choose a new time immediately: <a href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation">https://calendly.com/drconnoroliveri/15min-pain-free-consultation</a></p>
+        <p>If you have any questions please contact us at <a href="mailto:info@elevatehealthtampa.com">info@elevatehealthtampa.com</a></p>
         <p>— Dr. Connor Oliveri &amp; The Elevate Health Team</p>
       `.trim();
       const text = `Hi ${firstName},
 
-Your 15-minute consultation with Dr. Oliveri has been cancelled. Please use the link below to reschedule at a time that works for you.
+Your 15-minute consultation with Dr. Oliveri has been cancelled. We are sorry for the inconvenience. You have two options to rebook:
 
-Booking Link: https://calendly.com/drconnoroliveri/15min-pain-free-consultation
+Option 1 — Rebook through your dashboard: Log in to your dashboard at https://www.elevatehealthtampa.com/dashboard/consultation and click the booking button there.
 
-If you have any questions please contact us at droliveri@elevatehealthtampa.com
+Option 2 — Book directly: Use this link to choose a new time immediately: https://calendly.com/drconnoroliveri/15min-pain-free-consultation
+
+If you have any questions please contact us at info@elevatehealthtampa.com
 
 — Dr. Connor Oliveri & The Elevate Health Team`;
 
@@ -118,7 +122,7 @@ If you have any questions please contact us at droliveri@elevatehealthtampa.com
         <p>Hi ${firstName},</p>
         <p>Thank you for your consultation with Dr. Oliveri today. We hope it was helpful.</p>
         <p>If you would like to book another session you can do so directly from your dashboard at <a href="https://www.elevatehealthtampa.com/dashboard/consultation">https://www.elevatehealthtampa.com/dashboard/consultation</a>.</p>
-        <p>If you have any follow-up questions please email <a href="mailto:droliveri@elevatehealthtampa.com">droliveri@elevatehealthtampa.com</a>.</p>
+        <p>If you have any follow-up questions please email <a href="mailto:info@elevatehealthtampa.com">info@elevatehealthtampa.com</a>.</p>
         <p>— Dr. Connor Oliveri &amp; The Elevate Health Team</p>
       `.trim();
       const text = `Hi ${firstName},
@@ -127,7 +131,7 @@ Thank you for your consultation with Dr. Oliveri today. We hope it was helpful.
 
 If you would like to book another session you can do so directly from your dashboard at https://www.elevatehealthtampa.com/dashboard/consultation.
 
-If you have any follow-up questions please email droliveri@elevatehealthtampa.com.
+If you have any follow-up questions please email info@elevatehealthtampa.com.
 
 — Dr. Connor Oliveri & The Elevate Health Team`;
 
