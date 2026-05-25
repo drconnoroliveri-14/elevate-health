@@ -160,12 +160,6 @@ export default async function ConsultationPage() {
                 </svg>
                 Book a New Time →
               </a>
-              <p className="text-xs text-gray-400 mt-3">
-                Questions?{" "}
-                <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 hover:underline">
-                  Email droliveri@elevatehealthtampa.com
-                </a>
-              </p>
             </div>
           ) : alreadyBooked ? (
             /* ── Booked state ── */
