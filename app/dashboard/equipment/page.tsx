@@ -21,7 +21,7 @@ export default function EquipmentPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
         {/* Card 1 — TRX */}
         <div className="bg-white border-2 border-teal-400 rounded-2xl shadow-md flex flex-col overflow-hidden">
-          <Image src="/TRX__2_.webp" alt="TRX Suspension Trainer" width={800} height={200} style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px 8px 0 0" }} unoptimized />
+          <Image src="/TRX%20(2).webp" alt="TRX Suspension Trainer" width={800} height={200} style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px 8px 0 0" }} unoptimized />
           <div className="p-6 flex flex-col flex-1">
             <span className="inline-block bg-teal-500 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4 self-start">
               Recommended for Modules
@@ -44,7 +44,7 @@ export default function EquipmentPage() {
 
         {/* Card 2 — Foam Roller */}
         <div className="bg-white border-2 border-teal-400 rounded-2xl shadow-md flex flex-col overflow-hidden">
-          <Image src="/Foam_Roller.jpg" alt="Foam Roller Massager" width={800} height={200} style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px 8px 0 0" }} unoptimized />
+          <Image src="/Foam%20Roller.jpg" alt="Foam Roller Massager" width={800} height={200} style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px 8px 0 0" }} unoptimized />
           <div className="p-6 flex flex-col flex-1">
             <span className="inline-block bg-teal-500 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4 self-start">
               Recommended for Recovery
