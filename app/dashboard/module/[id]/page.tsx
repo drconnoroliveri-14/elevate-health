@@ -71,7 +71,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "Sleep position guide for pain relief",
       "Movement pattern corrections",
     ],
-    videoId: "s1xkIjAFyc8",
+    videoId: "1KUX7VR8rzY",
   },
   6: {
     title: "Strengthening for a Pain-Free Life",
