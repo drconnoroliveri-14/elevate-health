@@ -27,9 +27,9 @@ export default async function ConsultationPage() {
     redirect("/dashboard");
   }
 
-  const firstName = profile.full_name?.split(" ")[0] || "there";
-  const alreadyBooked = !!profile.consultation_booked;
-  const wasCancelled = !profile.consultation_booked && !!profile.consultation_cancelled;
+  // Show cancelled state whenever consultation_cancelled = true (overrides consultation_booked)
+  const wasCancelled = !!profile.consultation_cancelled;
+  const alreadyBooked = !wasCancelled && !!profile.consultation_booked;
 
   return (
     <div>
@@ -39,19 +39,6 @@ export default async function ConsultationPage() {
           Premium Add-On
         </span>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Consultation</h1>
-      </div>
-
-      {/* Confirmation banner */}
-      <div className="bg-teal-500 rounded-2xl p-6 mb-8 text-white text-center">
-        <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-          </svg>
-        </div>
-        <h2 className="text-xl font-bold mb-1">Your Consultation is Confirmed, {firstName}!</h2>
-        <p className="text-teal-100 text-sm">
-          You have secured a private 15-minute Pain Relief Consultation. Use the button below to choose your preferred time.
-        </p>
       </div>
 
       {/* Doctor card */}
@@ -68,8 +55,8 @@ export default async function ConsultationPage() {
         </div>
       </div>
 
-      {/* Book button, Cancelled state, or Already Booked state */}
       {wasCancelled ? (
+        /* ── Cancelled state ── */
         <div className="mb-8 bg-amber-50 border border-amber-300 rounded-2xl p-8 text-center">
           <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -77,8 +64,8 @@ export default async function ConsultationPage() {
             </svg>
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation Was Cancelled</h3>
-          <p className="text-gray-600 text-sm mb-6">
-            Your previously scheduled consultation has been cancelled. Please use the button below to reschedule at a new time.
+          <p className="text-gray-600 text-sm mb-6 max-w-sm mx-auto">
+            Your previously scheduled consultation has been cancelled. To reschedule please request a new appointment time through your original calendar invite and our team will move it to a time that works for you. Alternatively you can book a new time directly below.
           </p>
           <a
             href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"
@@ -89,7 +76,7 @@ export default async function ConsultationPage() {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
             </svg>
-            Reschedule Your Consultation →
+            Book a New Time →
           </a>
           <p className="text-xs text-gray-400 mt-3">
             Questions?{" "}
@@ -99,16 +86,24 @@ export default async function ConsultationPage() {
           </p>
         </div>
       ) : alreadyBooked ? (
-        <div className="text-center mb-8 bg-green-50 border border-green-200 rounded-2xl p-8">
+        /* ── Booked state ── */
+        <div className="mb-8 bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation is Scheduled!</h3>
-          <p className="text-gray-500 text-sm mb-6">
-            Check your email for your Zoom link and calendar confirmation. If you need to reschedule please email droliveri@elevatehealthtampa.com
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation is Booked!</h3>
+          <p className="text-gray-500 text-sm mb-5">
+            Check your email for your Zoom link and calendar confirmation.
           </p>
+          {/* Reschedule info box */}
+          <div className="bg-white border border-green-200 rounded-xl p-4 text-left mb-6 max-w-sm mx-auto">
+            <p className="text-xs text-gray-500 leading-relaxed">
+              <span className="font-semibold text-gray-700">Need to reschedule?</span> Please request a new appointment time through your calendar invite and our team will move it to a time that works for you. You can also email{" "}
+              <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 hover:underline">droliveri@elevatehealthtampa.com</a>
+            </p>
+          </div>
           <a
             href="mailto:droliveri@elevatehealthtampa.com"
             className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
@@ -120,6 +115,7 @@ export default async function ConsultationPage() {
           </a>
         </div>
       ) : (
+        /* ── Not yet booked state ── */
         <div className="text-center mb-8">
           <a
             href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"
@@ -187,8 +183,8 @@ export default async function ConsultationPage() {
         </div>
       </div>
 
-      {/* Rebook card — only show when already booked */}
-      {alreadyBooked && (
+      {/* Rebook card — show when booked or cancelled (has an active consultation slot purchased) */}
+      {(alreadyBooked || wasCancelled) && (
         <div className="bg-teal-50 border border-teal-200 rounded-2xl p-6 mb-8">
           <h3 className="text-lg font-bold text-teal-800 mb-2 text-center">Need Another Consultation?</h3>
           <p className="text-teal-700 text-sm text-center mb-5">

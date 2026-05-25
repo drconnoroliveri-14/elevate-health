@@ -34,7 +34,7 @@ export async function GET() {
     },
     body: JSON.stringify({
       url: "https://www.elevatehealthtampa.com/api/webhooks/calendly",
-      events: ["invitee.created"],
+      events: ["invitee.created", "invitee.canceled"],
       organization: orgUri,
       user: userUri,
       scope: "user",
