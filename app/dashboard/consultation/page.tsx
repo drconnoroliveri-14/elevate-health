@@ -5,6 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import type { Profile } from "@/types";
 import RebookButton from "./RebookButton";
 import ConsultationRatingForm from "./ConsultationRatingForm";
+import PurchaseConsultationButton from "./PurchaseConsultationButton";
 
 function formatCompletedAt(iso: string | null): string {
   if (!iso) return "";
@@ -34,14 +35,12 @@ export default async function ConsultationPage() {
 
   const profile = (profileRows as Pick<Profile, "has_consultation" | "consultation_booked" | "consultation_cancelled" | "consultation_completed" | "consultation_completed_at" | "full_name">[] | null)?.[0] ?? null;
 
-  if (!profile?.has_consultation) {
-    redirect("/dashboard");
-  }
+  const hasConsultation = !!profile?.has_consultation;
 
   // State priority: completed > cancelled > booked > not-yet-booked
-  const isCompleted = !!profile.consultation_completed;
-  const wasCancelled = !isCompleted && !!profile.consultation_cancelled;
-  const alreadyBooked = !isCompleted && !wasCancelled && !!profile.consultation_booked;
+  const isCompleted = hasConsultation && !!profile.consultation_completed;
+  const wasCancelled = hasConsultation && !isCompleted && !!profile.consultation_cancelled;
+  const alreadyBooked = hasConsultation && !isCompleted && !wasCancelled && !!profile.consultation_booked;
 
   return (
     <div>
@@ -53,7 +52,46 @@ export default async function ConsultationPage() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Consultation</h1>
       </div>
 
-      {isCompleted ? (
+      {!hasConsultation ? (
+        /* ── Purchase prompt ── */
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm mb-8">
+          <div className="bg-gradient-to-r from-orange-500 to-orange-700 p-6 text-white relative">
+            <span className="absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full bg-orange-100 text-orange-700">
+              High Value
+            </span>
+            <div className="text-4xl mb-3">🎯</div>
+            <h2 className="text-xl font-bold">Book a 1-on-1 Consultation with Dr. Oliveri</h2>
+          </div>
+          <div className="p-6">
+            <p className="text-gray-600 text-sm leading-relaxed mb-5">
+              Get a private 15-minute video call with Dr. Oliveri to review your specific pain pattern and receive a personalized protocol recommendation.
+            </p>
+            <ul className="space-y-2.5 mb-6">
+              {[
+                "Review your specific pain pattern",
+                "Identify your primary muscle imbalances",
+                "Get a personalized protocol recommendation",
+                "Direct access to Dr. Oliveri",
+              ].map((b) => (
+                <li key={b} className="flex items-start gap-3 text-sm text-gray-700">
+                  <svg className="w-4 h-4 text-teal-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <div className="flex items-baseline gap-2 mb-4">
+              <span className="text-4xl font-black text-teal-600">$197</span>
+              <span className="text-gray-400 text-sm">one-time · instant access</span>
+            </div>
+            <PurchaseConsultationButton />
+            <p className="text-xs text-gray-400 text-center mt-3">
+              You will receive a booking link via email immediately after purchase.
+            </p>
+          </div>
+        </div>
+      ) : isCompleted ? (
         /* ── Completed state ── */
         <>
           {/* Completion card */}
