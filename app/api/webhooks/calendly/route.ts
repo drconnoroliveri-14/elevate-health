@@ -7,6 +7,12 @@ export const dynamic = "force-dynamic";
 const FROM = "Dr. Connor Oliveri <droliveri@elevatehealthtampa.com>";
 const REPLY_TO = "droliveri@elevatehealthtampa.com";
 
+const COMPLETION_EVENTS = new Set([
+  "invitee.no_show",
+  "booking.completed",
+  "invitee.completed",
+]);
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -55,7 +61,6 @@ export async function POST(req: NextRequest) {
         console.error("[calendly webhook] Cancellation update error:", updateError.message);
       }
 
-      // Send cancellation email
       const html = `
         <p>Hi ${firstName},</p>
         <p>Your 15-minute consultation with Dr. Oliveri has been cancelled. Please use the link below to reschedule at a time that works for you.</p>
@@ -83,9 +88,7 @@ If you have any questions please contact us at droliveri@elevatehealthtampa.com
         text,
       });
 
-      if (emailError) {
-        console.error("[calendly webhook] Cancellation email error:", emailError);
-      }
+      if (emailError) console.error("[calendly webhook] Cancellation email error:", emailError);
 
       await supabaseAdmin.from("email_log").insert({
         recipient_email: email,
@@ -96,10 +99,68 @@ If you have any questions please contact us at droliveri@elevatehealthtampa.com
       return NextResponse.json({ ok: true }, { status: 200 });
     }
 
+    // ── Completion (no-show or meeting finished) ──────────────────────────────
+    if (eventType && COMPLETION_EVENTS.has(eventType)) {
+      const now = new Date().toISOString();
+
+      const { error: updateError } = await supabaseAdmin
+        .from("profiles")
+        .update({
+          consultation_completed: true,
+          consultation_completed_at: now,
+          consultation_booked: false,
+        })
+        .eq("id", profile.id);
+
+      if (updateError) {
+        console.error("[calendly webhook] Completion update error:", updateError.message);
+      }
+
+      const html = `
+        <p>Hi ${firstName},</p>
+        <p>Thank you for your consultation with Dr. Oliveri today. We hope it was helpful.</p>
+        <p>If you would like to book another session you can do so directly from your dashboard at <a href="https://www.elevatehealthtampa.com/dashboard/consultation">https://www.elevatehealthtampa.com/dashboard/consultation</a>.</p>
+        <p>If you have any follow-up questions please email <a href="mailto:droliveri@elevatehealthtampa.com">droliveri@elevatehealthtampa.com</a>.</p>
+        <p>— Dr. Connor Oliveri &amp; The Elevate Health Team</p>
+      `.trim();
+      const text = `Hi ${firstName},
+
+Thank you for your consultation with Dr. Oliveri today. We hope it was helpful.
+
+If you would like to book another session you can do so directly from your dashboard at https://www.elevatehealthtampa.com/dashboard/consultation.
+
+If you have any follow-up questions please email droliveri@elevatehealthtampa.com.
+
+— Dr. Connor Oliveri & The Elevate Health Team`;
+
+      const { error: emailError } = await resend.emails.send({
+        from: FROM,
+        replyTo: REPLY_TO,
+        to: email,
+        subject: "Thank you for your consultation with Dr. Oliveri",
+        html,
+        text,
+      });
+
+      if (emailError) console.error("[calendly webhook] Completion email error:", emailError);
+
+      await supabaseAdmin.from("email_log").insert({
+        recipient_email: email,
+        email_type: "consultation_completed",
+        status: emailError ? "failed" : "sent",
+      });
+
+      return NextResponse.json({ ok: true }, { status: 200 });
+    }
+
     // ── Booking (invitee.created or any other event) ──────────────────────────
     const { error: updateError } = await supabaseAdmin
       .from("profiles")
-      .update({ consultation_booked: true, consultation_cancelled: false })
+      .update({
+        consultation_booked: true,
+        consultation_cancelled: false,
+        consultation_completed: false,
+      })
       .eq("id", profile.id);
 
     if (updateError) {
@@ -115,7 +176,6 @@ If you have any questions please contact us at droliveri@elevatehealthtampa.com
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (err) {
     console.error("[calendly webhook] Unexpected error:", err);
-    // Always return 200 so Calendly does not retry
     return NextResponse.json({ ok: true }, { status: 200 });
   }
 }

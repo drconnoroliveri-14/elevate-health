@@ -4,6 +4,17 @@ import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { Profile } from "@/types";
 import RebookButton from "./RebookButton";
+import ConsultationRatingForm from "./ConsultationRatingForm";
+
+function formatCompletedAt(iso: string | null): string {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
 
 export default async function ConsultationPage() {
   const cookieStore = cookies();
@@ -17,19 +28,20 @@ export default async function ConsultationPage() {
 
   const { data: profileRows } = await supabaseAdmin
     .from("profiles")
-    .select("has_consultation, consultation_booked, consultation_cancelled, full_name")
+    .select("has_consultation, consultation_booked, consultation_cancelled, consultation_completed, consultation_completed_at, full_name")
     .eq("id", user.id)
     .limit(1);
 
-  const profile = (profileRows as Pick<Profile, "has_consultation" | "consultation_booked" | "consultation_cancelled" | "full_name">[] | null)?.[0] ?? null;
+  const profile = (profileRows as Pick<Profile, "has_consultation" | "consultation_booked" | "consultation_cancelled" | "consultation_completed" | "consultation_completed_at" | "full_name">[] | null)?.[0] ?? null;
 
   if (!profile?.has_consultation) {
     redirect("/dashboard");
   }
 
-  // Show cancelled state whenever consultation_cancelled = true (overrides consultation_booked)
-  const wasCancelled = !!profile.consultation_cancelled;
-  const alreadyBooked = !wasCancelled && !!profile.consultation_booked;
+  // State priority: completed > cancelled > booked > not-yet-booked
+  const isCompleted = !!profile.consultation_completed;
+  const wasCancelled = !isCompleted && !!profile.consultation_cancelled;
+  const alreadyBooked = !isCompleted && !wasCancelled && !!profile.consultation_booked;
 
   return (
     <div>
@@ -41,100 +53,132 @@ export default async function ConsultationPage() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Consultation</h1>
       </div>
 
-      {/* Doctor card */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6 flex items-center gap-5">
-        <div className="w-16 h-16 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
-          <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-          </svg>
-        </div>
-        <div>
-          <p className="font-bold text-gray-900 text-lg">Dr. Connor Oliveri, DC</p>
-          <p className="text-gray-500 text-sm">Doctor of Chiropractic · Spinal Rehabilitation Specialist</p>
-          <p className="text-teal-600 text-sm font-medium mt-1">15-Minute Private Pain Relief Consultation</p>
-        </div>
-      </div>
-
-      {wasCancelled ? (
-        /* ── Cancelled state ── */
-        <div className="mb-8 bg-amber-50 border border-amber-300 rounded-2xl p-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation Was Cancelled</h3>
-          <p className="text-gray-600 text-sm mb-6 max-w-sm mx-auto">
-            Your previously scheduled consultation has been cancelled. To reschedule please request a new appointment time through your original calendar invite and our team will move it to a time that works for you. Alternatively you can book a new time directly below.
-          </p>
-          <a
-            href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-teal-500 hover:bg-teal-700 text-white font-bold text-lg px-10 py-5 rounded-2xl transition-colors shadow-lg"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
-            </svg>
-            Book a New Time →
-          </a>
-          <p className="text-xs text-gray-400 mt-3">
-            Questions?{" "}
-            <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 hover:underline">
-              Email droliveri@elevatehealthtampa.com
-            </a>
-          </p>
-        </div>
-      ) : alreadyBooked ? (
-        /* ── Booked state ── */
-        <div className="mb-8 bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation is Booked!</h3>
-          <p className="text-gray-500 text-sm mb-5">
-            Check your email for your Zoom link and calendar confirmation.
-          </p>
-          {/* Reschedule info box */}
-          <div className="bg-white border border-green-200 rounded-xl p-4 text-left mb-6 max-w-sm mx-auto">
-            <p className="text-xs text-gray-500 leading-relaxed">
-              <span className="font-semibold text-gray-700">Need to reschedule?</span> Please request a new appointment time through your calendar invite and our team will move it to a time that works for you. You can also email{" "}
-              <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 hover:underline">droliveri@elevatehealthtampa.com</a>
+      {isCompleted ? (
+        /* ── Completed state ── */
+        <>
+          {/* Completion card */}
+          <div className="mb-6 bg-teal-50 border border-teal-200 rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-teal-100 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-1">Consultation Completed! ✓</h3>
+            <p className="text-gray-500 text-sm mb-6">
+              Your consultation with Dr. Oliveri
+              {profile.consultation_completed_at
+                ? ` on ${formatCompletedAt(profile.consultation_completed_at)}`
+                : ""}
+              {" "}has been completed.
             </p>
+            <ConsultationRatingForm />
           </div>
-          <a
-            href="mailto:droliveri@elevatehealthtampa.com"
-            className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-            </svg>
-            Email Dr. Oliveri
-          </a>
-        </div>
+
+          {/* Rebook card — emphasized with gold border */}
+          <div className="bg-amber-50 border-2 border-yellow-400 rounded-2xl p-6 mb-8">
+            <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">Ready for Your Next Session?</h3>
+            <p className="text-gray-600 text-sm text-center mb-5">
+              Book another 15-minute consultation with Dr. Oliveri to continue your progress.
+            </p>
+            <RebookButton />
+          </div>
+        </>
       ) : (
-        /* ── Not yet booked state ── */
-        <div className="text-center mb-8">
-          <a
-            href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-teal-500 hover:bg-teal-700 text-white font-bold text-lg px-10 py-5 rounded-2xl transition-colors shadow-lg"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5m-9-6h.008v.008H12V12zm0 3h.008v.008H12V15zm0 3h.008v.008H12V18zm3-6h.008v.008H15V12zm0 3h.008v.008H15V15zm0 3h.008v.008H15V18zm-6 0h.008v.008H9V18zm0-3h.008v.008H9V15z" />
-            </svg>
-            Book Your Session Now →
-          </a>
-          <p className="text-xs text-gray-400 mt-3">You will receive a Zoom link automatically after booking.</p>
-        </div>
+        /* ── Doctor card (only shown when not completed) ── */
+        <>
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6 flex items-center gap-5">
+            <div className="w-16 h-16 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
+              <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-bold text-gray-900 text-lg">Dr. Connor Oliveri, DC</p>
+              <p className="text-gray-500 text-sm">Doctor of Chiropractic · Spinal Rehabilitation Specialist</p>
+              <p className="text-teal-600 text-sm font-medium mt-1">15-Minute Private Pain Relief Consultation</p>
+            </div>
+          </div>
+
+          {wasCancelled ? (
+            /* ── Cancelled state ── */
+            <div className="mb-8 bg-amber-50 border border-amber-300 rounded-2xl p-8 text-center">
+              <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation Was Cancelled</h3>
+              <p className="text-gray-600 text-sm mb-6 max-w-sm mx-auto">
+                Your previously scheduled consultation has been cancelled. To reschedule please request a new appointment time through your original calendar invite and our team will move it to a time that works for you. Alternatively you can book a new time directly below.
+              </p>
+              <a
+                href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-teal-500 hover:bg-teal-700 text-white font-bold text-lg px-10 py-5 rounded-2xl transition-colors shadow-lg"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+                </svg>
+                Book a New Time →
+              </a>
+              <p className="text-xs text-gray-400 mt-3">
+                Questions?{" "}
+                <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 hover:underline">
+                  Email droliveri@elevatehealthtampa.com
+                </a>
+              </p>
+            </div>
+          ) : alreadyBooked ? (
+            /* ── Booked state ── */
+            <div className="mb-8 bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
+              <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation is Booked!</h3>
+              <p className="text-gray-500 text-sm mb-5">
+                Check your email for your Zoom link and calendar confirmation.
+              </p>
+              <div className="bg-white border border-green-200 rounded-xl p-4 text-left mb-6 max-w-sm mx-auto">
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  <span className="font-semibold text-gray-700">Need to reschedule?</span> Please request a new appointment time through your calendar invite and our team will move it to a time that works for you. You can also email{" "}
+                  <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 hover:underline">droliveri@elevatehealthtampa.com</a>
+                </p>
+              </div>
+              <a
+                href="mailto:droliveri@elevatehealthtampa.com"
+                className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+                Email Dr. Oliveri
+              </a>
+            </div>
+          ) : (
+            /* ── Not yet booked state ── */
+            <div className="text-center mb-8">
+              <a
+                href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-teal-500 hover:bg-teal-700 text-white font-bold text-lg px-10 py-5 rounded-2xl transition-colors shadow-lg"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5m-9-6h.008v.008H12V12zm0 3h.008v.008H12V15zm0 3h.008v.008H12V18zm3-6h.008v.008H15V12zm0 3h.008v.008H15V15zm0 3h.008v.008H15V18zm-6 0h.008v.008H9V18zm0-3h.008v.008H9V15z" />
+                </svg>
+                Book Your Session Now →
+              </a>
+              <p className="text-xs text-gray-400 mt-3">You will receive a Zoom link automatically after booking.</p>
+            </div>
+          )}
+        </>
       )}
 
-      {/* Two column info */}
+      {/* Two column info — always visible */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
-        {/* What to expect */}
         <div className="bg-white border border-gray-200 rounded-2xl p-6">
           <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
             <svg className="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -158,7 +202,6 @@ export default async function ConsultationPage() {
           </ul>
         </div>
 
-        {/* How to prepare */}
         <div className="bg-white border border-gray-200 rounded-2xl p-6">
           <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
             <svg className="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -183,7 +226,7 @@ export default async function ConsultationPage() {
         </div>
       </div>
 
-      {/* Rebook card — show when booked or cancelled (has an active consultation slot purchased) */}
+      {/* Standard rebook card for booked/cancelled states (not completed — completed gets the gold one above) */}
       {(alreadyBooked || wasCancelled) && (
         <div className="bg-teal-50 border border-teal-200 rounded-2xl p-6 mb-8">
           <h3 className="text-lg font-bold text-teal-800 mb-2 text-center">Need Another Consultation?</h3>
