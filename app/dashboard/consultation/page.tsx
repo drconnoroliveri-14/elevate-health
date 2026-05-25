@@ -185,11 +185,11 @@ export default async function ConsultationPage() {
               <div className="bg-white border border-green-200 rounded-xl p-4 text-left mb-6 max-w-sm mx-auto">
                 <p className="text-xs text-gray-500 leading-relaxed">
                   <span className="font-semibold text-gray-700">Need to reschedule?</span> Please request a new appointment time through your calendar invite and our team will move it to a time that works for you. You can also email{" "}
-                  <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 hover:underline">droliveri@elevatehealthtampa.com</a>
+                  <a href="mailto:info@elevatehealthtampa.com" className="text-teal-600 hover:underline">info@elevatehealthtampa.com</a>
                 </p>
               </div>
               <a
-                href="mailto:droliveri@elevatehealthtampa.com"
+                href="mailto:info@elevatehealthtampa.com"
                 className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -282,7 +282,7 @@ export default async function ConsultationPage() {
       <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center">
         <p className="text-sm text-gray-500">
           Questions about your booking? Reply to your confirmation email or contact us at{" "}
-          <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 font-medium hover:underline">droliveri@elevatehealthtampa.com</a>
+          <a href="mailto:info@elevatehealthtampa.com" className="text-teal-600 font-medium hover:underline">info@elevatehealthtampa.com</a>
         </p>
       </div>
     </div>
