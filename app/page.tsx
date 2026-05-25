@@ -72,7 +72,7 @@ export default function LandingPage() {
           <a href="#top"><Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} /></a>
           <button
             onClick={() => scrollToId("enroll")}
-            className="text-sm font-bold px-5 py-2.5 rounded-lg transition-opacity hover:opacity-90"
+            className="text-xs sm:text-sm font-bold px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg transition-opacity hover:opacity-90"
             style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
           >
             Yes, I Want Access to the Modules →
@@ -168,7 +168,7 @@ export default function LandingPage() {
             />
             <button
               onClick={() => scrollToId("enroll")}
-              className="relative font-extrabold text-sm sm:text-xl px-4 sm:px-12 py-2 sm:py-5 rounded-lg sm:rounded-2xl shadow-2xl transition-transform hover:scale-105 active:scale-100 duration-150"
+              className="relative font-extrabold text-xl px-12 py-5 rounded-2xl shadow-2xl transition-transform hover:scale-105 active:scale-100 duration-150"
               style={{ background: "#F5C842", color: "#1a1a1a" }}
             >
               Yes, I Want Access to the Modules →
