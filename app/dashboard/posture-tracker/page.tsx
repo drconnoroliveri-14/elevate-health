@@ -590,7 +590,7 @@ export default function PostureTrackerPage() {
       {/* ── Header ── */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">My 90-Day Posture Tracker</h1>
-        <p className="text-gray-500 text-sm mb-4">Upload your posture photos every 30 days to track your transformation</p>
+        <p className="text-gray-500 text-sm mb-4">Upload your posture photos every 30 days to track your transformation. <span className="font-bold text-teal-600">Clothing is mandatory for all posture photos.</span></p>
 
         {purchasedAt && (
           <div className="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
