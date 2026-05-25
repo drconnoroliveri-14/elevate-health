@@ -75,7 +75,7 @@ export default function LandingPage() {
             className="text-sm font-bold px-5 py-2.5 rounded-lg transition-opacity hover:opacity-90"
             style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
           >
-            Yes, I Want Access to the Pain-Free Modules →
+            Yes, I Want Access to the Modules →
           </button>
         </div>
       </nav>
@@ -171,7 +171,7 @@ export default function LandingPage() {
               className="relative font-extrabold text-xl px-12 py-5 rounded-2xl shadow-2xl transition-transform hover:scale-105 active:scale-100 duration-150"
               style={{ background: "#F5C842", color: "#1a1a1a" }}
             >
-              Yes, I Want Access to the Pain-Free Modules →
+              Yes, I Want Access to the Modules →
             </button>
           </div>
         </div>
