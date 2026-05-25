@@ -63,9 +63,9 @@ export async function POST(req: NextRequest) {
         <p>Hi ${firstName},</p>
         <p>Your 15-minute consultation with Dr. Oliveri has been cancelled. We are sorry for the inconvenience. You have two options to rebook:</p>
         <p><strong>Option 1 — Rebook through your dashboard:</strong><br>
-        Log in to your dashboard at <a href="https://www.elevatehealthtampa.com/dashboard/consultation">https://www.elevatehealthtampa.com/dashboard/consultation</a> and click the booking button there.</p>
+        Log in at <a href="https://www.elevatehealthtampa.com/dashboard/consultation">https://www.elevatehealthtampa.com/dashboard/consultation</a> and click the booking button.</p>
         <p><strong>Option 2 — Book directly:</strong><br>
-        Use this link to choose a new time immediately: <a href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation">https://calendly.com/drconnoroliveri/15min-pain-free-consultation</a></p>
+        <a href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation">https://calendly.com/drconnoroliveri/15min-pain-free-consultation</a></p>
         <p>If you have any questions please contact us at <a href="mailto:info@elevatehealthtampa.com">info@elevatehealthtampa.com</a></p>
         <p>— Dr. Connor Oliveri &amp; The Elevate Health Team</p>
       `.trim();
@@ -73,9 +73,9 @@ export async function POST(req: NextRequest) {
 
 Your 15-minute consultation with Dr. Oliveri has been cancelled. We are sorry for the inconvenience. You have two options to rebook:
 
-Option 1 — Rebook through your dashboard: Log in to your dashboard at https://www.elevatehealthtampa.com/dashboard/consultation and click the booking button there.
+Option 1 — Rebook through your dashboard: Log in at https://www.elevatehealthtampa.com/dashboard/consultation and click the booking button.
 
-Option 2 — Book directly: Use this link to choose a new time immediately: https://calendly.com/drconnoroliveri/15min-pain-free-consultation
+Option 2 — Book directly: https://calendly.com/drconnoroliveri/15min-pain-free-consultation
 
 If you have any questions please contact us at info@elevatehealthtampa.com
 

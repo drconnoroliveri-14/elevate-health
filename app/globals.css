@@ -18,6 +18,9 @@ body {
   }
 }
 
+.equipment-btn:hover { background-color: #E5B432 !important; }
+.amazon-btn:hover { background-color: #E5B432 !important; }
+
 /* Ensure iframes always form their own compositing layer and stacking context */
 iframe {
   position: relative;
