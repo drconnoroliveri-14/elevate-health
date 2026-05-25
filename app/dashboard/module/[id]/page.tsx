@@ -83,7 +83,7 @@ const MODULE_CONTENT: Record<number, ModuleContent> = {
       "Progressive overload for beginners",
       "3-day weekly strength routine",
     ],
-    videoId: "z5gjRENPjCM",
+    videoId: "2K4Ej7aoUis",
   },
   7: {
     title: "Your Personal 90-Day Pain-Free Protocol",
