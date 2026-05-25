@@ -228,22 +228,20 @@ export default function DashboardShell({
             <span className="text-sm font-medium flex-1">My Bonuses</span>
           </Link>
 
-          {profile?.has_consultation && (
-            <Link
-              href="/dashboard/consultation"
-              onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
-                pathname === "/dashboard/consultation" || pathname.startsWith("/dashboard/consultation/")
-                  ? "bg-teal-500 text-white"
-                  : "text-teal-100 hover:bg-teal-600"
-              }`}
-            >
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
-              </svg>
-              <span className="text-sm font-medium flex-1">My Consultation</span>
-            </Link>
-          )}
+          <Link
+            href="/dashboard/consultation"
+            onClick={() => setSidebarOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+              pathname === "/dashboard/consultation" || pathname.startsWith("/dashboard/consultation/")
+                ? "bg-teal-500 text-white"
+                : "text-teal-100 hover:bg-teal-600"
+            }`}
+          >
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+            </svg>
+            <span className="text-sm font-medium flex-1">My Consultation</span>
+          </Link>
 
           <Link
             href="/dashboard/pain-journal"
