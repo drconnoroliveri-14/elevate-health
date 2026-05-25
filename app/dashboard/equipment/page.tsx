@@ -1,33 +1,3 @@
-"use client";
-
-import { useState } from "react";
-
-function ProductImage({ src, alt }: { src: string; alt: string }) {
-  const [failed, setFailed] = useState(false);
-
-  if (failed) {
-    return (
-      <div className="w-full h-48 bg-gray-100 rounded-t-2xl flex flex-col items-center justify-center text-gray-400">
-        <svg className="w-10 h-10 mb-2" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-        </svg>
-        <span className="text-xs font-medium text-center px-4">{alt}</span>
-      </div>
-    );
-  }
-
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={src}
-      alt={alt}
-      onError={() => setFailed(true)}
-      className="w-full rounded-t-2xl"
-      style={{ height: "200px", objectFit: "cover" }}
-    />
-  );
-}
-
 export default function EquipmentPage() {
   const TRX_URL =
     "https://www.amazon.com/TRX-Suspension-Training-System-Travel/dp/B01LXL27XI?crid=2MWMSGA69W848&dib=eyJ2IjoiMSJ9.6h3WEiJTCikzHlXScPSMul3MuD7IaIH-oJ-vmh_7JGURS7cXTGRRStUZKiw-ME1Lh65qrS3UP3AzjEDMdn2CjHdiP0T661gHyxXQCKKveB0tFNV0bg5WEWhZX51aNDdJAbT8g4g5GtN2DedYD29czIsOdhO4xLFou2ftYamvRBozSuyRBkEE8SVOahX4aOm4rSnclu3xblY2PMCnvokkW9q2cUXEIT4zlbGV-7fk_69bEj2_2KmfnX3tenB9rOlznq9ftONmkY5a-6sOGPCMHl_n-Otriawbcx65Kooce3Q.m-Pb48umnpk7ovWlOKQEzBBrkxb_7omSMerIgc0JFXw&dib_tag=se&keywords=trx+straps&qid=1779655823&sprefix=trx+strap%2Caps%2C259&sr=8-1&linkCode=ll2&tag=drconnorolive-20&linkId=8832a84ac506e94e64e32a751d9aeb47&language=en_US&ref_=as_li_ss_tl";
@@ -49,10 +19,8 @@ export default function EquipmentPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
         {/* Card 1 — TRX */}
         <div className="bg-white border-2 border-teal-400 rounded-2xl shadow-md flex flex-col overflow-hidden">
-          <ProductImage
-            src="https://m.media-amazon.com/images/I/71RBMpkOTAL._AC_SL1500_.jpg"
-            alt="TRX Suspension Trainer"
-          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="https://images.unsplash.com/photo-1598971639058-fab3c3109a79?w=800&q=80" alt="TRX Suspension Trainer" className="w-full rounded-t-2xl" style={{ height: "200px", objectFit: "cover" }} />
           <div className="p-6 flex flex-col flex-1">
             <span className="inline-block bg-teal-500 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4 self-start">
               Recommended for Modules
@@ -75,10 +43,8 @@ export default function EquipmentPage() {
 
         {/* Card 2 — Foam Roller */}
         <div className="bg-white border-2 border-teal-400 rounded-2xl shadow-md flex flex-col overflow-hidden">
-          <ProductImage
-            src="https://m.media-amazon.com/images/I/71Q5Uo7ARZL._AC_SL1500_.jpg"
-            alt="Foam Roller Massager"
-          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80" alt="Foam Roller Massager" className="w-full rounded-t-2xl" style={{ height: "200px", objectFit: "cover" }} />
           <div className="p-6 flex flex-col flex-1">
             <span className="inline-block bg-teal-500 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4 self-start">
               Recommended for Recovery
