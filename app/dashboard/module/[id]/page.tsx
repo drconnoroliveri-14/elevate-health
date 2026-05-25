@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { supabaseAdmin } from "@/lib/supabase";
-import MarkCompleteButton from "./MarkCompleteButton";
+import ModuleVideoPlayer from "../ModuleVideoPlayer";
 
 type ModuleContent = {
   title: string;
@@ -140,27 +140,11 @@ export default async function ModulePage({
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{content.title}</h1>
       </div>
 
-      {/* Video */}
-      <div
-        style={{
-          position: "relative",
-          paddingBottom: "56.25%",
-          height: 0,
-          overflow: "hidden",
-          width: "100%",
-          backgroundColor: "white",
-          isolation: "isolate",
-          marginBottom: "32px",
-        }}
-      >
-        <iframe
-          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
-          src={`https://www.youtube.com/embed/${content.videoId}`}
-          title={content.title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
+      <ModuleVideoPlayer
+        videoId={content.videoId}
+        moduleNumber={moduleNum}
+        initialCompleted={completed}
+      />
 
       {/* Description */}
       <div className="prose prose-gray max-w-none mb-8">
@@ -187,7 +171,6 @@ export default async function ModulePage({
         </ul>
       </div>
 
-      <MarkCompleteButton moduleNumber={moduleNum} completed={completed} />
     </div>
   );
 }
