@@ -24,11 +24,11 @@ export async function POST(req: NextRequest) {
   // ── Parse body ────────────────────────────────────────────────────────────
   const body = await req.json().catch(() => ({}));
   const upgrade: string = body.upgrade;
-  if (upgrade !== "nutrition" && upgrade !== "consultation") {
+  if (upgrade !== "nutrition" && upgrade !== "consultation" && upgrade !== "consultation_rebooking") {
     return NextResponse.json({ error: "Invalid upgrade type." }, { status: 400 });
   }
 
-  // ── Check user doesn't already have this upgrade ──────────────────────────
+  // ── Fetch profile (for email + duplicate checks) ──────────────────────────
   const { data: profileRows } = await supabaseAdmin
     .from("profiles")
     .select("email, has_nutrition_course, has_consultation")
@@ -36,11 +36,38 @@ export async function POST(req: NextRequest) {
     .limit(1);
   const profile = profileRows?.[0];
 
+  // Duplicate-ownership check (only for first-time upgrades)
   if (upgrade === "nutrition" && profile?.has_nutrition_course) {
     return NextResponse.json({ error: "You already have the Nutrition Course." }, { status: 400 });
   }
   if (upgrade === "consultation" && profile?.has_consultation) {
     return NextResponse.json({ error: "You already have a Consultation." }, { status: 400 });
+  }
+
+  // ── Rebooking: separate session config ───────────────────────────────────
+  if (upgrade === "consultation_rebooking") {
+    const priceId = process.env.STRIPE_UPSELL_2_PRICE_ID!;
+    if (!priceId) {
+      return NextResponse.json({ error: "Price not configured." }, { status: 500 });
+    }
+    try {
+      const session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        line_items: [{ price: priceId, quantity: 1 }],
+        customer_email: profile?.email ?? user.email ?? undefined,
+        success_url: `${BASE_URL}/dashboard/consultation/rebooking-success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${BASE_URL}/dashboard/consultation`,
+        metadata: {
+          userId: user.id,
+          upgrade: "consultation_rebooking",
+          source: "dashboard_rebooking",
+        },
+      });
+      return NextResponse.json({ url: session.url });
+    } catch (err) {
+      console.error("[upgrades/checkout] Stripe error (rebooking):", err);
+      return NextResponse.json({ error: "Could not create checkout session." }, { status: 500 });
+    }
   }
 
   const priceId = upgrade === "nutrition"

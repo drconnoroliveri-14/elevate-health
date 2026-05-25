@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { supabaseAdmin } from "@/lib/supabase";
 import type { Profile } from "@/types";
+import RebookButton from "./RebookButton";
 
 export default async function ConsultationPage() {
   const cookieStore = cookies();
@@ -155,6 +156,17 @@ export default async function ConsultationPage() {
           </ul>
         </div>
       </div>
+
+      {/* Rebook card — only show when already booked */}
+      {alreadyBooked && (
+        <div className="bg-teal-50 border border-teal-200 rounded-2xl p-6 mb-8">
+          <h3 className="text-lg font-bold text-teal-800 mb-2 text-center">Need Another Consultation?</h3>
+          <p className="text-teal-700 text-sm text-center mb-5">
+            Purchase an additional 15-minute Pain Relief Consultation with Dr. Oliveri for $197. After payment you will be able to book your next session immediately.
+          </p>
+          <RebookButton />
+        </div>
+      )}
 
       {/* Help note */}
       <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center">

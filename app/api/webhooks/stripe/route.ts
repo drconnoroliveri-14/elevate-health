@@ -81,6 +81,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   }
 
+  // ── Consultation rebooking ─────────────────────────────────────────────────
+  // Reset consultation_booked so the customer can book a new Calendly slot.
+  if (session.metadata?.source === "dashboard_rebooking") {
+    const { userId } = session.metadata;
+    if (userId) {
+      await supabaseAdmin
+        .from("profiles")
+        .update({ consultation_booked: false })
+        .eq("id", userId);
+    }
+    return NextResponse.json({ received: true });
+  }
+
   const lineItemPriceIds = (session.line_items?.data ?? []).map(
     (item) => item.price?.id
   );
