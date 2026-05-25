@@ -12,6 +12,7 @@ export type Profile = {
   consultation_cancelled: boolean;
   consultation_completed: boolean;
   consultation_completed_at: string | null;
+  consultation_rated: boolean;
   login_dates: string[];
   last_login: string | null;
   created_at: string;

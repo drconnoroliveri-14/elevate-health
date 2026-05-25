@@ -42,5 +42,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  await supabaseAdmin.from("profiles").update({ consultation_rated: true }).eq("id", user.id);
+
   return NextResponse.json({ ok: true });
 }
