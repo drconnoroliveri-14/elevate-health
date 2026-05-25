@@ -153,18 +153,11 @@ export default async function NutritionPage() {
               Nutrition for Inflammation &amp; Pain Relief
             </h1>
             <p className="text-gray-500 text-sm mt-1">
-              The exact dietary protocol used alongside chiropractic rehabilitation to accelerate your results.
+              The exact dietary protocol used alongside chiropractic rehabilitation to accelerate your results. Please consult a healthcare provider before making significant dietary or supplemental changes.
             </p>
           </div>
           <PrintButton />
         </div>
-      </div>
-
-      {/* Top disclaimer */}
-      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center no-print mb-8">
-        <p className="text-xs text-gray-500">
-          For educational purposes only. Consult a healthcare provider before making significant dietary or supplemental changes.
-        </p>
       </div>
 
       {/* Introduction */}
