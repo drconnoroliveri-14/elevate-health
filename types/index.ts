@@ -13,6 +13,7 @@ export type Profile = {
   consultation_completed: boolean;
   consultation_completed_at: string | null;
   consultation_rated: boolean;
+  consultation_count: number;
   login_dates: string[];
   last_login: string | null;
   created_at: string;

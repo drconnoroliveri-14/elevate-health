@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     // Find the matching profile by email
     const { data: profileRows, error: lookupError } = await supabaseAdmin
       .from("profiles")
-      .select("id, email, full_name")
+      .select("id, email, full_name, consultation_count")
       .eq("email", email)
       .limit(1);
 
@@ -104,6 +104,7 @@ If you have any questions please contact us at info@elevatehealthtampa.com
     // ── Completion (no-show or meeting finished) ──────────────────────────────
     if (eventType && COMPLETION_EVENTS.has(eventType)) {
       const now = new Date().toISOString();
+      const newCount = (profile.consultation_count ?? 0) + 1;
 
       const { error: updateError } = await supabaseAdmin
         .from("profiles")
@@ -111,6 +112,8 @@ If you have any questions please contact us at info@elevatehealthtampa.com
           consultation_completed: true,
           consultation_completed_at: now,
           consultation_booked: false,
+          consultation_rated: false,
+          consultation_count: newCount,
         })
         .eq("id", profile.id);
 
@@ -156,6 +159,7 @@ If you have any follow-up questions please email info@elevatehealthtampa.com.
     }
 
     // ── Booking (invitee.created or any other event) ──────────────────────────
+    // Do NOT reset consultation_rated — leave it until the next completion increments the count.
     const { error: updateError } = await supabaseAdmin
       .from("profiles")
       .update({

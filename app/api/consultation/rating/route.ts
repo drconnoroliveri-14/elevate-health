@@ -31,10 +31,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Rating must be between 1 and 5." }, { status: 400 });
   }
 
+  // Fetch current consultation_count to tag this rating with the right consultation number
+  const { data: profileRows } = await supabaseAdmin
+    .from("profiles")
+    .select("consultation_count")
+    .eq("id", user.id)
+    .limit(1);
+  const consultationNumber = (profileRows?.[0]?.consultation_count ?? 1) as number;
+
   const { error } = await supabaseAdmin.from("consultation_ratings").insert({
     user_id: user.id,
     rating,
     feedback: feedback || null,
+    consultation_number: consultationNumber,
   });
 
   if (error) {
