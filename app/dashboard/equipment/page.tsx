@@ -19,8 +19,7 @@ export default function EquipmentPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
         {/* Card 1 — TRX */}
         <div className="bg-white border-2 border-teal-400 rounded-2xl shadow-md flex flex-col overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://images.unsplash.com/photo-1598971639058-fab3c3109a79?w=800&q=80" alt="TRX Suspension Trainer" className="w-full rounded-t-2xl" style={{ height: "200px", objectFit: "cover" }} />
+          <img src="/TRX__2_.webp" alt="TRX Suspension Trainer" className="w-full rounded-t-2xl" style={{ height: "200px", objectFit: "cover" }} />
           <div className="p-6 flex flex-col flex-1">
             <span className="inline-block bg-teal-500 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4 self-start">
               Recommended for Modules
@@ -43,8 +42,7 @@ export default function EquipmentPage() {
 
         {/* Card 2 — Foam Roller */}
         <div className="bg-white border-2 border-teal-400 rounded-2xl shadow-md flex flex-col overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80" alt="Foam Roller Massager" className="w-full rounded-t-2xl" style={{ height: "200px", objectFit: "cover" }} />
+          <img src="/Foam_Roller.jpg" alt="Foam Roller Massager" className="w-full rounded-t-2xl" style={{ height: "200px", objectFit: "cover" }} />
           <div className="p-6 flex flex-col flex-1">
             <span className="inline-block bg-teal-500 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4 self-start">
               Recommended for Recovery
