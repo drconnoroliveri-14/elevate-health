@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function EquipmentPage() {
   const TRX_URL =
     "https://www.amazon.com/TRX-Suspension-Training-System-Travel/dp/B01LXL27XI?crid=2MWMSGA69W848&dib=eyJ2IjoiMSJ9.6h3WEiJTCikzHlXScPSMul3MuD7IaIH-oJ-vmh_7JGURS7cXTGRRStUZKiw-ME1Lh65qrS3UP3AzjEDMdn2CjHdiP0T661gHyxXQCKKveB0tFNV0bg5WEWhZX51aNDdJAbT8g4g5GtN2DedYD29czIsOdhO4xLFou2ftYamvRBozSuyRBkEE8SVOahX4aOm4rSnclu3xblY2PMCnvokkW9q2cUXEIT4zlbGV-7fk_69bEj2_2KmfnX3tenB9rOlznq9ftONmkY5a-6sOGPCMHl_n-Otriawbcx65Kooce3Q.m-Pb48umnpk7ovWlOKQEzBBrkxb_7omSMerIgc0JFXw&dib_tag=se&keywords=trx+straps&qid=1779655823&sprefix=trx+strap%2Caps%2C259&sr=8-1&linkCode=ll2&tag=drconnorolive-20&linkId=8832a84ac506e94e64e32a751d9aeb47&language=en_US&ref_=as_li_ss_tl";
@@ -19,7 +21,7 @@ export default function EquipmentPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
         {/* Card 1 — TRX */}
         <div className="bg-white border-2 border-teal-400 rounded-2xl shadow-md flex flex-col overflow-hidden">
-          <img src="/TRX__2_.webp" alt="TRX Suspension Trainer" className="w-full rounded-t-2xl" style={{ height: "200px", objectFit: "cover" }} />
+          <Image src="/TRX__2_.webp" alt="TRX Suspension Trainer" width={800} height={200} style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px 8px 0 0" }} unoptimized />
           <div className="p-6 flex flex-col flex-1">
             <span className="inline-block bg-teal-500 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4 self-start">
               Recommended for Modules
@@ -42,7 +44,7 @@ export default function EquipmentPage() {
 
         {/* Card 2 — Foam Roller */}
         <div className="bg-white border-2 border-teal-400 rounded-2xl shadow-md flex flex-col overflow-hidden">
-          <img src="/Foam_Roller.jpg" alt="Foam Roller Massager" className="w-full rounded-t-2xl" style={{ height: "200px", objectFit: "cover" }} />
+          <Image src="/Foam_Roller.jpg" alt="Foam Roller Massager" width={800} height={200} style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px 8px 0 0" }} unoptimized />
           <div className="p-6 flex flex-col flex-1">
             <span className="inline-block bg-teal-500 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4 self-start">
               Recommended for Recovery
