@@ -8,9 +8,7 @@ const FROM = "Dr. Connor Oliveri <droliveri@elevatehealthtampa.com>";
 const REPLY_TO = "droliveri@elevatehealthtampa.com";
 
 const COMPLETION_EVENTS = new Set([
-  "invitee.no_show",
-  "booking.completed",
-  "invitee.completed",
+  "invitee_no_show.created",
 ]);
 
 export async function POST(req: NextRequest) {
