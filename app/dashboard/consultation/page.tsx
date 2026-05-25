@@ -17,11 +17,11 @@ export default async function ConsultationPage() {
 
   const { data: profileRows } = await supabaseAdmin
     .from("profiles")
-    .select("has_consultation, consultation_booked, full_name")
+    .select("has_consultation, consultation_booked, consultation_cancelled, full_name")
     .eq("id", user.id)
     .limit(1);
 
-  const profile = (profileRows as Pick<Profile, "has_consultation" | "consultation_booked" | "full_name">[] | null)?.[0] ?? null;
+  const profile = (profileRows as Pick<Profile, "has_consultation" | "consultation_booked" | "consultation_cancelled" | "full_name">[] | null)?.[0] ?? null;
 
   if (!profile?.has_consultation) {
     redirect("/dashboard");
@@ -29,6 +29,7 @@ export default async function ConsultationPage() {
 
   const firstName = profile.full_name?.split(" ")[0] || "there";
   const alreadyBooked = !!profile.consultation_booked;
+  const wasCancelled = !profile.consultation_booked && !!profile.consultation_cancelled;
 
   return (
     <div>
@@ -67,8 +68,37 @@ export default async function ConsultationPage() {
         </div>
       </div>
 
-      {/* Book button or Already Booked state */}
-      {alreadyBooked ? (
+      {/* Book button, Cancelled state, or Already Booked state */}
+      {wasCancelled ? (
+        <div className="mb-8 bg-amber-50 border border-amber-300 rounded-2xl p-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Your Consultation Was Cancelled</h3>
+          <p className="text-gray-600 text-sm mb-6">
+            Your previously scheduled consultation has been cancelled. Please use the button below to reschedule at a new time.
+          </p>
+          <a
+            href="https://calendly.com/drconnoroliveri/15min-pain-free-consultation"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-teal-500 hover:bg-teal-700 text-white font-bold text-lg px-10 py-5 rounded-2xl transition-colors shadow-lg"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+            </svg>
+            Reschedule Your Consultation →
+          </a>
+          <p className="text-xs text-gray-400 mt-3">
+            Questions?{" "}
+            <a href="mailto:droliveri@elevatehealthtampa.com" className="text-teal-600 hover:underline">
+              Email droliveri@elevatehealthtampa.com
+            </a>
+          </p>
+        </div>
+      ) : alreadyBooked ? (
         <div className="text-center mb-8 bg-green-50 border border-green-200 rounded-2xl p-8">
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">

@@ -9,6 +9,7 @@ export type Profile = {
   has_nutrition_course: boolean;
   has_consultation: boolean;
   consultation_booked: boolean;
+  consultation_cancelled: boolean;
   login_dates: string[];
   last_login: string | null;
   created_at: string;
