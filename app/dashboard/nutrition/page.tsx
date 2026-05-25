@@ -160,6 +160,13 @@ export default async function NutritionPage() {
         </div>
       </div>
 
+      {/* Top disclaimer */}
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center no-print mb-8">
+        <p className="text-xs text-gray-500">
+          For educational purposes only. Consult a healthcare provider before making significant dietary or supplemental changes.
+        </p>
+      </div>
+
       {/* Introduction */}
       <div className="bg-teal-50 border border-teal-100 rounded-2xl p-6 mb-8">
         <h2 className="text-base font-bold text-teal-800 mb-3">Why Nutrition Matters for Pain Relief</h2>
