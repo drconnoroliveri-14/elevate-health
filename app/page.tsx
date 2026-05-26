@@ -223,7 +223,7 @@ export default function LandingPage() {
       <section className="bg-teal-50 py-16 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-center text-2xl font-bold text-gray-900 mb-10">
-            What Our Members Say
+            What Clients Say
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {TESTIMONIALS.map((t) => (
