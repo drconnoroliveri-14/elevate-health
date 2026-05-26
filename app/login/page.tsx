@@ -52,8 +52,24 @@ function LoginForm() {
     setLoginError("");
     setLoginLoading(true);
     try {
-      const { error: authError } = await getSupabase().auth.signInWithPassword({ email, password });
+      const supabase = getSupabase();
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
       if (authError) throw authError;
+
+      // Check if user has set a personal password yet
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("password_changed")
+          .eq("id", user.id)
+          .single();
+        if (profile && profile.password_changed === false) {
+          router.push("/dashboard/change-password");
+          return;
+        }
+      }
+
       router.push("/dashboard");
     } catch (err: unknown) {
       setLoginError(err instanceof Error ? err.message : "Login failed. Please check your credentials.");
