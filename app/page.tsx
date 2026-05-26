@@ -330,7 +330,7 @@ export default function LandingPage() {
             90-Day Full Money-Back Guarantee
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed">
-            90-Day Pain-Free Guarantee — Follow the program for 90 days. If you are not completely satisfied with your results, we will refund every penny. No questions asked.
+            90-Day Money-Back Guarantee — Follow the complete program for 90 days. If you are not satisfied with your results, you may request a refund between days 90 and 120 of your membership provided you have completed all 7 modules and logged in for at least 30 days. We stand behind this program and want you to succeed.
           </p>
         </div>
       </section>

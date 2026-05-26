@@ -95,17 +95,12 @@ export default function TermsPage() {
           </p>
           <p>
             <strong>90-Day Money-Back Guarantee:</strong> We stand behind the
-            quality of this program. If you are not satisfied with your
-            purchase for any reason, contact us within 90 days of your purchase
-            date for a full refund — no questions asked. To request a refund,
-            email{" "}
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="text-teal-600 hover:underline"
-            >
-              {CONTACT_EMAIL}
-            </a>{" "}
-            with your order details.
+            quality of this program. If you are not satisfied with your results,
+            you may request a refund between days 90 and 120 of your membership,
+            provided you have completed all 7 modules and logged in for at least
+            30 days. Refund requests must be submitted through your member
+            dashboard during this window. We stand behind this program and want
+            you to succeed.
           </p>
           <p>
             Refunds are processed within 5–10 business days to your original

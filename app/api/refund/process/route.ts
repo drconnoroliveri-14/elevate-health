@@ -48,9 +48,25 @@ export async function POST() {
   const loginDates: string[] = Array.isArray(profile.login_dates) ? profile.login_dates : [];
   const uniqueLoginDays = loginDates.length;
 
-  if (daysSincePurchase < 90 || modulesCompleted < 7 || uniqueLoginDays < 30) {
+  if (daysSincePurchase < 90) {
     return NextResponse.json(
-      { error: "You do not meet the refund qualification criteria. Please complete all 7 modules and log in for at least 30 days within your 90-day guarantee period." },
+      { error: "Refund not yet available. Your 90-day guarantee window opens after day 90 of your membership." },
+      { status: 403 }
+    );
+  }
+
+  if (daysSincePurchase >= 120) {
+    return NextResponse.json(
+      { error: "Your refund window has closed. The 90-day money-back guarantee was available between days 90 and 119 of your membership." },
+      { status: 403 }
+    );
+  }
+
+  const daysRemainingInWindow = 120 - daysSincePurchase;
+
+  if (modulesCompleted < 7 || uniqueLoginDays < 30) {
+    return NextResponse.json(
+      { error: `You do not yet meet all refund criteria. Please complete all 7 modules and log in for at least 30 days before requesting a refund. You have ${daysRemainingInWindow} ${daysRemainingInWindow === 1 ? "day" : "days"} remaining in your refund window.` },
       { status: 403 }
     );
   }
