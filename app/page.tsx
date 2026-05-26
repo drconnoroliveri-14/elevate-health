@@ -69,19 +69,40 @@ export default function LandingPage() {
     <div className="min-h-screen font-sans">
       {/* ── NAV ── */}
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <a href="#top"><Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} /></a>
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Desktop: outlined Member Login button */}
+        {/* Mobile nav: logo centered + two stacked buttons */}
+        <div className="sm:hidden px-4 py-3 flex flex-col items-center gap-2">
+          <a href="#top">
+            <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{ height: "60px", width: "auto" }} />
+          </a>
+          <div className="flex flex-col items-center gap-2 w-full">
+            <button
+              onClick={() => scrollToId("enroll")}
+              className="w-full font-bold text-sm py-2.5 rounded-lg transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
+            >
+              Yes, I Want Access to the Modules →
+            </button>
             <Link
               href="/login"
-              className="hidden sm:inline-block text-sm font-semibold px-4 py-2 rounded-lg border-2 border-teal-600 bg-white text-teal-600 hover:bg-teal-50 transition-colors"
+              className="w-full text-center text-sm font-semibold py-2.5 rounded-lg border-2 border-teal-600 bg-white text-teal-600 hover:bg-teal-50 transition-colors"
+            >
+              Member Login
+            </Link>
+          </div>
+        </div>
+        {/* Desktop nav: logo left, buttons right */}
+        <div className="hidden sm:flex max-w-6xl mx-auto px-6 lg:px-8 h-16 items-center justify-between">
+          <a href="#top"><Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{ height: "70px", width: "auto" }} /></a>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="text-sm font-semibold px-4 py-2 rounded-lg border-2 border-teal-600 bg-white text-teal-600 hover:bg-teal-50 transition-colors"
             >
               Member Login
             </Link>
             <button
               onClick={() => scrollToId("enroll")}
-              className="text-xs sm:text-sm font-bold px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg transition-opacity hover:opacity-90"
+              className="text-sm font-bold px-5 py-2.5 rounded-lg transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
             >
               Yes, I Want Access to the Modules →
@@ -171,23 +192,18 @@ export default function LandingPage() {
           </p>
 
           {/* CTA with pulse ring */}
-          <div className="flex flex-col items-center gap-3 w-full">
-            <div className="relative w-full sm:w-auto flex justify-center">
-              <span
-                className="absolute inset-0 rounded-2xl animate-ping pointer-events-none"
-                style={{ background: "#F5C842", opacity: 0.4 }}
-              />
-              <button
-                onClick={() => scrollToId("enroll")}
-                className="relative font-extrabold text-xl px-12 py-5 rounded-2xl shadow-2xl transition-transform hover:scale-105 active:scale-100 duration-150"
-                style={{ background: "#F5C842", color: "#1a1a1a" }}
-              >
-                Yes, I Want Access to the Modules →
-              </button>
-            </div>
-            <a href="/login" className="sm:hidden text-teal-300 underline text-sm text-center block">
-              Already a member? Log in here →
-            </a>
+          <div className="relative inline-flex">
+            <span
+              className="absolute inset-0 rounded-2xl animate-ping pointer-events-none"
+              style={{ background: "#F5C842", opacity: 0.4 }}
+            />
+            <button
+              onClick={() => scrollToId("enroll")}
+              className="relative font-extrabold text-xl px-12 py-5 rounded-2xl shadow-2xl transition-transform hover:scale-105 active:scale-100 duration-150"
+              style={{ background: "#F5C842", color: "#1a1a1a" }}
+            >
+              Yes, I Want Access to the Modules →
+            </button>
           </div>
         </div>
       </section>
