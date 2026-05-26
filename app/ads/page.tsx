@@ -64,33 +64,58 @@ function Ad1() {
         position: "relative",
       }}
     >
-      {/* Subtle background pattern */}
-      <div style={{
-        position: "absolute", inset: 0,
-        background: "radial-gradient(ellipse at 80% 20%, rgba(78,204,163,0.12) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(0,0,0,0.25) 0%, transparent 50%)",
-      }} />
+      {/* Main area: left text panel + right image panel */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "row", position: "relative" }}>
+        {/* Left 65% — teal background with text */}
+        <div style={{
+          width: "65%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "80px 60px 40px 90px",
+          position: "relative",
+          zIndex: 1,
+        }}>
+          {/* Subtle radial glow */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "radial-gradient(ellipse at 20% 80%, rgba(0,0,0,0.25) 0%, transparent 60%)",
+          }} />
 
-      {/* Main content */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "80px 90px 40px", position: "relative" }}>
-        <h1 style={{ color: "white", fontSize: 88, fontWeight: 900, lineHeight: 1.05, marginBottom: 28, letterSpacing: "-2px" }}>
-          Why does your back pain keep coming back?
-        </h1>
+          <h1 style={{ color: "white", fontSize: 80, fontWeight: 900, lineHeight: 1.05, marginBottom: 28, letterSpacing: "-2px", position: "relative" }}>
+            Why does your back pain keep coming back?
+          </h1>
 
-        <p style={{ color: "white", fontSize: 36, fontWeight: 700, lineHeight: 1.35, marginBottom: 16 }}>
-          (And how to fix it{" "}
-          <span style={{ color: GOLD, fontWeight: 900 }}>FROM HOME</span>
-          {" "}in 20 minutes a day)
-        </p>
+          <p style={{ color: "white", fontSize: 32, fontWeight: 700, lineHeight: 1.35, marginBottom: 16, position: "relative" }}>
+            (And how to fix it{" "}
+            <span style={{ color: GOLD, fontWeight: 900 }}>FROM HOME</span>
+            {" "}in 20 minutes a day)
+          </p>
 
-        <p style={{ color: "rgba(78,204,163,0.9)", fontSize: 28, fontWeight: 500, lineHeight: 1.4 }}>
-          It&apos;s not your age. It&apos;s not your genetics.<br />Here&apos;s the real reason.
-        </p>
+          <p style={{ color: "rgba(78,204,163,0.9)", fontSize: 26, fontWeight: 500, lineHeight: 1.4, position: "relative" }}>
+            It&apos;s not your age. It&apos;s not your genetics.<br />Here&apos;s the real reason.
+          </p>
 
-        {/* Decorative line */}
-        <div style={{ width: 80, height: 4, background: GOLD, borderRadius: 2, marginTop: 50 }} />
+          <div style={{ width: 80, height: 4, background: GOLD, borderRadius: 2, marginTop: 50, position: "relative" }} />
+        </div>
+
+        {/* Right 35% — spine image with teal-to-transparent gradient overlay */}
+        <div style={{ width: "35%", position: "relative", overflow: "hidden" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1200&q=80"
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+          />
+          {/* Gradient: teal on left fading to transparent on right */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: `linear-gradient(90deg, ${TEAL} 0%, rgba(15,110,86,0.6) 40%, transparent 100%)`,
+          }} />
+        </div>
       </div>
 
-      {/* Bottom white section */}
+      {/* Bottom white section — full width */}
       <div style={{
         background: "white",
         padding: "36px 90px",
@@ -136,22 +161,15 @@ function Ad2() {
         position: "relative",
       }}
     >
-      {/* Background gradients simulating body/spine imagery */}
-      <div style={{
-        position: "absolute", inset: 0,
-        background: [
-          "radial-gradient(ellipse at 50% 0%, rgba(15,110,86,0.5) 0%, transparent 55%)",
-          "radial-gradient(ellipse at 100% 100%, rgba(15,110,86,0.3) 0%, transparent 50%)",
-          "linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%)",
-        ].join(", "),
-      }} />
-
-      {/* Spine decoration */}
-      <div style={{ position: "absolute", right: 80, top: "50%", transform: "translateY(-50%)", opacity: 0.06 }}>
-        {[...Array(12)].map((_, i) => (
-          <div key={i} style={{ width: 60, height: 18, background: "white", borderRadius: 4, marginBottom: 8, marginLeft: i % 2 === 0 ? 0 : 8 }} />
-        ))}
-      </div>
+      {/* Spine image background */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1200&q=80"
+        alt=""
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+      />
+      {/* Dark overlay at 75% opacity for text readability */}
+      <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.75)" }} />
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "70px 90px 40px", position: "relative" }}>
         {/* Star badge */}
@@ -234,11 +252,18 @@ function Ad3() {
         position: "relative",
       }}
     >
-      {/* Logo — bottom right (no filter: white bg ad) */}
-      {/* Top teal bar */}
-      <div style={{ height: 10, background: `linear-gradient(90deg, ${TEAL}, ${TEAL_LIGHT})` }} />
+      {/* Spine image watermark at 15% opacity */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1200&q=80"
+        alt=""
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", opacity: 0.15 }}
+      />
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "52px 90px 48px" }}>
+      {/* Top teal bar */}
+      <div style={{ height: 10, background: `linear-gradient(90deg, ${TEAL}, ${TEAL_LIGHT})`, position: "relative" }} />
+
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "52px 90px 48px", position: "relative" }}>
         {/* Headline */}
         <h1 style={{ color: TEAL, fontSize: 74, fontWeight: 900, lineHeight: 1.08, marginBottom: 40, letterSpacing: "-2px" }}>
           The At-Home Fix for Chronic Neck &amp; Back Pain
@@ -299,7 +324,7 @@ function Ad3() {
       </div>
 
       {/* Bottom teal bar */}
-      <div style={{ height: 10, background: `linear-gradient(90deg, ${TEAL_LIGHT}, ${TEAL})` }} />
+      <div style={{ height: 10, background: `linear-gradient(90deg, ${TEAL_LIGHT}, ${TEAL})`, position: "relative" }} />
     </div>
   );
 }
