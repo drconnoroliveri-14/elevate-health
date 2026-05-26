@@ -184,19 +184,9 @@ export default async function ConsultationPage() {
               </p>
               <div className="bg-white border border-green-200 rounded-xl p-4 text-left mb-6 max-w-sm mx-auto">
                 <p className="text-xs text-gray-500 leading-relaxed">
-                  <span className="font-semibold text-gray-700">Need to reschedule?</span> Please request a new appointment time through your calendar invite and our team will move it to a time that works for you. You can also email{" "}
-                  <a href="mailto:info@elevatehealthtampa.com" className="text-teal-600 hover:underline">info@elevatehealthtampa.com</a>
+                  <span className="font-semibold text-gray-700">Need to reschedule?</span> Please request a new appointment time through your calendar invite and our team will move it to a time that works for you.
                 </p>
               </div>
-              <a
-                href="mailto:info@elevatehealthtampa.com"
-                className="inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                </svg>
-                Email Dr. Oliveri
-              </a>
             </div>
           ) : (
             /* ── Not yet booked state ── */
