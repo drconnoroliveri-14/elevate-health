@@ -79,13 +79,6 @@ export default function LandingPage() {
             >
               Member Login
             </Link>
-            {/* Mobile: small Login text link */}
-            <Link
-              href="/login"
-              className="sm:hidden text-xs font-semibold text-teal-600 underline"
-            >
-              Login
-            </Link>
             <button
               onClick={() => scrollToId("enroll")}
               className="text-xs sm:text-sm font-bold px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg transition-opacity hover:opacity-90"
@@ -190,6 +183,12 @@ export default function LandingPage() {
             >
               Yes, I Want Access to the Modules →
             </button>
+            <Link
+              href="/login"
+              className="sm:hidden text-sm font-semibold text-teal-200 hover:text-white transition-colors"
+            >
+              Already a member? Log in here →
+            </Link>
           </div>
         </div>
       </section>
