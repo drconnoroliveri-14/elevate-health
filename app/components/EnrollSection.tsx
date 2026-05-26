@@ -316,6 +316,11 @@ export default function EnrollSection() {
           <p className="text-center text-xs text-gray-400 mt-4">
             One-time payment · Lifetime access · Instant delivery · Secure checkout
           </p>
+          <p className="text-center text-sm mt-3">
+            <a href="/login" className="text-teal-600 hover:underline">
+              Already a member? Log in to your dashboard →
+            </a>
+          </p>
         </div>
       </div>
     </section>

@@ -71,13 +71,27 @@ export default function LandingPage() {
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <a href="#top"><Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} /></a>
-          <button
-            onClick={() => scrollToId("enroll")}
-            className="text-xs sm:text-sm font-bold px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
-          >
-            Yes, I Want Access to the Modules →
-          </button>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/login"
+              className="hidden sm:inline-block text-sm font-semibold px-4 py-2 rounded-lg border border-teal-600 text-teal-600 hover:bg-teal-50 transition-colors"
+            >
+              Member Login
+            </Link>
+            <Link
+              href="/login"
+              className="sm:hidden text-xs font-semibold text-teal-600 hover:underline"
+            >
+              Log in
+            </Link>
+            <button
+              onClick={() => scrollToId("enroll")}
+              className="text-xs sm:text-sm font-bold px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
+            >
+              Yes, I Want Access to the Modules →
+            </button>
+          </div>
         </div>
       </nav>
 
