@@ -35,20 +35,39 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { error } = await supabaseAdmin
+  const now = new Date().toISOString();
+
+  console.log(`[modules/complete] userId=${user.id} moduleNumber=${moduleNumber}`);
+
+  // Step 1: Ensure a progress row exists for this module (insert if missing, skip if present).
+  // Without this, the UPDATE below silently no-ops for modules that have never been
+  // accessed via /api/modules/access and therefore have no row yet.
+  const { error: upsertError } = await supabaseAdmin
     .from("module_progress")
-    .update({ completed_at: new Date().toISOString() })
+    .upsert(
+      { user_id: user.id, module_number: moduleNumber, unlocked_at: now },
+      { onConflict: "user_id,module_number", ignoreDuplicates: true }
+    );
+
+  if (upsertError) {
+    console.error("[modules/complete] upsert error:", upsertError);
+    return NextResponse.json({ error: "Could not mark module complete." }, { status: 500 });
+  }
+
+  // Step 2: Mark complete — only if not already marked.
+  const { error, count } = await supabaseAdmin
+    .from("module_progress")
+    .update({ completed_at: now })
     .eq("user_id", user.id)
     .eq("module_number", moduleNumber)
     .is("completed_at", null);
 
   if (error) {
-    console.error("[modules/complete]", error);
-    return NextResponse.json(
-      { error: "Could not mark module complete." },
-      { status: 500 }
-    );
+    console.error("[modules/complete] update error:", error);
+    return NextResponse.json({ error: "Could not mark module complete." }, { status: 500 });
   }
+
+  console.log(`[modules/complete] success — module ${moduleNumber} marked complete, rows affected: ${count ?? "unknown"}`);
 
   return NextResponse.json({ success: true });
 }
