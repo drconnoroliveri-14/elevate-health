@@ -42,16 +42,28 @@ export default async function DashboardLayout({
   // Gate: must have purchased to access the dashboard
   if (!profile?.purchased_at) redirect("/");
 
-  // Track login date (fire-and-forget — don't block render)
+  // Track login date — awaited so it completes before response in serverless envs
   const today = new Date().toISOString().split("T")[0];
   const currentLoginDates: string[] = Array.isArray(profile.login_dates) ? profile.login_dates : [];
   const newLoginDates = currentLoginDates.includes(today)
     ? currentLoginDates
     : [...currentLoginDates, today];
-  void supabaseAdmin.from("profiles").update({
-    last_login: new Date().toISOString(),
-    login_dates: newLoginDates,
-  }).eq("id", user.id);
+
+  const { data: loginUpdateData, error: loginUpdateError } = await supabaseAdmin
+    .from("profiles")
+    .update({
+      last_login: new Date().toISOString(),
+      login_dates: newLoginDates,
+    })
+    .eq("id", user.id)
+    .select("login_dates")
+    .single();
+
+  if (loginUpdateError) {
+    console.error("[dashboard/layout] login_dates update failed:", loginUpdateError);
+  } else {
+    console.log("[dashboard/layout] login_dates updated successfully:", loginUpdateData?.login_dates);
+  }
 
   return (
     <DashboardShell
