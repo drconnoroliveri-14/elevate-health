@@ -17,6 +17,7 @@ const MODULES = [
 const BONUSES = [
   { title: "Pain Tracking Journal", value: "$47", desc: "Track your daily pain levels, exercises, and progress to stay on track and celebrate your wins." },
   { title: "Posture Correction Quick Reference Guide", value: "$37", desc: "One-page visual guide showing ideal sitting, standing, and sleeping posture to reinforce your daily habits." },
+  { title: "90-Day Posture Photo Tracker", value: "$97", desc: "Upload your posture photos every 30 days and track your transformation with built-in posture analysis tools and before and after milestone comparisons." },
 ];
 
 const TESTIMONIALS = [

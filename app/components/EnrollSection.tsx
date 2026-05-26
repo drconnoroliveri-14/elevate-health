@@ -8,6 +8,7 @@ const INCLUDES = [
   "90-day personal pain-free protocol",
   "Pain Tracking Journal ($47 value)",
   "Posture Correction Quick Reference Guide ($37 value)",
+  "90-Day Posture Photo Tracker ($97 value)",
   "90-day pain-free guarantee",
   "Secure checkout · Instant delivery",
 ];
@@ -180,11 +181,11 @@ export default function EnrollSection() {
             Elevate Pain-Free Program
           </p>
           <div className="text-center mb-2">
-            <span className="text-2xl text-gray-400 line-through mr-2">$281</span>
+            <span className="text-2xl text-gray-400 line-through mr-2">$378</span>
             <span className="text-6xl font-bold text-teal-500">$97</span>
           </div>
           <p className="text-center text-orange-600 text-sm font-semibold mb-2">
-            Limited time offer — save $184 today.
+            Limited time offer — save $281 today.
           </p>
           <p className="text-center text-gray-400 text-sm mb-6">One-time payment</p>
 

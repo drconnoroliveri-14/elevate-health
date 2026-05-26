@@ -14,6 +14,7 @@ const bonuses = [
       </svg>
     ),
     cta: "Open Pain Journal →",
+    bullets: null,
   },
   {
     title: "Posture Correction Quick Reference Guide",
@@ -28,6 +29,23 @@ const bonuses = [
       </svg>
     ),
     cta: "Open Posture Guide →",
+    bullets: null,
+  },
+  {
+    title: "90-Day Posture Photo Tracker",
+    description:
+      "Upload your posture photos every 30 days and track your transformation with built-in posture analysis tools and milestone comparisons.",
+    value: "Included Free",
+    href: "/dashboard/posture-tracker",
+    internal: true,
+    icon: <span className="text-4xl">📸</span>,
+    cta: "Open Posture Tracker →",
+    bullets: [
+      "90-day milestone photo tracking",
+      "Built-in posture line analysis tools",
+      "Before and after comparison view",
+      "Daily accountability system",
+    ],
   },
 ];
 
@@ -41,7 +59,7 @@ export default function BonusesPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {bonuses.map((bonus) => (
           <div
             key={bonus.title}
@@ -52,13 +70,25 @@ export default function BonusesPage() {
                 {bonus.icon}
               </div>
               <span className="text-sm font-semibold text-teal-600 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full whitespace-nowrap">
-                {bonus.value} value — FREE
+                {bonus.value.startsWith("$") ? `${bonus.value} value — FREE` : bonus.value}
               </span>
             </div>
 
             <div>
               <h2 className="text-lg font-bold text-gray-900 mb-1">{bonus.title}</h2>
               <p className="text-sm text-gray-500 leading-relaxed">{bonus.description}</p>
+              {bonus.bullets && (
+                <ul className="mt-3 space-y-1.5">
+                  {bonus.bullets.map((b) => (
+                    <li key={b} className="flex items-start gap-2 text-sm text-gray-600">
+                      <svg className="w-4 h-4 text-teal-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             <Link
