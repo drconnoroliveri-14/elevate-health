@@ -81,18 +81,42 @@ export default async function RefundPage() {
 
   // ── State 1: Too early (days 0–89) ────────────────────────────────────────
   if (tooEarly) {
+    const windowOpenDate = new Date(new Date(profile.purchased_at).getTime() + 90 * 86_400_000)
+      .toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+
+    const requirementsWithDates = [
+      {
+        label: "Member for 90+ days",
+        met: metDays,
+        progress: `${daysSincePurchase} of 90 days complete. Refund window opens on ${windowOpenDate}.`,
+      },
+      {
+        label: "All 7 modules completed",
+        met: metModules,
+        progress: `${modulesCompleted} of 7 modules complete`,
+      },
+      {
+        label: "Active for 30+ days",
+        met: metLogins,
+        progress: `${uniqueLoginDays} of 30 days logged in`,
+      },
+    ];
+
     return (
       <div className="max-w-lg mx-auto pt-4">
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-          <div className="p-6 border-b border-gray-100">
-            <h1 className="text-xl font-bold text-gray-900 mb-1">Refund Qualification Status</h1>
-            <p className="text-sm text-gray-500 leading-relaxed">
-              Your 90-day money-back guarantee becomes available after you have completed the full program. Here is your current progress:
-            </p>
+        <div className="bg-blue-50 border border-blue-200 rounded-2xl overflow-hidden shadow-sm">
+          <div className="p-6 border-b border-blue-100 flex items-start gap-4">
+            <span className="text-3xl flex-shrink-0">🛡️</span>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900 mb-2">Refund Not Yet Available</h1>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Thank you for being part of the Elevate Pain-Free Program. Our 90-day money-back guarantee is designed to give you the full program experience before evaluating your results. Your refund window will open on <strong>{windowOpenDate}</strong> provided you have completed all 7 modules and logged in for at least 30 days. Here is your current progress toward qualifying:
+              </p>
+            </div>
           </div>
           <div className="p-6 space-y-4">
-            {requirements.map((req) => (
-              <div key={req.label} className="flex items-center gap-4 p-4 rounded-xl bg-gray-50">
+            {requirementsWithDates.map((req) => (
+              <div key={req.label} className="flex items-center gap-4 p-4 rounded-xl bg-white border border-blue-100">
                 {req.met ? <CheckIcon /> : <XIcon />}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-800">{req.label}</p>
@@ -105,7 +129,7 @@ export default async function RefundPage() {
           </div>
           <div className="px-6 pb-6">
             <p className="text-sm text-gray-500 mb-5 text-center">
-              Keep going! Complete all requirements to qualify for your refund after day 90.
+              Complete the program fully and your refund option will be available between days 90 and 120 of your membership if needed.
             </p>
             <Link
               href="/dashboard"
