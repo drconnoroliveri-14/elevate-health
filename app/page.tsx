@@ -185,12 +185,9 @@ export default function LandingPage() {
                 Yes, I Want Access to the Modules →
               </button>
             </div>
-            <Link
-              href="/login"
-              className="sm:hidden text-sm font-semibold text-teal-200 hover:text-white transition-colors"
-            >
+            <a href="/login" className="sm:hidden text-teal-300 underline text-sm text-center">
               Already a member? Log in here →
-            </Link>
+            </a>
           </div>
         </div>
       </section>
