@@ -108,11 +108,6 @@ export default function DashboardShell({
   const completedCount = moduleProgress.filter((p) => !!p.completed_at).length;
   const progressPercent = Math.round((completedCount / 7) * 100);
 
-  const showUpsell =
-    !!profile?.purchased_at &&
-    Date.now() - new Date(profile.purchased_at).getTime() >
-      14 * 24 * 60 * 60 * 1000;
-
   async function handleLogout() {
     const supabase = createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -439,22 +434,6 @@ export default function DashboardShell({
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">{children}</div>
 
-          {/* Upsell banner */}
-          {showUpsell && (
-            <div className="sticky bottom-0 bg-teal-700 text-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
-              <p className="text-sm text-teal-100 text-center sm:text-left">
-                Want faster results? Book a 1-on-1 Virtual Chiropractic Consultation with a licensed chiropractor.
-              </p>
-              <a
-                href="https://buy.stripe.com/placeholder_coaching_link"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-shrink-0 bg-white text-teal-700 font-semibold text-sm px-5 py-2 rounded-lg hover:bg-teal-50 transition-colors"
-              >
-                Book My 1-on-1 Virtual Chiropractic Consultation — $197 →
-              </a>
-            </div>
-          )}
         </main>
       </div>
     </div>
