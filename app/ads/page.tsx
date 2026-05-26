@@ -125,8 +125,8 @@ function Ad1() {
         gap: 24,
       }}>
         <div>
-          <p style={{ color: "#4b5563", fontSize: 19 }}>7-Module At-Home Rehab Program</p>
-          <p style={{ color: "#6b7280", fontSize: 16, marginTop: 4 }}>$97 &nbsp;·&nbsp; 90-Day Money-Back Guarantee</p>
+          <p style={{ color: "#4b5563", fontSize: 19, fontWeight: 600 }}>7-Module At-Home Rehab Program</p>
+          <p style={{ color: "#6b7280", fontSize: 16, marginTop: 4, fontWeight: 600 }}>$97 &nbsp;·&nbsp; 90-Day Money-Back Guarantee</p>
         </div>
         <div style={{
           background: GOLD,
@@ -209,8 +209,8 @@ function Ad2() {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
           <div>
-            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 18 }}>The Elevate Pain-Free Program</p>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, marginTop: 4 }}>$97 Today · 90-Day Money Back Guarantee</p>
+            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 18, fontWeight: 600 }}>The Elevate Pain-Free Program</p>
+            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, marginTop: 4, fontWeight: 600 }}>$97 Today · 90-Day Money Back Guarantee</p>
           </div>
           <div style={{
             background: GOLD,
