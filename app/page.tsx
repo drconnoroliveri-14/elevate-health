@@ -172,10 +172,10 @@ export default function LandingPage() {
 
           {/* CTA with pulse ring */}
           <div className="flex flex-col items-center gap-3 w-full">
-            <div className="relative inline-flex">
+            <div className="relative w-full sm:w-auto flex justify-center">
               <span
-                className="absolute inset-0 rounded-2xl animate-ping opacity-25 pointer-events-none"
-                style={{ background: "#F5C842" }}
+                className="absolute inset-0 rounded-2xl animate-ping pointer-events-none"
+                style={{ background: "#F5C842", opacity: 0.4 }}
               />
               <button
                 onClick={() => scrollToId("enroll")}
@@ -185,7 +185,7 @@ export default function LandingPage() {
                 Yes, I Want Access to the Modules →
               </button>
             </div>
-            <a href="/login" className="sm:hidden text-teal-300 underline text-sm text-center">
+            <a href="/login" className="sm:hidden text-teal-300 underline text-sm text-center block">
               Already a member? Log in here →
             </a>
           </div>
