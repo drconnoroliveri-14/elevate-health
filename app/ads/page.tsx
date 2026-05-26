@@ -103,7 +103,7 @@ function Ad1() {
         <div style={{ width: "35%", position: "relative", overflow: "hidden" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80"
+            src="https://images.unsplash.com/photo-1559757175-5700dde675bc?w=1200&q=80"
             alt=""
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
           />
@@ -164,7 +164,7 @@ function Ad2() {
       {/* Spine image background */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80"
+        src="https://images.unsplash.com/photo-1559757175-5700dde675bc?w=1200&q=80"
         alt=""
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
       />
@@ -255,7 +255,7 @@ function Ad3() {
       {/* Spine image watermark at 15% opacity */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80"
+        src="https://images.unsplash.com/photo-1559757175-5700dde675bc?w=1200&q=80"
         alt=""
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", opacity: 0.15 }}
       />
