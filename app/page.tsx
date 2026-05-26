@@ -77,14 +77,14 @@ export default function LandingPage() {
           <div className="flex flex-col items-center gap-2 w-full">
             <button
               onClick={() => scrollToId("enroll")}
-              className="w-full font-bold text-sm py-2.5 rounded-lg transition-opacity hover:opacity-90"
+              className="w-full font-bold text-base py-3 px-6 rounded-lg transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
             >
               Yes, I Want Access to the Modules →
             </button>
             <Link
               href="/login"
-              className="w-full text-center text-sm font-semibold py-2.5 rounded-lg border-2 border-teal-600 bg-white text-teal-600 hover:bg-teal-50 transition-colors"
+              className="w-full text-center text-sm font-semibold py-2 px-5 rounded-lg border-2 border-teal-600 bg-white text-teal-600 hover:bg-teal-50 transition-colors"
             >
               Member Login
             </Link>
