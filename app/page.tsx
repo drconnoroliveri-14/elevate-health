@@ -72,17 +72,19 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <a href="#top"><Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto'}} /></a>
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Desktop: outlined Member Login button */}
             <Link
               href="/login"
-              className="hidden sm:inline-block text-sm font-semibold px-4 py-2 rounded-lg border border-teal-600 text-teal-600 hover:bg-teal-50 transition-colors"
+              className="hidden sm:inline-block text-sm font-semibold px-4 py-2 rounded-lg border-2 border-teal-600 bg-white text-teal-600 hover:bg-teal-50 transition-colors"
             >
               Member Login
             </Link>
+            {/* Mobile: small Login text link */}
             <Link
               href="/login"
-              className="sm:hidden text-xs font-semibold text-teal-600 hover:underline"
+              className="sm:hidden text-xs font-semibold text-teal-600 underline"
             >
-              Log in
+              Login
             </Link>
             <button
               onClick={() => scrollToId("enroll")}
