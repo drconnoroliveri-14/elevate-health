@@ -233,7 +233,7 @@ function Ad2() {
 function Ad3() {
   const bullets = [
     "100% At-Home — Minimal Equipment Needed",
-    "Developed by Licensed Chiropractors 👨‍⚕️",
+    "Developed by Licensed Chiropractors",
     "Just 20 minutes a day from your living room",
     "90-day money-back guarantee",
   ];
