@@ -91,7 +91,7 @@ export default function EnrollSection() {
     <section id="enroll" className="bg-white py-20 px-4 sm:px-6">
       <div className="max-w-xl mx-auto">
         {/* Pricing card */}
-        <div id="pricing-card" className="bg-white border-2 border-teal-500 rounded-2xl shadow-xl p-8">
+        <div id="pricing-card" className="bg-white border-2 border-teal-500 rounded-2xl shadow-xl p-8 scroll-mt-24">
           <p className="text-center text-sm font-semibold text-teal-600 uppercase tracking-widest mb-2">
             Elevate Pain-Free Program
           </p>
