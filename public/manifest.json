@@ -1,0 +1,25 @@
+{
+  "name": "Embers + Ice",
+  "short_name": "E+I",
+  "description": "Track your sauna and cold room sessions at Embers + Ice contrast therapy studio.",
+  "theme_color": "#000000",
+  "background_color": "#E6E7D7",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

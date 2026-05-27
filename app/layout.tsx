@@ -1,36 +1,34 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { SupabaseProvider } from "@/components/SupabaseProvider";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { AuthProvider } from "@/lib/auth/AuthContext";
 
 export const metadata: Metadata = {
-  title: "Elevate Health — Pain-Free Program",
-  description:
-    "Finally eliminate neck, mid back, and lower back pain from home with the chiropractor-designed Elevate Pain-Free Program. Just $97.",
-  icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-  },
-  openGraph: {
-    title: "Elevate Health — Pain-Free Program",
-    description:
-      "Finally eliminate neck, mid back, and lower back pain from home. Just $97 — 90-day guarantee.",
-    url: "https://elevate-health-lyart.vercel.app",
-    siteName: "Elevate Health",
-    type: "website",
+  title: "Embers + Ice",
+  description: "Track your sauna and cold room sessions at Embers + Ice contrast therapy studio.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "E+I",
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>
-        <SupabaseProvider>{children}</SupabaseProvider>
+      <head>
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+      </head>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
