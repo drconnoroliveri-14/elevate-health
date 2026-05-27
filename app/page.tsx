@@ -61,7 +61,7 @@ function ShieldIcon() {
 }
 
 function scrollToId(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 export default function LandingPage() {
@@ -76,7 +76,7 @@ export default function LandingPage() {
           </a>
           <div className="flex flex-col items-center gap-2 w-full">
             <button
-              onClick={() => scrollToId("enroll")}
+              onClick={() => scrollToId("pricing-card")}
               className="w-full font-bold text-base py-3 px-6 rounded-lg transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
             >
@@ -101,7 +101,7 @@ export default function LandingPage() {
               Member Login
             </Link>
             <button
-              onClick={() => scrollToId("enroll")}
+              onClick={() => scrollToId("pricing-card")}
               className="text-sm font-bold px-5 py-2.5 rounded-lg transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
             >
@@ -198,7 +198,7 @@ export default function LandingPage() {
               style={{ background: "#F5C842", opacity: 0.4 }}
             />
             <button
-              onClick={() => scrollToId("enroll")}
+              onClick={() => scrollToId("pricing-card")}
               className="relative font-extrabold text-xl px-12 py-5 rounded-2xl shadow-2xl transition-transform hover:scale-105 active:scale-100 duration-150"
               style={{ background: "#F5C842", color: "#1a1a1a" }}
             >
