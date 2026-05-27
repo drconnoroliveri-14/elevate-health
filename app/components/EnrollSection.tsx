@@ -61,12 +61,6 @@ function CheckIcon() {
 }
 
 export default function EnrollSection() {
-  const [leadName, setLeadName] = useState("");
-  const [leadEmail, setLeadEmail] = useState("");
-  const [leadLoading, setLeadLoading] = useState(false);
-  const [leadCaptured, setLeadCaptured] = useState(false);
-  const [leadError, setLeadError] = useState("");
-
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
 
@@ -74,33 +68,6 @@ export default function EnrollSection() {
   const [upsell2, setUpsell2] = useState(false);
 
   const total = 97 + (upsell1 ? 47 : 0) + (upsell2 ? 197 : 0);
-
-  async function handleLeadSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLeadError("");
-    setLeadLoading(true);
-    try {
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          full_name: leadName,
-          email: leadEmail,
-          source: "landing-page",
-        }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Something went wrong. Please try again.");
-      }
-      setLeadCaptured(true);
-      setTimeout(() => scrollToId("pricing-card"), 300);
-    } catch (err: unknown) {
-      setLeadError(err instanceof Error ? err.message : "Something went wrong.");
-    } finally {
-      setLeadLoading(false);
-    }
-  }
 
   async function handleCheckout() {
     setCheckoutError("");
@@ -113,7 +80,7 @@ export default function EnrollSection() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: leadEmail, full_name: leadName, upsells }),
+        body: JSON.stringify({ upsells }),
       });
       const data = await res.json();
       if (!res.ok || !data.url) throw new Error(data.error || "Could not start checkout.");
@@ -127,54 +94,6 @@ export default function EnrollSection() {
   return (
     <section id="enroll" className="bg-white py-20 px-4 sm:px-6">
       <div className="max-w-xl mx-auto">
-        {/* Lead capture */}
-        {!leadCaptured ? (
-          <div className="bg-teal-50 border border-teal-200 rounded-2xl p-8 mb-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-1 text-center">
-              Get Instant Access — Start Pain-Free Today
-            </h3>
-            <p className="text-sm text-gray-500 text-center mb-6">
-              Enter your details to unlock your free Back Pain Relief Guide — then enroll below.
-            </p>
-            <form onSubmit={handleLeadSubmit} className="flex flex-col gap-4">
-              <input
-                type="text"
-                placeholder="Full Name"
-                value={leadName}
-                onChange={(e) => setLeadName(e.target.value)}
-                required
-                className="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
-              <input
-                type="email"
-                placeholder="Email Address"
-                value={leadEmail}
-                onChange={(e) => setLeadEmail(e.target.value)}
-                required
-                className="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
-              {leadError && <p className="text-red-600 text-sm">{leadError}</p>}
-              <button
-                type="submit"
-                disabled={leadLoading}
-                className="bg-teal-500 hover:bg-teal-700 disabled:opacity-60 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
-              >
-                {leadLoading ? (
-                  <><Spinner /> Sending…</>
-                ) : (
-                  "Get My Free Back Pain Relief Guide"
-                )}
-              </button>
-            </form>
-          </div>
-        ) : (
-          <div className="bg-teal-50 border border-teal-500 rounded-2xl p-5 mb-8 text-center">
-            <p className="text-teal-700 font-semibold">
-              ✓ Your guide is on its way! Now unlock the full program below.
-            </p>
-          </div>
-        )}
-
         {/* Pricing card */}
         <div id="pricing-card" className="bg-white border-2 border-teal-500 rounded-2xl shadow-xl p-8">
           <p className="text-center text-sm font-semibold text-teal-600 uppercase tracking-widest mb-2">
