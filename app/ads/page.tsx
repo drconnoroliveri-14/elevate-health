@@ -232,7 +232,7 @@ function Ad2() {
 /* ── Ad 3 — Direct Offer ───────────────────────────────────────────── */
 function Ad3() {
   const bullets = [
-    "100% At-Home — No gym or equipment needed",
+    "100% At-Home — Minimal Equipment Needed",
     "Developed with licensed chiropractors",
     "Just 20 minutes a day from your living room",
     "90-day money-back guarantee",
