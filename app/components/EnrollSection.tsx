@@ -88,7 +88,7 @@ export default function EnrollSection() {
   }
 
   return (
-    <section id="enroll" className="bg-white py-20 px-4 sm:px-6">
+    <section id="enroll" className="bg-white py-20 px-4 sm:px-6" style={{ scrollMarginTop: "80px" }}>
       <div className="max-w-xl mx-auto">
         {/* Pricing card */}
         <div id="pricing-card" className="bg-white border-2 border-teal-500 rounded-2xl shadow-xl p-8 scroll-mt-24">
