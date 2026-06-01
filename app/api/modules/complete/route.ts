@@ -39,6 +39,9 @@ export async function POST(req: NextRequest) {
 
   console.log(`[modules/complete] userId=${user.id} moduleNumber=${moduleNumber}`);
 
+  // Step 1: Ensure a progress row exists for this module (insert if missing, skip if present).
+  // Without this, the UPDATE below silently no-ops for modules that have never been
+  // accessed via /api/modules/access and therefore have no row yet.
   const { error: upsertError } = await supabaseAdmin
     .from("module_progress")
     .upsert(
@@ -51,6 +54,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Could not mark module complete." }, { status: 500 });
   }
 
+  // Step 2: Mark complete — only if not already marked.
   const { error, count } = await supabaseAdmin
     .from("module_progress")
     .update({ completed_at: now })

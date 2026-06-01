@@ -6,18 +6,17 @@ export type Profile = {
   stripe_customer_id: string;
   stripe_session_id: string;
   purchased_at: string;
+  has_nutrition_course: boolean;
+  has_consultation: boolean;
+  consultation_booked: boolean;
+  consultation_cancelled: boolean;
+  consultation_completed: boolean;
+  consultation_completed_at: string | null;
+  consultation_rated: boolean;
+  consultation_count: number;
+  login_dates: string[];
+  last_login: string | null;
   created_at: string;
-  password_changed?: boolean;
-  login_dates?: string[];
-  last_login?: string;
-  has_nutrition_course?: boolean;
-  has_consultation?: boolean;
-  consultation_booked?: boolean;
-  consultation_cancelled?: boolean;
-  consultation_completed?: boolean;
-  consultation_completed_at?: string | null;
-  consultation_rated?: boolean;
-  consultation_count?: number;
 };
 
 export type Lead = {

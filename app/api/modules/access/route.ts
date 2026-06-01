@@ -51,6 +51,9 @@ export async function POST(req: NextRequest) {
     return data ?? [];
   };
 
+  // Fetch current module's progress row — use limit(1)+array to avoid
+  // the Range header that .maybeSingle()/.single() send, which triggers
+  // PGRST117 RANGE_MISSING_UNIT when Range-Unit is stripped.
   const { data: progressRows, error: progressError } = await supabaseAdmin
     .from("module_progress")
     .select("*")
@@ -61,11 +64,13 @@ export async function POST(req: NextRequest) {
 
   console.log(`[modules/access] progress row:`, JSON.stringify(progress), "error:", JSON.stringify(progressError));
 
+  // Surface admin query errors instead of silently treating them as "no row"
   if (progressError) {
     console.error("[modules/access] supabaseAdmin query failed:", progressError);
     return NextResponse.json({ error: "Database error.", locked: true }, { status: 500 });
   }
 
+  // No row yet → locked (no scheduled unlock date known)
   if (!progress) {
     console.log(`[modules/access] no progress row found for userId=${userId} module=${moduleNumber} — locked`);
     return NextResponse.json({
@@ -76,6 +81,8 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  // Unlock date is in the future → locked (null/missing = treat as already unlocked)
+  // Guard against Invalid Date — Postgres "+00" suffix without colon may parse oddly.
   const unlockedAt = progress.unlocked_at ? new Date(progress.unlocked_at) : null;
   const unlockedAtValid = unlockedAt && !isNaN(unlockedAt.getTime());
   const isStillLocked = unlockedAtValid && unlockedAt > now;
@@ -91,6 +98,9 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  // ── Module is accessible ─────────────────────────────────────────────────
+
+  // Stamp first access
   if (!progress.first_accessed_at) {
     await supabaseAdmin
       .from("module_progress")
@@ -99,6 +109,7 @@ export async function POST(req: NextRequest) {
       .eq("module_number", moduleNumber);
   }
 
+  // Schedule / unlock the next module (modules 1–6 only)
   if (moduleNumber < 7) {
     const { data: nextRows } = await supabaseAdmin
       .from("module_progress")
@@ -109,6 +120,7 @@ export async function POST(req: NextRequest) {
     const nextProgress = nextRows?.[0] ?? null;
 
     if (!nextProgress) {
+      // Check if the previous module was accessed 7+ days ago
       let nextUnlockAt: string;
 
       if (moduleNumber > 1) {
@@ -128,11 +140,13 @@ export async function POST(req: NextRequest) {
           prevAccessed &&
           now.getTime() - prevAccessed.getTime() >= SEVEN_DAYS_MS
         ) {
+          // 7-day window already elapsed — next module unlocks immediately
           nextUnlockAt = now.toISOString();
         } else {
           nextUnlockAt = new Date(now.getTime() + SEVEN_DAYS_MS).toISOString();
         }
       } else {
+        // Module 1 has no predecessor — schedule module 2 for 7 days from now
         nextUnlockAt = new Date(now.getTime() + SEVEN_DAYS_MS).toISOString();
       }
 
@@ -144,6 +158,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Return fresh data
   const { data: updatedRows } = await supabaseAdmin
     .from("module_progress")
     .select("*")

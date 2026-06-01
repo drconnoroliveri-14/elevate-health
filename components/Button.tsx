@@ -12,17 +12,37 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 function Spinner() {
   return (
-    <svg className="animate-spin h-4 w-4 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+    <svg
+      className="animate-spin h-4 w-4 inline-block"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v8H4z"
+      />
     </svg>
   );
 }
 
 const VARIANT_CLASSES: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  primary: "bg-teal-500 hover:bg-teal-700 text-white border border-transparent disabled:opacity-60",
-  secondary: "bg-white hover:bg-teal-50 text-teal-600 border border-teal-500 disabled:opacity-60",
-  ghost: "bg-transparent hover:bg-teal-50 text-teal-600 border border-transparent disabled:opacity-60",
+  primary:
+    "bg-teal-500 hover:bg-teal-700 text-white border border-transparent disabled:opacity-60",
+  secondary:
+    "bg-white hover:bg-teal-50 text-teal-600 border border-teal-500 disabled:opacity-60",
+  ghost:
+    "bg-transparent hover:bg-teal-50 text-teal-600 border border-transparent disabled:opacity-60",
 };
 
 const SIZE_CLASSES: Record<NonNullable<ButtonProps["size"]>, string> = {

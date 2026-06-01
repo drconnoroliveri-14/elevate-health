@@ -2,18 +2,23 @@
 
 import { useState } from "react";
 
-export default function PurchaseConsultationButton() {
+interface Props {
+  upgrade: "nutrition" | "consultation";
+  price: number;
+}
+
+export default function UpgradeButton({ upgrade, price }: Props) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState("");
 
   async function handleClick() {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
       const res = await fetch("/api/upgrades/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ upgrade: "consultation" }),
+        body: JSON.stringify({ upgrade }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong.");
@@ -30,7 +35,7 @@ export default function PurchaseConsultationButton() {
         onClick={handleClick}
         disabled={loading}
         style={{ background: "#F5C842" }}
-        className="w-full flex items-center justify-center gap-2 text-gray-900 font-bold text-lg py-4 rounded-xl transition-opacity disabled:opacity-60 hover:opacity-90"
+        className="w-full flex items-center justify-center gap-2 text-gray-900 font-bold text-base py-4 rounded-xl transition-opacity disabled:opacity-60 hover:opacity-90"
       >
         {loading ? (
           <>
@@ -38,7 +43,7 @@ export default function PurchaseConsultationButton() {
             Redirecting to checkout…
           </>
         ) : (
-          "Purchase Consultation — $197 →"
+          `Add to My Program — $${price} →`
         )}
       </button>
       {error && <p className="text-red-600 text-sm mt-2 text-center">{error}</p>}

@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 
+// Lazy singleton — avoids build-time errors when RESEND_API_KEY is not set.
 let _resend: Resend | null = null;
 
 function getResend(): Resend {
