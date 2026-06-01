@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import NextImage from "next/image";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -837,7 +838,7 @@ export default function PostureTrackerPage() {
                       return (
                         <div key={v.key} className="aspect-[3/4] rounded-lg overflow-hidden bg-gray-100">
                           {photo?.signed_url
-                            ? <img src={photo.signed_url} alt={v.label} className="w-full h-full object-cover" />
+                            ? <NextImage src={photo.signed_url} alt={v.label} fill className="object-cover" unoptimized />
                             : <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs text-center p-1">{v.label}</div>
                           }
                         </div>
@@ -897,7 +898,7 @@ export default function PostureTrackerPage() {
                           <div key={v.key} className="aspect-[3/4] rounded-lg overflow-hidden bg-gray-100 relative group">
                             {photo?.signed_url ? (
                               <>
-                                <img src={photo.signed_url} alt={v.label} className="w-full h-full object-cover" />
+                                <NextImage src={photo.signed_url} alt={v.label} fill className="object-cover" unoptimized />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 no-print">
                                   <button onClick={() => handleDelete(photo.id)} className="bg-white text-red-500 text-xs font-bold px-2 py-1 rounded shadow">Del</button>
                                 </div>
