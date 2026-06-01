@@ -3,41 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --cream: #E6E7D7;
-  --onyx: #000000;
-  --slate: #A09F93;
-  --sand: #DBC6A1;
-  --ember: #FF5740;
-  --ice: #6AB9DF;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  background-color: #E6E7D7;
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 body {
-  font-family: "Apercu Pro", "Inter", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color: var(--foreground);
+  background: var(--background);
 }
 
-.safe-area-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.equipment-btn:hover { background-color: #E5B432 !important; }
+.amazon-btn:hover { background-color: #E5B432 !important; }
+
+/* Ensure iframes always form their own compositing layer and stacking context */
+iframe {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
 }
