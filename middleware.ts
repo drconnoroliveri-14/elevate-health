@@ -1,47 +1,47 @@
+import { createServerClient } from "@supabase/auth-helpers-nextjs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 
-const STAFF_ROLES = ["staff", "manager", "owner"];
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-  const accessToken = request.cookies.get("sb-access-token")?.value;
-
-  if (pathname.startsWith("/member") || pathname.startsWith("/staff")) {
-    if (!accessToken) {
-      return NextResponse.redirect(new URL("/login", request.url));
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll: () => req.cookies.getAll(),
+        setAll: (cookiesToSet) => {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            res.cookies.set(name, value, options);
+          });
+        },
+      },
     }
+  );
 
-    if (pathname.startsWith("/staff")) {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser(accessToken);
+  const { data: { session } } = await supabase.auth.getSession();
 
-      if (!user) {
-        return NextResponse.redirect(new URL("/login", request.url));
-      }
+  const { pathname } = req.nextUrl;
 
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
-
-      if (!profile || !STAFF_ROLES.includes(profile.role)) {
-        return NextResponse.redirect(new URL("/login", request.url));
-      }
-    }
+  // Authenticated users visiting /login → send to dashboard
+  if (session && pathname === "/login") {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  return NextResponse.next();
+  // Unauthenticated users visiting protected routes → send to login
+  const isProtected =
+    pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
+  if (!session && isProtected) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  // Everything else (including / for all users) → allow through
+  return res;
 }
 
 export const config = {
-  matcher: ["/member/:path*", "/staff/:path*"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|logo.PNG|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)).*)",
+  ],
 };
