@@ -9,21 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        cream: "#E6E7D7",
-        onyx: "#000000",
-        slate: "#A09F93",
-        sand: "#DBC6A1",
-        ember: "#FF5740",
-        ice: "#6AB9DF",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        teal: {
+          50: "#E1F5EE",
+          500: "#0F6E56",
+          700: "#085041",
+        },
       },
       fontFamily: {
-        heading: ["Galano Grotesque", "Inter", "sans-serif"],
-        body: ["Apercu Pro", "Inter", "sans-serif"],
-        accent: ["Loretta Light", "Georgia", "serif"],
+        sans: ["Inter", "sans-serif"],
       },
     },
   },
   plugins: [],
 };
-
 export default config;
