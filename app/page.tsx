@@ -124,11 +124,12 @@ export default function LandingPage() {
         }}
       >
         <div className="relative max-w-4xl mx-auto text-center">
-          <h1 className="mb-5">
-            <span className="block text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white/90 mb-1">
-              Dr. Connor Oliveri&apos;s
-            </span>
-            <span className="relative inline-block text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
+          <h1
+            className="mb-5 text-5xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight text-white"
+            style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.3)" }}
+          >
+            <span className="block mb-1">Dr. Connor Oliveri&apos;s</span>
+            <span className="relative inline-block">
               Neck &amp; Back Pain Program.
               <span
                 className="absolute left-0 w-full rounded-full"
