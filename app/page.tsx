@@ -35,7 +35,7 @@ const PROCESS_STEPS = [
   {
     num: 2,
     title: "Log In and Access Your Dashboard",
-    desc: "Use your login credentials to access your personal dashboard at elevatehealthtampa.com. All 7 modules, your bonuses, and any add-ons you selected are waiting for you instantly.",
+    desc: "Use your login credentials to access your personal dashboard at elevatehealthtampa.com/login. All 7 modules, your bonuses, and any add-ons you selected are waiting for you instantly.",
   },
   {
     num: 3,
