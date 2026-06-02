@@ -106,9 +106,9 @@ export default function LandingPage() {
             className="mb-5 text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white"
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.3)" }}
           >
-            <span className="block">Dr. Connor Oliveri&apos;s</span>
+            <span className="block">Finally End Your</span>
             <span className="block relative">
-              Neck &amp; Back Pain Program.
+              Neck &amp; Back Pain.
               <span
                 className="absolute left-0 w-full rounded-full"
                 style={{ background: "#4ECCA3", height: "4px", bottom: "-6px" }}
