@@ -30,17 +30,17 @@ const PROCESS_STEPS = [
   {
     num: 1,
     title: "Purchase the Program",
-    desc: "One-time payment of $97. Instant access. No subscriptions, no hidden fees.",
+    desc: "Make a one-time payment of $97 and get instant digital access. No subscriptions, no recurring charges. You\'ll have lifetime access to all 7 modules and every future update we release.",
   },
   {
     num: 2,
     title: "Follow the Modules",
-    desc: "Work through 7 step-by-step at-home rehabilitation modules at your own pace — 20 minutes a day.",
+    desc: "Work through 7 step-by-step at-home rehabilitation video modules at your own pace. Each session takes just 20 minutes a day and targets a specific source of your pain. No gym, no equipment, no experience needed.",
   },
   {
     num: 3,
     title: "Become Pain-Free",
-    desc: "Apply the 90-day protocol and eliminate your neck and back pain for good.",
+    desc: "Follow the 90-day protocol and eliminate the root cause of your neck and back pain for good. Most members notice a significant reduction in pain within the first two weeks.",
   },
 ];
 
@@ -192,8 +192,7 @@ export default function LandingPage() {
           <h2 className="text-center text-2xl sm:text-3xl font-bold text-gray-900 mb-2">The Process</h2>
           <p className="text-center text-gray-500 mb-12">Three simple steps to a pain-free life.</p>
           <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {/* Connector line — desktop only */}
-            <div className="hidden sm:block absolute top-8 left-1/6 right-1/6 h-0.5 bg-teal-100" style={{ left: "18%", right: "18%" }} />
+            <div className="hidden sm:block absolute top-8 h-0.5 bg-teal-100" style={{ left: "18%", right: "18%" }} />
             {PROCESS_STEPS.map(({ num, title, desc }) => (
               <div key={num} className="flex flex-col items-center text-center">
                 <div className="relative z-10 w-16 h-16 rounded-full bg-teal-500 text-white text-2xl font-black flex items-center justify-center shadow-md mb-4">
