@@ -126,10 +126,10 @@ export default function LandingPage() {
         <div className="relative max-w-4xl mx-auto text-center">
           <h1 className="mb-5">
             <span className="block text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white/90 mb-1">
-              Finally End Your
+              Dr. Connor Oliveri&apos;s
             </span>
             <span className="relative inline-block text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
-              Neck &amp; Back Pain.
+              Neck &amp; Back Pain Program.
               <span
                 className="absolute left-0 w-full rounded-full"
                 style={{ background: "#4ECCA3", height: "4px", bottom: "-6px" }}
@@ -179,7 +179,7 @@ export default function LandingPage() {
             ))}
           </ul>
           <p className="text-sm font-semibold mb-5" style={{ color: "rgba(255,255,255,0.72)" }}>
-            ★★★★★  Trusted by 2,000+ people with chronic pain
+            ★★★★★  Trusted by 2,000+ people with chronic pain
           </p>
           <div className="relative inline-flex">
             <span
