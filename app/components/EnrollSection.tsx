@@ -32,6 +32,27 @@ const UPSELLS = [
   },
 ];
 
+const AFTER_PURCHASE_STEPS = [
+  {
+    step: 1,
+    emoji: "📧",
+    title: "Check Your Email",
+    subtitle: "Within minutes of purchase you will receive a welcome email from Dr. Oliveri containing your personal login credentials, a link to access your dashboard, and your Zoom consultation booking link if you selected that option.",
+  },
+  {
+    step: 2,
+    emoji: "🔐",
+    title: "Log In to Your Dashboard",
+    subtitle: "Use the credentials in your email to log in at elevatehealthtampa.com/login. Your personal dashboard gives you instant access to all 7 modules, your bonuses, and your Nutrition for Inflammation course if you added it.",
+  },
+  {
+    step: 3,
+    emoji: "🎯",
+    title: "Start Module 1 Today",
+    subtitle: "Begin your at-home rehabilitation program immediately. Work through each module at your own pace and start feeling results within the first week.",
+  },
+];
+
 function Spinner() {
   return (
     <svg className="animate-spin h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -132,11 +153,7 @@ export default function EnrollSection() {
           </button>
           <div className="mt-5 rounded-xl p-4" style={{ backgroundColor: "#E1F5EE" }}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {[
-                { step: 1, emoji: "📧", title: "Check Your Email", subtitle: "Your login credentials are sent instantly after purchase. If you added a Virtual Consultation, your booking link will also be included." },
-                { step: 2, emoji: "🔐", title: "Access Your Dashboard", subtitle: "Log in to your personal pain-free portal. If you added the Nutrition for Inflammation course, it will be waiting for you in your dashboard." },
-                { step: 3, emoji: "🎯", title: "Start Module 1", subtitle: "Begin your at-home rehabilitation immediately." },
-              ].map(({ step, emoji, title, subtitle }) => (
+              {AFTER_PURCHASE_STEPS.map(({ step, emoji, title, subtitle }) => (
                 <div key={step} className="flex flex-col items-center text-center gap-1.5">
                   <div className="w-7 h-7 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">{step}</div>
                   <p className="text-sm font-bold text-gray-900">{emoji} {title}</p>
