@@ -125,7 +125,7 @@ export default function LandingPage() {
       >
         <div className="relative max-w-4xl mx-auto text-center">
           <h1
-            className="mb-5 text-5xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight text-white"
+            className="mb-5 text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white"
             style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.3)" }}
           >
             <span className="block mb-1">Dr. Connor Oliveri&apos;s</span>
