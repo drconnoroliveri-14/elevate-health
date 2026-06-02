@@ -26,6 +26,24 @@ const TESTIMONIALS = [
   { quote: "Avoided surgery thanks to this program. My orthopedic surgeon was shocked.", name: "David L.", age: 61 },
 ];
 
+const PROCESS_STEPS = [
+  {
+    num: 1,
+    title: "Purchase the Program",
+    desc: "One-time payment of $97. Instant access. No subscriptions, no hidden fees.",
+  },
+  {
+    num: 2,
+    title: "Follow the Modules",
+    desc: "Work through 7 step-by-step at-home rehabilitation modules at your own pace — 20 minutes a day.",
+  },
+  {
+    num: 3,
+    title: "Become Pain-Free",
+    desc: "Apply the 90-day protocol and eliminate your neck and back pain for good.",
+  },
+];
+
 function StarRow() {
   return (
     <div className="flex gap-0.5 mb-3" aria-label="5 stars">
@@ -102,12 +120,11 @@ export default function LandingPage() {
         }}
       >
         <div className="relative max-w-4xl mx-auto text-center">
-          <h1
-            className="mb-5 text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white"
-            style={{ textShadow: "2px 2px 8px rgba(0,0,0,0.3)" }}
-          >
-            <span className="block">Finally End Your</span>
-            <span className="block relative">
+          <h1 className="mb-5">
+            <span className="block text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white/90 mb-1">
+              Finally End Your
+            </span>
+            <span className="relative inline-block text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
               Neck &amp; Back Pain.
               <span
                 className="absolute left-0 w-full rounded-full"
@@ -165,6 +182,27 @@ export default function LandingPage() {
             >
               Yes, I Want Access to the Modules →
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── THE PROCESS ── */}
+      <section className="bg-white py-16 px-4 sm:px-6 border-b border-gray-100">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-center text-2xl sm:text-3xl font-bold text-gray-900 mb-2">The Process</h2>
+          <p className="text-center text-gray-500 mb-12">Three simple steps to a pain-free life.</p>
+          <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-8">
+            {/* Connector line — desktop only */}
+            <div className="hidden sm:block absolute top-8 left-1/6 right-1/6 h-0.5 bg-teal-100" style={{ left: "18%", right: "18%" }} />
+            {PROCESS_STEPS.map(({ num, title, desc }) => (
+              <div key={num} className="flex flex-col items-center text-center">
+                <div className="relative z-10 w-16 h-16 rounded-full bg-teal-500 text-white text-2xl font-black flex items-center justify-center shadow-md mb-4">
+                  {num}
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
