@@ -130,6 +130,21 @@ export default function EnrollSection() {
           <button onClick={handleCheckout} disabled={checkoutLoading} className="w-full bg-teal-500 hover:bg-teal-700 disabled:opacity-60 text-white font-bold text-lg py-4 rounded-xl transition-colors flex items-center justify-center gap-2">
             {checkoutLoading ? <><Spinner /> Redirecting…</> : `Complete Purchase — $${total}`}
           </button>
+          <div className="mt-5 rounded-xl p-4" style={{ backgroundColor: "#E1F5EE" }}>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { step: 1, emoji: "📧", title: "Check Your Email", subtitle: "Your login credentials are sent instantly after purchase. If you added a Virtual Consultation, your booking link will also be included." },
+                { step: 2, emoji: "🔐", title: "Access Your Dashboard", subtitle: "Log in to your personal pain-free portal. If you added the Nutrition for Inflammation course, it will be waiting for you in your dashboard." },
+                { step: 3, emoji: "🎯", title: "Start Module 1", subtitle: "Begin your at-home rehabilitation immediately." },
+              ].map(({ step, emoji, title, subtitle }) => (
+                <div key={step} className="flex flex-col items-center text-center gap-1.5">
+                  <div className="w-7 h-7 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">{step}</div>
+                  <p className="text-sm font-bold text-gray-900">{emoji} {title}</p>
+                  <p className="text-xs text-gray-500 leading-relaxed">{subtitle}</p>
+                </div>
+              ))}
+            </div>
+          </div>
           <p className="text-center text-xs text-gray-400 mt-4">One-time payment · Lifetime access · Instant delivery · Secure checkout</p>
           <p className="text-center text-sm mt-3"><a href="/login" className="text-teal-600 hover:underline">Already a member? Log in to your dashboard →</a></p>
         </div>
