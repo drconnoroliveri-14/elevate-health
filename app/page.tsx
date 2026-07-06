@@ -1,272 +1,310 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import EnrollSection from "@/app/components/EnrollSection";
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const MODULES = [
-  { num: 1, title: "Understanding Your Pain", desc: "The root causes of neck, mid back, and lower back pain. How posture, muscle imbalances, and movement patterns create chronic pain. Your baseline pain assessment." },
-  { num: 2, title: "Neck Pain Relief Protocol", desc: "Step-by-step exercises to release neck tension, restore cervical mobility, and eliminate headaches caused by neck dysfunction." },
-  { num: 3, title: "Mid Back Pain Relief Protocol", desc: "Thoracic mobility exercises, postural correction, and strengthening routines to eliminate mid back pain and improve breathing." },
-  { num: 4, title: "Lower Back Pain Relief Protocol", desc: "Core activation, hip flexor release, and lumbar stabilization exercises proven to eliminate lower back pain." },
-  { num: 5, title: "Posture Correction & Alignment", desc: "Full body postural assessment and correction. How to sit, stand, sleep, and move without creating pain." },
-  { num: 6, title: "Strengthening for a Pain-Free Life", desc: "Progressive strengthening program to bulletproof your spine and prevent pain from returning." },
-  { num: 7, title: "Your Personal 90-Day Pain-Free Protocol", desc: "Build your customized daily rehabilitation routine. Week-by-week implementation, pain tracking, and long-term maintenance." },
+const FULLSCRIPT_URL = 'https://us.fullscript.com/welcome/elevatehealth-75cdea33-a471-46ca-83c8-7e492b97030a';
+
+const SUPPLEMENTS = [
+  {
+    name: 'Turmeric & Curcumin Complex',
+    benefit: 'Powerful anti-inflammatory support for joints and spine',
+    icon: '🌿',
+    why: 'Clinically studied to reduce inflammatory markers — the root driver of most chronic pain.',
+  },
+  {
+    name: 'Omega-3 Fish Oil',
+    benefit: 'Reduces systemic inflammation and supports nerve health',
+    icon: '🐟',
+    why: 'EPA and DHA help calm nerve pain and protect disc and joint tissue.',
+  },
+  {
+    name: 'Magnesium Glycinate',
+    benefit: 'Relieves muscle tension, spasms, and promotes deep sleep',
+    icon: '💊',
+    why: 'Most chronic pain patients are deficient in magnesium — the #1 muscle relaxation mineral.',
+  },
+  {
+    name: 'Collagen Peptides',
+    benefit: 'Rebuilds cartilage, discs, tendons, and connective tissue',
+    icon: '🦴',
+    why: 'Type I & II collagen directly supports spinal disc regeneration and joint cushioning.',
+  },
+  {
+    name: 'Vitamin D3 + K2',
+    benefit: 'Strengthens bones and regulates calcium for spinal health',
+    icon: '☀️',
+    why: 'Low Vitamin D is linked to chronic musculoskeletal pain and slow recovery.',
+  },
+  {
+    name: 'Zinc Bisglycinate',
+    benefit: 'Accelerates tissue repair and reduces oxidative stress',
+    icon: '⚡',
+    why: 'An often-overlooked mineral essential for healing soft tissue and reducing pain signals.',
+  },
 ];
 
-const BONUSES = [
-  { title: "Pain Tracking Journal", value: "$47", desc: "Track your daily pain levels, exercises, and progress to stay on track and celebrate your wins." },
-  { title: "Posture Correction Quick Reference Guide", value: "$37", desc: "One-page visual guide showing ideal sitting, standing, and sleeping posture to reinforce your daily habits." },
-  { title: "90-Day Posture Photo Tracker", value: "$97", desc: "Upload your posture photos every 30 days and track your transformation with built-in posture analysis tools and before and after milestone comparisons." },
+const WHY_FULLSCRIPT = [
+  {
+    icon: '✅',
+    title: 'Professional-Grade Quality',
+    desc: 'Every product is third-party tested for purity, potency, and safety — no fillers or proprietary blends.',
+  },
+  {
+    icon: '🚚',
+    title: 'Free Shipping on Orders $50+',
+    desc: 'Fast, discreet shipping delivered directly to your door anywhere in the US.',
+  },
+  {
+    icon: '💰',
+    title: '20% Off Retail Pricing',
+    desc: 'As a patient of Dr. Oliveri, you receive exclusive practitioner pricing not available to the public.',
+  },
+  {
+    icon: '🔒',
+    title: 'Recommended by Your Doctor',
+    desc: 'These are the exact supplements Dr. Oliveri uses in his clinical practice — not random picks.',
+  },
 ];
 
 const TESTIMONIALS = [
-  { quote: "I had chronic lower back pain for 6 years. After 8 weeks I was completely pain-free.", name: "Michael R.", age: 52 },
-  { quote: "My neck pain from desk work is completely gone. I do 20 minutes a day.", name: "Sarah K.", age: 38 },
-  { quote: "Avoided surgery thanks to this program. My orthopedic surgeon was shocked.", name: "David L.", age: 61 },
-];
-
-const PROCESS_STEPS = [
   {
-    num: 1,
-    title: "Purchase the Program",
-    desc: "Complete your secure checkout for $97. Within minutes you will receive a welcome email with your personal login credentials and everything you need to get started immediately.",
+    name: 'Sarah M.',
+    location: 'Tampa, FL',
+    text: 'After 3 months on Dr. Oliveri\'s supplement protocol alongside his rehab program, my back pain has dropped from a 7 to a 2. I finally sleep through the night.',
+    stars: 5,
   },
   {
-    num: 2,
-    title: "Log In and Access Your Dashboard",
-    desc: "Use your login credentials to access your personal dashboard at elevatehealthtampa.com/login. All 7 modules, your bonuses, and any add-ons you selected are waiting for you instantly.",
+    name: 'James R.',
+    location: 'St. Petersburg, FL',
+    text: 'I was skeptical about supplements but the combination of Turmeric and Fish Oil made a noticeable difference within weeks. My neck stiffness is almost completely gone.',
+    stars: 5,
   },
   {
-    num: 3,
-    title: "Become Pain-Free",
-    desc: "Follow the 7 modules at your own pace — just 20 minutes a day from home. Apply the 90-day protocol and eliminate your neck and back pain for good.",
+    name: 'Linda K.',
+    location: 'Clearwater, FL',
+    text: 'The magnesium alone was a game-changer for my muscle spasms. Dr. Oliveri\'s protocol is the missing piece I never knew I needed.',
+    stars: 5,
   },
 ];
 
-function StarRow() {
+const FAQS = [
+  {
+    q: 'Do I need to be a current patient to order?',
+    a: 'No. Anyone can create a free Fullscript account using Dr. Oliveri\'s practitioner link and access the curated protocol at a 20% discount.',
+  },
+  {
+    q: 'Are these supplements safe to take together?',
+    a: 'Yes. Dr. Oliveri specifically selected these six supplements because they work synergistically with no known negative interactions. As always, consult your physician if you are on prescription medications.',
+  },
+  {
+    q: 'How long until I feel a difference?',
+    a: 'Most patients notice reduced muscle tension and improved sleep within 2–3 weeks of starting Magnesium. Anti-inflammatory benefits from Turmeric and Fish Oil typically build over 4–8 weeks of consistent use.',
+  },
+  {
+    q: 'Why Fullscript instead of Amazon or a health food store?',
+    a: 'Fullscript carries only professional-grade brands that meet strict quality standards. Many supplements sold on Amazon are underdosed, mislabeled, or contaminated. Your health is worth the difference.',
+  },
+  {
+    q: 'Is there a subscription or auto-ship?',
+    a: 'Fullscript offers optional auto-ship with an additional discount, but it is completely optional. You can order one-time whenever you need a refill.',
+  },
+];
+
+function FAQItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
   return (
-    <div className="flex gap-0.5 mb-3" aria-label="5 stars">
-      {[...Array(5)].map((_, i) => (
-        <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ))}
+    <div className="border border-gray-200 rounded-xl overflow-hidden">
+      <button
+        className="w-full flex justify-between items-center p-5 text-left bg-white hover:bg-gray-50 transition-colors"
+        onClick={() => setOpen(!open)}
+      >
+        <span className="font-semibold text-gray-800 pr-4">{q}</span>
+        <span className="text-teal-600 text-xl flex-shrink-0">{open ? '−' : '+'}</span>
+      </button>
+      {open && (
+        <div className="px-5 pb-5 bg-white">
+          <p className="text-gray-600 leading-relaxed">{a}</p>
+        </div>
+      )}
     </div>
   );
 }
 
-function ShieldIcon() {
+export default function SupplementsPage() {
   return (
-    <svg className="w-14 h-14 text-teal-500 mx-auto mb-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-    </svg>
-  );
-}
-
-function scrollToId(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-export default function LandingPage() {
-  return (
-    <div className="min-h-screen font-sans">
-      {/* ── NAV ── */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-        <div className="sm:hidden px-4 py-3 flex flex-col items-center gap-2">
-          <a href="#top">
-            <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{ height: "60px", width: "auto" }} />
-          </a>
-          <div className="flex flex-col items-center gap-2 w-full">
-            <button
-              onClick={() => scrollToId("enroll")}
-              className="w-full font-bold text-base py-3 px-6 rounded-lg transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
-            >
-              Yes, I Want Access to the Modules →
-            </button>
-            <Link href="/login" className="w-full text-center text-sm font-semibold py-2 px-5 rounded-lg border-2 border-teal-600 bg-white text-teal-600 hover:bg-teal-50 transition-colors">
-              Member Login
-            </Link>
-          </div>
-        </div>
-        <div className="hidden sm:flex max-w-6xl mx-auto px-6 lg:px-8 h-16 items-center justify-between">
-          <a href="#top"><Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{ height: "70px", width: "auto" }} /></a>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm font-semibold px-4 py-2 rounded-lg border-2 border-teal-600 bg-white text-teal-600 hover:bg-teal-50 transition-colors">
-              Member Login
-            </Link>
-            <button
-              onClick={() => scrollToId("enroll")}
-              className="text-sm font-bold px-5 py-2.5 rounded-lg transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#F5C842", color: "#1a1a1a" }}
-            >
-              Yes, I Want Access to the Modules →
-            </button>
-          </div>
-        </div>
-      </nav>
+    <main className="min-h-screen font-sans">
 
       {/* ── HERO ── */}
-      <section
-        className="relative text-white py-28 sm:py-36 px-4 sm:px-6 overflow-hidden"
-        style={{
-          isolation: "isolate",
-          backgroundColor: "#085041",
-          backgroundImage: "linear-gradient(135deg, rgba(8,80,65,0.87) 0%, rgba(15,110,86,0.82) 100%), url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1920&q=80')",
-          backgroundSize: "auto, cover",
-          backgroundPosition: "center, center",
-          backgroundRepeat: "no-repeat, no-repeat",
-        }}
-      >
-        <div className="relative max-w-4xl mx-auto text-center">
-          <h1 className="mb-5">
-            <span className="block text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white/90 mb-1">
-              Finally End Your
-            </span>
-            <span className="relative inline-block text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
-              Neck &amp; Back Pain.
-              <span
-                className="absolute left-0 w-full rounded-full"
-                style={{ background: "#4ECCA3", height: "4px", bottom: "-6px" }}
-              />
-            </span>
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/scoliosis.jpeg"
+            alt="Spine background"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-teal-900/80" />
+        </div>
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+          <span className="inline-block bg-yellow-400 text-yellow-900 font-bold text-sm uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
+            Dr. Oliveri&apos;s Recommended Protocol
+          </span>
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-tight mb-6" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
+            <span className="block">Finally End Your</span>
+            <span className="block">Chronic Pain Naturally.</span>
           </h1>
-          <p className="mb-8 mt-6">
-            <span
-              className="inline-block font-bold text-xl sm:text-2xl"
-              style={{
-                background: "#F5C842",
-                color: "#1a1a1a",
-                padding: "6px 16px",
-                borderRadius: "999px",
-                boxShadow: "0 4px 16px rgba(245,200,66,0.45)",
-              }}
-            >
-              From Home, Without Surgery or Medication
-            </span>
+          <p className="text-xl sm:text-2xl text-teal-100 mb-4 max-w-2xl mx-auto">
+            The exact 6-supplement protocol Dr. Oliveri uses in his clinical practice — now available to you at 20% off through Fullscript.
           </p>
-          <p className="text-base sm:text-lg text-teal-100/90 mb-10 leading-relaxed max-w-2xl mx-auto">
-            The Elevate Pain-Free Program gives you a proven at-home rehabilitation system used by chiropractors — so you can eliminate neck, mid back, and lower back pain for good.
-          </p>
-          <ul className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-            {[
-              "Developed by Licensed Chiropractors",
-              "Step-by-step video exercises",
-              "90-day pain-free guarantee",
-            ].map((bullet) => (
-              <li
-                key={bullet}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-white"
-                style={{ background: "rgba(255,255,255,0.18)" }}
-              >
-                <svg className="w-4 h-4 flex-shrink-0" style={{ color: "#4ECCA3" }} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
-                {bullet}
-              </li>
-            ))}
-          </ul>
-          <p className="text-sm font-semibold mb-5" style={{ color: "rgba(255,255,255,0.72)" }}>
-            ★★★★★  Trusted by 2,000+ people with chronic pain
-          </p>
-          <div className="relative inline-flex">
-            <span
-              className="absolute inset-0 rounded-2xl animate-ping pointer-events-none"
-              style={{ background: "#F5C842", opacity: 0.4 }}
-            />
-            <button
-              onClick={() => scrollToId("enroll")}
-              className="relative font-extrabold text-xl px-12 py-5 rounded-2xl shadow-2xl transition-transform hover:scale-105 active:scale-100 duration-150"
-              style={{ background: "#F5C842", color: "#1a1a1a" }}
-            >
-              Yes, I Want Access to the Modules →
-            </button>
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-teal-200 mb-8">
+            <span>✓ Professional-Grade Only</span>
+            <span>✓ Third-Party Tested</span>
+            <span>✓ 20% Off Retail</span>
+          </div>
+          <a
+            href={FULLSCRIPT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-black text-lg px-10 py-4 rounded-full shadow-xl transition-all hover:scale-105"
+          >
+            Access My Protocol on Fullscript →
+          </a>
+          <div className="mt-6 flex justify-center items-center gap-1 text-yellow-400">
+            {'★★★★★'}
+            <span className="text-teal-200 text-sm ml-2">500+ patients trust this protocol</span>
           </div>
         </div>
       </section>
 
-      {/* ── THE PROCESS ── */}
-      <section className="bg-white py-16 px-4 sm:px-6 border-b border-gray-100">
+      {/* ── MEET DR. OLIVERI ── */}
+      <section className="bg-white py-20 px-6">
+        <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12">
+          <div className="flex-shrink-0">
+            <div className="relative w-56 h-56 rounded-full overflow-hidden ring-4 ring-teal-500 shadow-2xl">
+              <Image src="/5.jpg" alt="Dr. Connor Oliveri" fill className="object-cover" />
+            </div>
+          </div>
+          <div>
+            <p className="text-teal-600 font-semibold uppercase tracking-widest text-sm mb-2">Your Doctor</p>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">Dr. Connor Oliveri, DC</h2>
+            <p className="text-gray-600 text-lg leading-relaxed mb-4">
+              Dr. Oliveri is a Doctor of Chiropractic specializing in non-surgical spinal rehabilitation, serving patients throughout the Tampa Bay area. After years of helping patients recover from chronic neck and back pain, he developed this supplement protocol to address the nutritional deficiencies that keep most people stuck in a cycle of pain.
+            </p>
+            <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              &ldquo;Rehabilitation alone only gets you so far. When you pair the right exercise protocol with targeted nutritional support, patients heal faster and stay pain-free longer. These are the six supplements I recommend to virtually every patient I see.&rdquo;
+            </p>
+            <a
+              href={FULLSCRIPT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-bold px-8 py-3 rounded-full shadow transition-all hover:scale-105"
+            >
+              View the Full Protocol →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── THE PROTOCOL ── */}
+      <section className="bg-gray-50 py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-teal-600 font-semibold uppercase tracking-widest text-sm mb-2">The Protocol</p>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">6 Supplements. One Goal: Less Pain.</h2>
+            <p className="text-gray-500 text-lg max-w-2xl mx-auto">Each supplement was chosen for a specific reason. Together they target inflammation, nerve health, muscle tension, tissue repair, and bone density.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {SUPPLEMENTS.map((s) => (
+              <div key={s.name} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div className="text-4xl mb-4">{s.icon}</div>
+                <h3 className="text-lg font-black text-gray-900 mb-1">{s.name}</h3>
+                <p className="text-teal-700 font-semibold text-sm mb-3">{s.benefit}</p>
+                <p className="text-gray-500 text-sm leading-relaxed">{s.why}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center">
+            <a
+              href={FULLSCRIPT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-black text-lg px-10 py-4 rounded-full shadow-xl transition-all hover:scale-105"
+            >
+              Order All 6 Supplements at 20% Off →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ── */}
+      <section className="bg-white py-20 px-6">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-center text-2xl sm:text-3xl font-bold text-gray-900 mb-2">The Process</h2>
-          <p className="text-center text-gray-500 mb-12">Three simple steps to a pain-free life.</p>
-          <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <div className="hidden sm:block absolute top-8 h-0.5 bg-teal-100" style={{ left: "18%", right: "18%" }} />
-            {PROCESS_STEPS.map(({ num, title, desc }) => (
-              <div key={num} className="flex flex-col items-center text-center">
-                <div className="relative z-10 w-16 h-16 rounded-full bg-teal-500 text-white text-2xl font-black flex items-center justify-center shadow-md mb-4">
-                  {num}
+          <div className="text-center mb-12">
+            <p className="text-teal-600 font-semibold uppercase tracking-widest text-sm mb-2">How It Works</p>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900">Three Steps to Get Started</h2>
+          </div>
+          <div className="relative">
+            <div className="hidden sm:block absolute left-8 top-8 bottom-8 w-0.5 bg-teal-100" />
+            <div className="space-y-8">
+              {[
+                { n: 1, title: 'Create Your Free Fullscript Account', desc: 'Click the button below to access Dr. Oliveri\'s practitioner storefront on Fullscript. Creating an account is free and takes less than 2 minutes.' },
+                { n: 2, title: 'Select Your Supplements', desc: 'Browse the curated protocol and add whichever supplements you need to your cart. Every item is automatically discounted 20% from retail pricing.' },
+                { n: 3, title: 'Receive & Start Your Protocol', desc: 'Your order ships directly to your door. Follow the simple dosing guide included with each product and track your progress over the coming weeks.' },
+              ].map((step) => (
+                <div key={step.n} className="flex gap-6 items-start">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-teal-600 text-white flex items-center justify-center text-2xl font-black shadow-lg">
+                    {step.n}
+                  </div>
+                  <div className="pt-3">
+                    <h3 className="text-xl font-black text-gray-900 mb-2">{step.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">{step.desc}</p>
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── WHY FULLSCRIPT ── */}
+      <section className="py-20 px-6" style={{ backgroundColor: '#E1F5EE' }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-teal-600 font-semibold uppercase tracking-widest text-sm mb-2">Why Fullscript</p>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900">Professional Quality. Practitioner Prices.</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {WHY_FULLSCRIPT.map((item) => (
+              <div key={item.title} className="bg-white rounded-2xl p-6 shadow-sm flex gap-4 items-start">
+                <span className="text-3xl">{item.icon}</span>
+                <div>
+                  <h3 className="text-lg font-black text-gray-900 mb-1">{item.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── VSL ── */}
-      <section style={{ backgroundColor: "white", position: "relative", zIndex: 10, isolation: "isolate", transform: "translateZ(0)", overflow: "hidden", paddingTop: "64px", paddingBottom: "64px", paddingLeft: "16px", paddingRight: "16px" }}>
-        <div className="max-w-3xl mx-auto text-center">
-          <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden", backgroundColor: "white", marginBottom: "24px" }}>
-            <iframe
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
-              src="https://www.youtube.com/embed/92oXxshiqFM"
-              title="Elevate Pain-Free Program"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-          <p className="text-gray-500 text-base">
-            Join <strong className="text-gray-700">2,000+</strong> people who have already eliminated their neck and back pain
-          </p>
-        </div>
-      </section>
-
-      {/* ── SOCIAL PROOF ── */}
-      <section className="bg-teal-50 py-16 px-4 sm:px-6">
+      {/* ── TESTIMONIALS ── */}
+      <section className="bg-white py-20 px-6">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-center text-2xl font-bold text-gray-900 mb-10">What People are Saying...</h2>
+          <div className="text-center mb-12">
+            <p className="text-teal-600 font-semibold uppercase tracking-widest text-sm mb-2">Results</p>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900">Real Patients. Real Relief.</h2>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {TESTIMONIALS.map((t) => (
-              <div key={t.name} className="bg-white rounded-2xl p-6 shadow-sm flex flex-col">
-                <StarRow />
-                <p className="text-gray-800 italic flex-1 mb-4">&ldquo;{t.quote}&rdquo;</p>
-                <p className="text-sm font-semibold text-gray-600">— {t.name}, {t.age}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── WHAT'S INSIDE ── */}
-      <section className="bg-white py-16 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Everything You Get Inside the Program</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-            {MODULES.map((m) => (
-              <div key={m.num} className="flex gap-4 bg-gray-50 rounded-xl p-5 border border-gray-100">
-                <span className="flex-shrink-0 w-9 h-9 rounded-full bg-teal-500 text-white text-sm font-bold flex items-center justify-center">{m.num}</span>
+              <div key={t.name} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                <div className="text-yellow-400 text-lg mb-3">{'★'.repeat(t.stars)}</div>
+                <p className="text-gray-700 leading-relaxed mb-4 text-sm">&ldquo;{t.text}&rdquo;</p>
                 <div>
-                  <p className="font-semibold text-gray-900 mb-1">{m.title}</p>
-                  <p className="text-sm text-gray-500 leading-relaxed">{m.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <h3 className="text-xl font-bold text-gray-800 mb-5 text-center">Plus These Free Bonuses</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {BONUSES.map((b) => (
-              <div key={b.title} className="flex gap-4 bg-teal-50 border border-teal-200 rounded-xl p-5">
-                <span className="flex-shrink-0 text-teal-500">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
-                  </svg>
-                </span>
-                <div>
-                  <p className="font-bold text-gray-900">{b.title} <span className="line-through text-gray-400 font-normal text-sm">{b.value}</span> <span className="text-teal-600 font-semibold text-sm">FREE</span></p>
-                  <p className="text-sm text-gray-500 mt-1">{b.desc}</p>
+                  <p className="font-black text-gray-900 text-sm">{t.name}</p>
+                  <p className="text-gray-400 text-xs">{t.location}</p>
                 </div>
               </div>
             ))}
@@ -274,40 +312,58 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── AUTHORITY ── */}
-      <section className="bg-white border-t border-gray-100 py-14 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-gray-700 text-lg leading-relaxed">
-            The Elevate Pain-Free Program was developed in collaboration with licensed chiropractors and spinal health specialists — combining the latest evidence-based research with practical at-home exercises that actually work.
-          </p>
+      {/* ── FAQ ── */}
+      <section className="bg-gray-50 py-20 px-6">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-teal-600 font-semibold uppercase tracking-widest text-sm mb-2">FAQ</p>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900">Common Questions</h2>
+          </div>
+          <div className="space-y-3">
+            {FAQS.map((faq) => (
+              <FAQItem key={faq.q} q={faq.q} a={faq.a} />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── GUARANTEE ── */}
-      <section className="bg-gray-50 py-16 px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <ShieldIcon />
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">90-Day Full Money-Back Guarantee</h2>
-          <p className="text-gray-600 text-lg leading-relaxed">
-            90-Day Money-Back Guarantee — Follow the complete program for 90 days. If you are not satisfied with your results, you may request a refund between days 90 and 120 of your membership provided you have completed all 7 modules and logged in for at least 30 days. We stand behind this program and want you to succeed.
-          </p>
+      {/* ── FINAL CTA ── */}
+      <section className="bg-gradient-to-br from-teal-700 to-teal-900 py-20 px-6 text-center">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">Ready to Start Feeling Better?</h2>
+          <p className="text-teal-200 text-lg mb-8">Join hundreds of patients who have added Dr. Oliveri&apos;s supplement protocol to their recovery and started living with less pain.</p>
+          <a
+            href={FULLSCRIPT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-black text-xl px-12 py-5 rounded-full shadow-2xl transition-all hover:scale-105"
+          >
+            Access My Protocol — 20% Off →
+          </a>
+          <p className="text-teal-300 text-sm mt-4">Free shipping on orders $50+. No subscription required.</p>
         </div>
       </section>
-
-      {/* ── ENROLL ── */}
-      <EnrollSection />
 
       {/* ── FOOTER ── */}
-      <footer className="bg-teal-700 text-white py-10 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <Image src="/logo.PNG" alt="Elevate Health" width={140} height={70} unoptimized style={{height: '70px', width: 'auto', filter: 'brightness(0) invert(1)'}} />
-          <p className="text-teal-200 text-sm">© {new Date().getFullYear()} Elevate Health. All rights reserved.</p>
-          <div className="flex gap-6 text-sm text-teal-200">
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+      <footer className="bg-teal-950 py-12 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <p className="text-white font-black text-xl tracking-wide mb-1">ELEVATE HEALTH</p>
+            <p className="text-teal-400 text-sm">Tampa Bay&apos;s Premier Spinal Rehabilitation Clinic</p>
+          </div>
+          <div className="border-t border-teal-800 pt-8 text-center">
+            <p className="text-teal-500 text-xs leading-relaxed max-w-3xl mx-auto mb-4">
+              *These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease. Always consult with a qualified healthcare provider before starting any new supplement regimen, especially if you are pregnant, nursing, have a medical condition, or are taking medications.
+            </p>
+            <p className="text-teal-600 text-xs mb-4">© {new Date().getFullYear()} Elevate Health Tampa. All rights reserved.</p>
+            <div className="flex justify-center gap-6 text-teal-500 text-xs">
+              <Link href="/privacy" className="hover:text-teal-300 transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-teal-300 transition-colors">Terms of Service</Link>
+            </div>
           </div>
         </div>
       </footer>
-    </div>
+
+    </main>
   );
 }
