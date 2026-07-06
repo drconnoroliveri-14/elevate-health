@@ -37,12 +37,6 @@ const SUPPLEMENTS = [
     icon: '☀️',
     why: 'Low Vitamin D is linked to chronic musculoskeletal pain and slow recovery.',
   },
-  {
-    name: 'Zinc Bisglycinate',
-    benefit: 'Accelerates tissue repair and reduces oxidative stress',
-    icon: '⚡',
-    why: 'An often-overlooked mineral essential for healing soft tissue and reducing pain signals.',
-  },
 ];
 
 const WHY_FULLSCRIPT = [
@@ -96,7 +90,7 @@ const FAQS = [
   },
   {
     q: 'Are these supplements safe to take together?',
-    a: 'Yes. Dr. Oliveri specifically selected these six supplements because they work synergistically with no known negative interactions. As always, consult your physician if you are on prescription medications.',
+    a: 'Yes. Dr. Oliveri specifically selected these five supplements because they work synergistically with no known negative interactions. As always, consult your physician if you are on prescription medications.',
   },
   {
     q: 'How long until I feel a difference?',
@@ -132,6 +126,17 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+function SupplementCard({ s }: { s: typeof SUPPLEMENTS[number] }) {
+  return (
+    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+      <div className="text-4xl mb-4">{s.icon}</div>
+      <h3 className="text-lg font-black text-gray-900 mb-1">{s.name}</h3>
+      <p className="text-teal-700 font-semibold text-sm mb-3">{s.benefit}</p>
+      <p className="text-gray-500 text-sm leading-relaxed">{s.why}</p>
+    </div>
+  );
+}
+
 export default function SupplementsPage() {
   return (
     <main className="min-h-screen font-sans">
@@ -157,7 +162,7 @@ export default function SupplementsPage() {
             <span className="block">Chronic Pain Naturally.</span>
           </h1>
           <p className="text-xl sm:text-2xl text-teal-100 mb-4 max-w-2xl mx-auto">
-            The exact 6-supplement protocol Dr. Oliveri uses in his clinical practice — now available to you at 20% off through Fullscript.
+            The exact 5-supplement protocol Dr. Oliveri uses in his clinical practice — now available to you at 20% off through Fullscript.
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm text-teal-200 mb-8">
             <span>✓ Professional-Grade Only</span>
@@ -194,7 +199,7 @@ export default function SupplementsPage() {
               Dr. Oliveri is a Doctor of Chiropractic specializing in non-surgical spinal rehabilitation, serving patients throughout the Tampa Bay area. After years of helping patients recover from chronic neck and back pain, he developed this supplement protocol to address the nutritional deficiencies that keep most people stuck in a cycle of pain.
             </p>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
-              &ldquo;Rehabilitation alone only gets you so far. When you pair the right exercise protocol with targeted nutritional support, patients heal faster and stay pain-free longer. These are the six supplements I recommend to virtually every patient I see.&rdquo;
+              &ldquo;Rehabilitation alone only gets you so far. When you pair the right exercise protocol with targeted nutritional support, patients heal faster and stay pain-free longer. These are the five supplements I recommend to virtually every patient I see.&rdquo;
             </p>
             <a
               href={FULLSCRIPT_URL}
@@ -210,22 +215,27 @@ export default function SupplementsPage() {
 
       {/* ── THE PROTOCOL ── */}
       <section className="bg-gray-50 py-20 px-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-teal-600 font-semibold uppercase tracking-widest text-sm mb-2">The Protocol</p>
-            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">6 Supplements. One Goal: Less Pain.</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">5 Supplements. One Goal: Less Pain.</h2>
             <p className="text-gray-500 text-lg max-w-2xl mx-auto">Each supplement was chosen for a specific reason. Together they target inflammation, nerve health, muscle tension, tissue repair, and bone density.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {SUPPLEMENTS.map((s) => (
-              <div key={s.name} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <div className="text-4xl mb-4">{s.icon}</div>
-                <h3 className="text-lg font-black text-gray-900 mb-1">{s.name}</h3>
-                <p className="text-teal-700 font-semibold text-sm mb-3">{s.benefit}</p>
-                <p className="text-gray-500 text-sm leading-relaxed">{s.why}</p>
-              </div>
+
+          {/* 2x2 grid for first 4 cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+            {SUPPLEMENTS.slice(0, 4).map((s) => (
+              <SupplementCard key={s.name} s={s} />
             ))}
           </div>
+
+          {/* 5th card centered below */}
+          <div className="flex justify-center mb-12">
+            <div className="w-full sm:w-1/2">
+              <SupplementCard s={SUPPLEMENTS[4]} />
+            </div>
+          </div>
+
           <div className="text-center">
             <a
               href={FULLSCRIPT_URL}
@@ -233,7 +243,7 @@ export default function SupplementsPage() {
               rel="noopener noreferrer"
               className="inline-block bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-black text-lg px-10 py-4 rounded-full shadow-xl transition-all hover:scale-105"
             >
-              Order All 6 Supplements at 20% Off →
+              Order All 5 Supplements at 20% Off →
             </a>
           </div>
         </div>
