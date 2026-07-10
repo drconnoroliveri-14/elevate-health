@@ -3,23 +3,13 @@ import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase";
 import { resend } from "@/lib/resend";
-import {
-  welcomeEmail,
-  day3Email,
-  day14Email,
-  day30Email,
-  day90Email,
-} from "@/lib/emails";
+import { welcomeEmail } from "@/lib/emails";
 
 // Next.js App Router does not pre-parse the body; we read it raw here.
 export const dynamic = "force-dynamic";
 
 const FROM = "Dr. Connor Oliveri <droliveri@elevatehealthtampa.com>";
 const REPLY_TO = "droliveri@elevatehealthtampa.com";
-
-function daysFromNow(days: number): string {
-  return new Date(Date.now() + days * 86_400_000).toISOString();
-}
 
 async function logEmail(
   recipientEmail: string,
@@ -69,7 +59,7 @@ export async function POST(req: NextRequest) {
     expand: ["line_items"],
   });
 
-  // ── Dashboard upgrade (post-purchase upsell) ─────────────────────────────
+  // ── Dashboard upgrade (post-purchase upsell) ─────────────────────────────────────────
   // These sessions are created by /api/upgrades/checkout for existing students.
   // Just update the profile flag — no new user creation, no welcome email.
   if (session.metadata?.source === "dashboard_upgrade") {
@@ -81,7 +71,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   }
 
-  // ── Consultation rebooking ─────────────────────────────────────────────────
+  // ── Consultation rebooking ────────────────────────────────────────────────────
   // Reset consultation_booked so the customer can book a new Calendly slot.
   if (session.metadata?.source === "dashboard_rebooking") {
     const { userId } = session.metadata;
@@ -160,7 +150,7 @@ export async function POST(req: NextRequest) {
     userId = createData.user.id;
   }
 
-  // ── 3. Upsert profile ────────────────────────────────────────────────────
+  // ── 3. Upsert profile ────────────────────────────────────────────────
   await supabaseAdmin.from("profiles").upsert(
     {
       id: userId,
@@ -176,7 +166,7 @@ export async function POST(req: NextRequest) {
     { onConflict: "id" }
   );
 
-  // ── 4. Unlock Module 1 ───────────────────────────────────────────────────
+  // ── 4. Unlock Module 1 ──────────────────────────────────────────────────
   await supabaseAdmin.from("module_progress").upsert(
     {
       user_id: userId,
@@ -186,7 +176,7 @@ export async function POST(req: NextRequest) {
     { onConflict: "user_id,module_number" }
   );
 
-  // ── 5. Mark lead as purchased ────────────────────────────────────────────
+  // ── 5. Mark lead as purchased ──────────────────────────────────────────────
   await supabaseAdmin
     .from("leads")
     .update({ purchased: true })
@@ -241,39 +231,6 @@ If you have any questions reply to this email. We look forward to speaking with 
     await logEmail(email, "consultation_confirmation", consultErr ? "failed" : "sent");
     if (consultErr) console.error("[stripe-webhook] Consultation email failed:", consultErr);
   }
-
-  // ── 8. Schedule Day 3, 14, 90 follow-up emails ──────────────────────────
-  const scheduleEmail = async (
-    type: string,
-    subject: string,
-    html: string,
-    text: string,
-    daysDelay: number
-  ) => {
-    const { error } = await resend.emails.send({
-      from: FROM,
-      replyTo: REPLY_TO,
-      to: email,
-      subject,
-      html,
-      text,
-      scheduledAt: daysFromNow(daysDelay),
-    });
-    await logEmail(email, type, error ? "failed" : "sent");
-    if (error) console.error(`[stripe-webhook] Schedule ${type}:`, error);
-  };
-
-  const d3 = day3Email(firstName);
-  const d14 = day14Email(firstName);
-  const d30 = day30Email(firstName);
-  const d90 = day90Email(firstName);
-
-  await Promise.all([
-    scheduleEmail("post_day3", d3.subject, d3.html, d3.text, 3),
-    scheduleEmail("post_day14", d14.subject, d14.html, d14.text, 14),
-    scheduleEmail("post_day30", d30.subject, d30.html, d30.text, 30),
-    scheduleEmail("post_day90", d90.subject, d90.html, d90.text, 90),
-  ]);
 
   return NextResponse.json({ received: true }, { status: 200 });
 }

@@ -23,8 +23,8 @@ function wrap(body: string) {
         <tr>
           <td style="background:#f3f4f6;padding:20px 40px;text-align:center;">
             <p style="margin:0;font-size:12px;color:#9ca3af;">
-              © ${new Date().getFullYear()} Elevate Health ·
-              <a href="${SITE_URL}/privacy" style="color:#9ca3af;">Privacy</a> ·
+              &copy; ${new Date().getFullYear()} Elevate Health &middot;
+              <a href="${SITE_URL}/privacy" style="color:#9ca3af;">Privacy</a> &middot;
               <a href="${SITE_URL}/terms" style="color:#9ca3af;">Terms</a>
             </p>
           </td>
@@ -36,7 +36,7 @@ function wrap(body: string) {
 </html>`;
 }
 
-// ── Pre-purchase nurture ───────────────────────────────────────────────────────
+// ── Pre-purchase nurture ────────────────────────────────────────────────────────────────────────────────
 
 export function nurtureEmail1(firstName: string) {
   return {
@@ -241,7 +241,7 @@ ${NURTURE_UNSUB_TEXT}`,
   };
 }
 
-// ── Post-purchase sequence ────────────────────────────────────────────────────
+// ── Post-purchase transactional emails ────────────────────────────────────────────────────────────────
 
 export function welcomeEmail({
   firstName,
@@ -294,150 +294,5 @@ Elevate Health
 Go to My Program: ${SITE_URL}/login
 
 To ensure you receive all course updates please add info@elevatehealthtampa.com to your contacts.`,
-  };
-}
-
-export function day3Email(firstName: string) {
-  return {
-    subject: "Day 3 check-in — how is your pain today?",
-    html: wrap(`
-      <p>Hey ${firstName || "there"},</p>
-      <p>You are 3 days into the Elevate Pain-Free Program — nice work for showing up.</p>
-      <p>Quick tip: the students who get the best results do their exercises at the same time every day. Even 20 minutes builds real momentum.</p>
-      <p>If you have not finished Module 1 yet, do it today. It gives you your baseline pain score so you can track your improvement over the next 90 days.</p>
-      <p>To your health,<br>Dr. Connor Oliveri<br>Elevate Health</p>
-      <p style="text-align:center;margin-top:32px;">
-        <a href="${SITE_URL}/login" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
-          Continue My Program →
-        </a>
-      </p>
-    `),
-    text: `Hey ${firstName || "there"},
-
-You are 3 days into the Elevate Pain-Free Program — nice work for showing up.
-
-Quick tip: the students who get the best results do their exercises at the same time every day. Even 20 minutes builds real momentum.
-
-If you have not finished Module 1 yet, do it today. It gives you your baseline pain score so you can track your improvement over the next 90 days.
-
-To your health,
-Dr. Connor Oliveri
-Elevate Health
-
-Continue My Program: ${SITE_URL}/login`,
-  };
-}
-
-export function day14Email(firstName: string) {
-  return {
-    subject: "Two weeks in — how to accelerate your results",
-    html: wrap(`
-      <p>Hey ${firstName || "there"},</p>
-      <p>Two weeks in — most students notice real improvement by now. How are you feeling?</p>
-      <p>If you want to accelerate your results, here is an option for you.</p>
-      <p><strong>1-on-1 Virtual Chiropractic Consultation — $197</strong></p>
-      <p>A licensed chiropractor will review your specific muscle imbalances, assess your movement patterns, and create a custom protocol just for you.</p>
-      <p>This is the fastest way to get pain-free — a session tailored exactly to your body.</p>
-      <p style="text-align:center;margin-top:32px;">
-        <a href="${SITE_URL}/consult" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
-          Book My Chiropractic Consultation — $197
-        </a>
-      </p>
-      <p>To your health,<br>Dr. Connor Oliveri<br>Elevate Health</p>
-    `),
-    text: `Hey ${firstName || "there"},
-
-Two weeks in — most students notice real improvement by now. How are you feeling?
-
-If you want to accelerate your results, here is an option for you.
-
-1-on-1 Virtual Chiropractic Consultation — $197
-
-A licensed chiropractor will review your specific muscle imbalances, assess your movement patterns, and create a custom protocol just for you.
-
-This is the fastest way to get pain-free — a session tailored exactly to your body.
-
-Book My Chiropractic Consultation — $197: ${SITE_URL}/consult
-
-To your health,
-Dr. Connor Oliveri
-Elevate Health`,
-  };
-}
-
-export function day30Email(firstName: string) {
-  return {
-    subject: "How is your pain level compared to Day 1?",
-    html: wrap(`
-      <p>Hey ${firstName || "there"},</p>
-      <p>You are 30 days in. How does your pain compare to when you started?</p>
-      <p>Most students see a 50–70% reduction in pain by day 30. Some are already completely pain-free.</p>
-      <p>If you want ongoing support and the ability to ask questions as you progress, I want to invite you to our <strong>Lifetime Access + Q&A Membership</strong>.</p>
-      <p><strong>What you get — $97 one-time:</strong></p>
-      <ul style="padding-left:20px;line-height:2;">
-        <li>Lifetime access to all future program updates</li>
-        <li>Monthly live Q&A calls with our DC team</li>
-        <li>Private community of pain-free members</li>
-        <li>Priority email support</li>
-      </ul>
-      <p style="text-align:center;margin-top:32px;">
-        <a href="${SITE_URL}/membership" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
-          Join the Membership — $97
-        </a>
-      </p>
-      <p>To your health,<br>Dr. Connor Oliveri<br>Elevate Health</p>
-    `),
-    text: `Hey ${firstName || "there"},
-
-You are 30 days in. How does your pain compare to when you started?
-
-Most students see a 50–70% reduction in pain by day 30. Some are already completely pain-free.
-
-If you want ongoing support and the ability to ask questions as you progress, I want to invite you to our Lifetime Access + Q&A Membership.
-
-What you get — $97 one-time:
-- Lifetime access to all future program updates
-- Monthly live Q&A calls with our DC team
-- Private community of pain-free members
-- Priority email support
-
-Join the Membership — $97: ${SITE_URL}/membership
-
-To your health,
-Dr. Connor Oliveri
-Elevate Health`,
-  };
-}
-
-export function day90Email(firstName: string) {
-  return {
-    subject: "90 days — how is your pain today?",
-    html: wrap(`
-      <p>Hey ${firstName || "there"},</p>
-      <p>90 days. This is a big milestone.</p>
-      <p>How is your pain level compared to Day 1?</p>
-      <p>If you are pain-free — congratulations. You did the work and it paid off. We would love to share your story.</p>
-      <p>Reply to this email with your results and we will feature you in our next student spotlight.</p>
-      <p><strong>Know someone with back or neck pain?</strong> Refer them and they get 20% off with your personal link.</p>
-      <p>And remember — your 90-day money-back guarantee is still active. If you are not satisfied for any reason, reply to this email and we will refund you in full. No questions asked.</p>
-      <p>To your health,<br>Dr. Connor Oliveri<br>Elevate Health</p>
-    `),
-    text: `Hey ${firstName || "there"},
-
-90 days. This is a big milestone.
-
-How is your pain level compared to Day 1?
-
-If you are pain-free — congratulations. You did the work and it paid off. We would love to share your story.
-
-Reply to this email with your results and we will feature you in our next student spotlight.
-
-Know someone with back or neck pain? Refer them and they get 20% off with your personal link.
-
-And remember — your 90-day money-back guarantee is still active. If you are not satisfied for any reason, reply to this email and we will refund you in full. No questions asked.
-
-To your health,
-Dr. Connor Oliveri
-Elevate Health`,
   };
 }
