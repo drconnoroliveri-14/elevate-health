@@ -6,6 +6,7 @@ import Link from 'next/link';
 import EnrollSection from '@/app/components/EnrollSection';
 
 const FULLSCRIPT_URL = 'https://us.fullscript.com/welcome/elevatehealth-75cdea33-a471-46ca-83c8-7e492b97030a';
+const NAVY = '#1B3A6B';
 
 const SUPPLEMENTS = [
   {
@@ -135,13 +136,12 @@ export default function UnifiedLandingPage() {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                border: '2px solid white',
+                backgroundColor: NAVY,
                 color: 'white',
                 fontWeight: 'bold',
                 borderRadius: '8px',
                 textDecoration: 'none',
                 textAlign: 'center',
-                backgroundColor: 'transparent',
               }}
               className="w-full sm:w-auto px-5 py-2.5 text-sm whitespace-nowrap"
             >
@@ -157,57 +157,99 @@ export default function UnifiedLandingPage() {
         </div>
       </nav>
 
-      {/* ── HERO ── */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/scoliosis.jpeg"
-            alt="Spine background"
-            fill
-            className="object-cover"
-            priority
+      {/* ── SPLIT HERO ── */}
+      <section className="overflow-hidden">
+        {/* Logo centered above the split */}
+        <div
+          className="flex justify-center items-center py-6 px-4"
+          style={{ backgroundColor: '#071a10' }}
+        >
+          <img
+            src="/logo.PNG"
+            alt="Elevate Health"
+            style={{ height: '70px', width: 'auto', filter: 'brightness(0) invert(1)' }}
           />
-          <div className="absolute inset-0 bg-teal-900/85" />
         </div>
-        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto w-full py-16">
-          <span className="inline-block bg-yellow-400 text-yellow-900 font-bold text-xs sm:text-sm uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-            Dr. Connor Oliveri&apos;s Complete Pain Relief System
-          </span>
-          <h1
-            className="text-4xl sm:text-5xl lg:text-7xl font-black text-white leading-tight mb-6"
-            style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}
+
+        {/* Split layout — stacks vertically on mobile, side-by-side on sm+ */}
+        <div className="flex flex-col sm:flex-row" style={{ minHeight: '80vh' }}>
+
+          {/* LEFT — Pain-Free Program (teal) */}
+          <div
+            className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 sm:py-20"
+            style={{ backgroundColor: '#0F6E56' }}
           >
-            <span className="block">Finally End Your</span>
-            <span className="block">Chronic Pain.</span>
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 max-w-3xl mx-auto leading-relaxed">
-            Dr. Connor Oliveri, Doctor of Chiropractic, offers two proven approaches to eliminating chronic neck and back pain — a complete at-home rehabilitation program AND a clinician-curated supplement protocol.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-5 text-xs sm:text-sm text-teal-200 mb-8">
-            <span>✓ Licensed Chiropractor</span>
-            <span>✓ Developed for Home Use</span>
-            <span>✓ 90-Day Guarantee</span>
-          </div>
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+            <span
+              className="inline-block text-xs uppercase tracking-widest font-bold px-4 py-1.5 rounded-full mb-6 self-start"
+              style={{ backgroundColor: '#F5C842', color: '#1a1a1a' }}
+            >
+              AT-HOME REHABILITATION
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
+              The Pain-Free Program
+            </h2>
+            <p className="text-green-100 text-base sm:text-lg mb-6 leading-relaxed max-w-md">
+              7 chiropractor-designed modules to eliminate chronic neck and back pain from home in just 20 minutes a day
+            </p>
+            <ul className="space-y-3 mb-8">
+              {['7 Video Modules', 'Lifetime Access', '90-Day Guarantee', 'Instant Access'].map((item) => (
+                <li key={item} className="flex items-center gap-3 text-white text-sm sm:text-base">
+                  <span style={{ color: '#F5C842', fontWeight: 900, fontSize: '1.1rem' }}>✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
             <a
               href="#program"
-              className="inline-block w-full sm:w-auto bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-xl transition-all hover:scale-105 text-center"
+              className="inline-block w-full sm:w-auto text-center font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-xl transition-all hover:scale-105"
+              style={{ backgroundColor: '#F5C842', color: '#1a1a1a' }}
             >
-              Get the Pain-Free Program — $97 →
+              Get Started — $97 →
             </a>
+          </div>
+
+          {/* Gold dividing line (desktop only) */}
+          <div
+            className="hidden sm:block flex-shrink-0"
+            style={{ width: '3px', backgroundColor: '#F5C842' }}
+          />
+
+          {/* RIGHT — Supplement Protocol (navy) */}
+          <div
+            className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 sm:py-20"
+            style={{ backgroundColor: NAVY }}
+          >
+            <span
+              className="inline-block text-xs uppercase tracking-widest font-bold px-4 py-1.5 rounded-full mb-6 self-start"
+              style={{ backgroundColor: '#E8EEF7', color: NAVY }}
+            >
+              CLINICIAN-CURATED SUPPLEMENTS
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
+              The Supplement Protocol
+            </h2>
+            <p className="text-blue-200 text-base sm:text-lg mb-6 leading-relaxed max-w-md">
+              5 practitioner-grade supplements to fight inflammation, reduce muscle tension, and accelerate your pain recovery
+            </p>
+            <ul className="space-y-3 mb-8">
+              {['5 Targeted Supplements', '15% First Order Discount', 'Ships to Your Door', 'Practitioner Grade'].map((item) => (
+                <li key={item} className="flex items-center gap-3 text-white text-sm sm:text-base">
+                  <span style={{ color: '#93C5FD', fontWeight: 900, fontSize: '1.1rem' }}>✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
             <a
               href={FULLSCRIPT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block w-full sm:w-auto border-2 border-white text-white font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-xl transition-all hover:scale-105 hover:bg-white hover:text-teal-900 text-center"
+              className="inline-block w-full sm:w-auto text-center font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-xl transition-all hover:scale-105"
+              style={{ border: '2px solid white', color: 'white', backgroundColor: 'transparent' }}
             >
-              View Supplement Protocol →
+              View Protocol →
             </a>
           </div>
-          <div className="flex justify-center items-center gap-2 text-yellow-400">
-            <span>{'★★★★★'}</span>
-            <span className="text-gray-300 text-sm">Trusted by 2,000+ people with chronic pain</span>
-          </div>
+
         </div>
       </section>
 
@@ -236,7 +278,8 @@ export default function UnifiedLandingPage() {
                 href={FULLSCRIPT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block w-full sm:w-auto border-2 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white font-bold px-8 py-3 rounded-full shadow transition-all hover:scale-105 text-center"
+                className="inline-block w-full sm:w-auto font-bold px-8 py-3 rounded-full shadow transition-all hover:scale-105 hover:opacity-90 text-center"
+                style={{ backgroundColor: NAVY, color: 'white' }}
               >
                 View Supplement Protocol →
               </a>
@@ -291,7 +334,10 @@ export default function UnifiedLandingPage() {
       <section className="bg-white py-16 sm:py-20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
-            <span className="inline-block bg-teal-100 text-teal-700 font-bold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">
+            <span
+              className="inline-block font-bold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-4"
+              style={{ backgroundColor: '#E8EEF7', color: NAVY }}
+            >
               Clinician-Curated Supplements
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3">
@@ -307,7 +353,8 @@ export default function UnifiedLandingPage() {
             {SUPPLEMENTS.slice(0, 4).map((s) => (
               <div
                 key={s.name}
-                className="border-2 border-teal-200 rounded-2xl p-5 hover:border-teal-400 hover:shadow-md transition-all"
+                className="border-2 rounded-2xl p-5 hover:shadow-md transition-all"
+                style={{ borderColor: NAVY }}
               >
                 <div className="text-3xl mb-3">{s.icon}</div>
                 <h3 className="font-black text-gray-900 mb-2">{s.name}</h3>
@@ -319,7 +366,10 @@ export default function UnifiedLandingPage() {
           {/* 5th card centered */}
           <div className="flex justify-center mb-10">
             <div className="w-full sm:w-1/2">
-              <div className="border-2 border-teal-200 rounded-2xl p-5 hover:border-teal-400 hover:shadow-md transition-all">
+              <div
+                className="border-2 rounded-2xl p-5 hover:shadow-md transition-all"
+                style={{ borderColor: NAVY }}
+              >
                 <div className="text-3xl mb-3">{SUPPLEMENTS[4].icon}</div>
                 <h3 className="font-black text-gray-900 mb-2">{SUPPLEMENTS[4].name}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{SUPPLEMENTS[4].desc}</p>
@@ -328,14 +378,15 @@ export default function UnifiedLandingPage() {
           </div>
 
           <div className="text-center">
-            <p className="text-teal-700 font-semibold text-sm mb-5">
+            <p className="font-semibold text-sm mb-5" style={{ color: NAVY }}>
               💰 Save 15% on your first order · 10% on all future orders
             </p>
             <a
               href={FULLSCRIPT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block w-full sm:w-auto bg-yellow-400 hover:bg-yellow-300 text-yellow-900 font-black text-base sm:text-lg px-8 sm:px-10 py-4 rounded-full shadow-xl transition-all hover:scale-105 text-center"
+              className="inline-block w-full sm:w-auto font-black text-base sm:text-lg px-8 sm:px-10 py-4 rounded-full shadow-xl transition-all hover:scale-105 hover:opacity-90 text-center"
+              style={{ backgroundColor: NAVY, color: 'white' }}
             >
               Order Supplements with 15% Discount →
             </a>
@@ -389,7 +440,10 @@ export default function UnifiedLandingPage() {
                   'Supplements delivered to your door',
                 ].map((step, i) => (
                   <li key={step} className="flex items-start gap-3 text-gray-600 text-sm">
-                    <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span
+                      className="w-6 h-6 rounded-full text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ backgroundColor: NAVY }}
+                    >
                       {i + 1}
                     </span>
                     {step}
@@ -400,7 +454,8 @@ export default function UnifiedLandingPage() {
                 href={FULLSCRIPT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block w-full border-2 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white font-black px-6 py-3 rounded-full shadow transition-all hover:scale-105 text-center text-sm"
+                className="inline-block w-full font-black px-6 py-3 rounded-full shadow transition-all hover:scale-105 hover:opacity-90 text-center text-sm"
+                style={{ backgroundColor: NAVY, color: 'white' }}
               >
                 View Protocol →
               </a>
@@ -464,7 +519,8 @@ export default function UnifiedLandingPage() {
               href={FULLSCRIPT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block w-full sm:w-auto border-2 border-white text-white font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-2xl transition-all hover:scale-105 hover:bg-white hover:text-teal-900 text-center"
+              className="inline-block w-full sm:w-auto font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-2xl transition-all hover:scale-105 hover:opacity-90 text-center"
+              style={{ backgroundColor: NAVY, color: 'white' }}
             >
               View Supplement Protocol →
             </a>
