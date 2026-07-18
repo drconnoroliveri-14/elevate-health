@@ -149,7 +149,15 @@ export default function UnifiedLandingPage() {
             </a>
             <Link
               href="/login"
-              className="text-teal-300 hover:text-white text-xs underline underline-offset-2 transition-colors hidden sm:inline whitespace-nowrap"
+              style={{
+                backgroundColor: '#FFFFFF',
+                color: '#1a1a1a',
+                fontWeight: 'bold',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                textAlign: 'center',
+              }}
+              className="hidden sm:inline px-5 py-2.5 text-sm whitespace-nowrap transition-colors hover:opacity-90"
             >
               Member Login
             </Link>
