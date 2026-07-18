@@ -159,18 +159,6 @@ export default function UnifiedLandingPage() {
 
       {/* ── SPLIT HERO ── */}
       <section className="overflow-hidden">
-        {/* Logo centered above the split */}
-        <div
-          className="flex justify-center items-center py-6 px-4"
-          style={{ backgroundColor: '#071a10' }}
-        >
-          <img
-            src="/logo.PNG"
-            alt="Elevate Health"
-            style={{ height: '70px', width: 'auto', filter: 'brightness(0) invert(1)' }}
-          />
-        </div>
-
         {/* Split layout — stacks vertically on mobile, side-by-side on sm+ */}
         <div className="flex flex-col sm:flex-row" style={{ minHeight: '80vh' }}>
 
