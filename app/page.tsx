@@ -173,35 +173,43 @@ export default function UnifiedLandingPage() {
           {/* LEFT — Pain-Free Program (teal) */}
           <div
             className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 sm:py-20"
-            style={{ backgroundColor: '#0F6E56' }}
+            style={{
+              backgroundImage: 'url(https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              position: 'relative',
+            }}
           >
-            <span
-              className="inline-block text-xs uppercase tracking-widest font-bold px-4 py-1.5 rounded-full mb-6 self-start"
-              style={{ backgroundColor: '#F5C842', color: '#1a1a1a' }}
-            >
-              AT-HOME REHABILITATION
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
-              The Pain-Free Program
-            </h2>
-            <p className="text-green-100 text-base sm:text-lg mb-6 leading-relaxed max-w-md">
-              7 chiropractor-designed modules to eliminate chronic neck and back pain from home in just 20 minutes a day
-            </p>
-            <ul className="space-y-3 mb-8">
-              {['7 Video Modules', 'Lifetime Access', '90-Day Guarantee', 'Instant Access'].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-white text-sm sm:text-base">
-                  <span style={{ color: '#F5C842', fontWeight: 900, fontSize: '1.1rem' }}>✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <a
-              href="#program"
-              className="inline-block w-full sm:w-auto text-center font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-xl transition-all hover:scale-105"
-              style={{ backgroundColor: '#F5C842', color: '#1a1a1a' }}
-            >
-              Get Started — $97 →
-            </a>
+            <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(15,110,86,0.75)' }} />
+            <div style={{ position: 'relative' }} className="flex flex-col">
+              <span
+                className="inline-block text-xs uppercase tracking-widest font-bold px-4 py-1.5 rounded-full mb-6 self-start"
+                style={{ backgroundColor: '#F5C842', color: '#1a1a1a' }}
+              >
+                AT-HOME REHABILITATION
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
+                The Pain-Free Program
+              </h2>
+              <p className="text-green-100 text-base sm:text-lg mb-6 leading-relaxed max-w-md">
+                7 chiropractor-designed modules to eliminate chronic neck and back pain from home in just 20 minutes a day
+              </p>
+              <ul className="space-y-3 mb-8">
+                {['7 Video Modules', 'Lifetime Access', '90-Day Guarantee', 'Instant Access'].map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-white text-sm sm:text-base">
+                    <span style={{ color: '#F5C842', fontWeight: 900, fontSize: '1.1rem' }}>✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#program"
+                className="inline-block w-full sm:w-auto text-center font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-xl transition-all hover:scale-105"
+                style={{ backgroundColor: '#F5C842', color: '#1a1a1a' }}
+              >
+                Get Started — $97 →
+              </a>
+            </div>
           </div>
 
           {/* Gold dividing line (desktop only) */}
@@ -213,37 +221,45 @@ export default function UnifiedLandingPage() {
           {/* RIGHT — Supplement Protocol (navy) */}
           <div
             className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-14 sm:py-20"
-            style={{ backgroundColor: NAVY }}
+            style={{
+              backgroundImage: 'url(https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=1200&q=80)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              position: 'relative',
+            }}
           >
-            <span
-              className="inline-block text-xs uppercase tracking-widest font-bold px-4 py-1.5 rounded-full mb-6 self-start"
-              style={{ backgroundColor: '#E8EEF7', color: NAVY }}
-            >
-              CLINICIAN-CURATED SUPPLEMENTS
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
-              The Supplement Protocol
-            </h2>
-            <p className="text-blue-200 text-base sm:text-lg mb-6 leading-relaxed max-w-md">
-              5 practitioner-grade supplements to fight inflammation, reduce muscle tension, and accelerate your pain recovery
-            </p>
-            <ul className="space-y-3 mb-8">
-              {['5 Targeted Supplements', '15% First Order Discount', 'Ships to Your Door', 'Practitioner Grade'].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-white text-sm sm:text-base">
-                  <span style={{ color: '#93C5FD', fontWeight: 900, fontSize: '1.1rem' }}>✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <a
-              href={FULLSCRIPT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block w-full sm:w-auto text-center font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-xl transition-all hover:scale-105"
-              style={{ border: '2px solid white', color: 'white', backgroundColor: 'transparent' }}
-            >
-              View Protocol →
-            </a>
+            <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(27,58,107,0.75)' }} />
+            <div style={{ position: 'relative' }} className="flex flex-col">
+              <span
+                className="inline-block text-xs uppercase tracking-widest font-bold px-4 py-1.5 rounded-full mb-6 self-start"
+                style={{ backgroundColor: '#E8EEF7', color: NAVY }}
+              >
+                CLINICIAN-CURATED SUPPLEMENTS
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-4">
+                The Supplement Protocol
+              </h2>
+              <p className="text-blue-200 text-base sm:text-lg mb-6 leading-relaxed max-w-md">
+                5 practitioner-grade supplements to fight inflammation, reduce muscle tension, and accelerate your pain recovery
+              </p>
+              <ul className="space-y-3 mb-8">
+                {['5 Targeted Supplements', '15% First Order Discount', 'Ships to Your Door', 'Practitioner Grade'].map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-white text-sm sm:text-base">
+                    <span style={{ color: '#93C5FD', fontWeight: 900, fontSize: '1.1rem' }}>✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={FULLSCRIPT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block w-full sm:w-auto text-center font-black text-base sm:text-lg px-8 py-4 rounded-full shadow-xl transition-all hover:scale-105"
+                style={{ border: '2px solid white', color: 'white', backgroundColor: 'transparent' }}
+              >
+                View Protocol →
+              </a>
+            </div>
           </div>
 
         </div>
