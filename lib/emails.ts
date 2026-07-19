@@ -241,6 +241,239 @@ ${NURTURE_UNSUB_TEXT}`,
   };
 }
 
+// ── Post-purchase follow-up sequence ─────────────────────────────────────────
+
+export function day3Email(firstName: string) {
+  return {
+    subject: "How is your pain feeling today?",
+    html: wrap(`
+      <p>Hi ${firstName || "there"},</p>
+      <p>It has been 3 days since you joined the Elevate Pain-Free Program and I wanted to check in.</p>
+      <p>By now you should have completed Module 1 and have a clear understanding of the three root causes of your chronic pain — muscle imbalances, movement pattern dysfunction, and postural collapse.</p>
+      <p><strong>Here is what to focus on this week:</strong></p>
+      <ul style="padding-left:20px;line-height:2;">
+        <li>Complete <strong>Module 2 — Neck Pain Relief Protocol</strong></li>
+        <li>Do your exercises every morning for 20 minutes</li>
+        <li>Start tracking your pain scores in your Pain Journal</li>
+      </ul>
+      <p>Remember — the first week is about building the habit. You will not feel dramatically different yet and that is completely normal. The results come from consistency over 90 days.</p>
+      <p>Keep going. You are doing the right thing.</p>
+      <p>To your health,<br>Dr. Connor Oliveri, DC<br>Elevate Health | Tampa, FL</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/login" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Go to My Program →
+        </a>
+      </p>
+    `),
+    text: `Hi ${firstName || "there"},
+
+It has been 3 days since you joined the Elevate Pain-Free Program and I wanted to check in.
+
+By now you should have completed Module 1 and have a clear understanding of the three root causes of your chronic pain — muscle imbalances, movement pattern dysfunction, and postural collapse.
+
+Here is what to focus on this week:
+
+- Complete Module 2 — Neck Pain Relief Protocol
+- Do your exercises every morning for 20 minutes
+- Start tracking your pain scores in your Pain Journal
+
+Remember — the first week is about building the habit. You will not feel dramatically different yet and that is completely normal. The results come from consistency over 90 days.
+
+Keep going. You are doing the right thing.
+
+To your health,
+Dr. Connor Oliveri, DC
+Elevate Health | Tampa, FL
+
+Go to My Program: ${SITE_URL}/login`,
+  };
+}
+
+export function day14Email(firstName: string) {
+  return {
+    subject: "Two weeks in — how to accelerate your results",
+    html: wrap(`
+      <p>Hi ${firstName || "there"},</p>
+      <p>Two weeks into the Elevate Pain-Free Program — congratulations on sticking with it!</p>
+      <p>By now you should notice some early improvements in your flexibility and morning stiffness. If you are not feeling any changes yet do not worry — for many people the shift happens between weeks 3 and 6 as the nervous system adapts.</p>
+      <p><strong>To accelerate your results:</strong></p>
+      <ul style="padding-left:20px;line-height:2;">
+        <li>Make sure you are completing your exercises <strong>EVERY day</strong> — consistency is everything</li>
+        <li>Check your posture throughout the day — forward head posture and slouching undo your progress</li>
+        <li>Consider adding the <strong>Nutrition for Inflammation</strong> course to your program — what you eat directly affects how much inflammation you carry in your spine</li>
+      </ul>
+      <p><strong>Where you should be at week 2:</strong></p>
+      <p style="margin:4px 0;">✓ Module 1 completed — Understanding Your Pain</p>
+      <p style="margin:4px 0;">✓ Module 2 completed — Neck Pain Relief Protocol</p>
+      <p style="margin:4px 0;">✓ Module 3 completed — Mid Back Pain Relief Protocol</p>
+      <p style="margin:4px 0;">✓ Working on Module 4 — Lower Back Pain Relief Protocol</p>
+      <p style="margin-top:16px;">If you have not purchased the Nutrition for Inflammation add-on yet you can access it from your dashboard under <strong>Upgrade My Program</strong>.</p>
+      <p>Keep going — you are almost halfway through the modules!</p>
+      <p>To your health,<br>Dr. Connor Oliveri, DC<br>Elevate Health | Tampa, FL</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/login" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Go to My Program →
+        </a>
+      </p>
+    `),
+    text: `Hi ${firstName || "there"},
+
+Two weeks into the Elevate Pain-Free Program — congratulations on sticking with it!
+
+By now you should notice some early improvements in your flexibility and morning stiffness. If you are not feeling any changes yet do not worry — for many people the shift happens between weeks 3 and 6 as the nervous system adapts.
+
+To accelerate your results:
+
+- Make sure you are completing your exercises EVERY day — consistency is everything
+- Check your posture throughout the day — forward head posture and slouching undo your progress
+- Consider adding the Nutrition for Inflammation course to your program — what you eat directly affects how much inflammation you carry in your spine
+
+Where you should be at week 2:
+✓ Module 1 completed — Understanding Your Pain
+✓ Module 2 completed — Neck Pain Relief Protocol
+✓ Module 3 completed — Mid Back Pain Relief Protocol
+✓ Working on Module 4 — Lower Back Pain Relief Protocol
+
+If you have not purchased the Nutrition for Inflammation add-on yet you can access it from your dashboard under Upgrade My Program.
+
+Keep going — you are almost halfway through the modules!
+
+To your health,
+Dr. Connor Oliveri, DC
+Elevate Health | Tampa, FL
+
+Go to My Program: ${SITE_URL}/login`,
+  };
+}
+
+export function day30Email(firstName: string) {
+  return {
+    subject: "30 days in — your pain should be changing",
+    html: wrap(`
+      <p>Hi ${firstName || "there"},</p>
+      <p>One month into the Elevate Pain-Free Program. This is a big milestone!</p>
+      <p><strong>By day 30 most of my patients report:</strong></p>
+      <ul style="padding-left:20px;line-height:2;">
+        <li>Reduced morning stiffness</li>
+        <li>Better range of motion in the neck and lower back</li>
+        <li>Fewer pain flare-ups throughout the day</li>
+        <li>Improved sleep quality</li>
+        <li>More energy and less fatigue</li>
+      </ul>
+      <p><strong>How are you feeling compared to day 1?</strong></p>
+      <p>If you have been tracking your pain scores in your Pain Journal open it now and compare your Day 1 scores to today. Most people are genuinely surprised by how much progress they have made without even realizing it.</p>
+      <p><strong>Where you should be at day 30:</strong></p>
+      <p style="margin:4px 0;">✓ All 7 modules completed</p>
+      <p style="margin:4px 0;">✓ Daily exercise habit established</p>
+      <p style="margin:4px 0;">✓ Posture awareness improved</p>
+      <p style="margin:4px 0;">✓ Working through your 90-day personal protocol</p>
+      <p style="margin-top:16px;">Not seeing the results you expected? Book a <strong>1-on-1 Virtual Consultation</strong> with me from your dashboard. I can review your specific pain pattern and give you personalized protocol adjustments to accelerate your results.</p>
+      <p>You are one third of the way through your 90-day protocol. Keep going — the best results happen in months 2 and 3.</p>
+      <p>To your health,<br>Dr. Connor Oliveri, DC<br>Elevate Health | Tampa, FL</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/login" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Go to My Program →
+        </a>
+      </p>
+    `),
+    text: `Hi ${firstName || "there"},
+
+One month into the Elevate Pain-Free Program. This is a big milestone!
+
+By day 30 most of my patients report:
+
+- Reduced morning stiffness
+- Better range of motion in the neck and lower back
+- Fewer pain flare-ups throughout the day
+- Improved sleep quality
+- More energy and less fatigue
+
+How are you feeling compared to day 1?
+
+If you have been tracking your pain scores in your Pain Journal open it now and compare your Day 1 scores to today. Most people are genuinely surprised by how much progress they have made without even realizing it.
+
+Where you should be at day 30:
+✓ All 7 modules completed
+✓ Daily exercise habit established
+✓ Posture awareness improved
+✓ Working through your 90-day personal protocol
+
+Not seeing the results you expected? Book a 1-on-1 Virtual Consultation with me from your dashboard. I can review your specific pain pattern and give you personalized protocol adjustments to accelerate your results.
+
+You are one third of the way through your 90-day protocol. Keep going — the best results happen in months 2 and 3.
+
+To your health,
+Dr. Connor Oliveri, DC
+Elevate Health | Tampa, FL
+
+Go to My Program: ${SITE_URL}/login`,
+  };
+}
+
+export function day90Email(firstName: string) {
+  return {
+    subject: "90 days — how is your pain today?",
+    html: wrap(`
+      <p>Hi ${firstName || "there"},</p>
+      <p>90 days ago you made a decision to take control of your chronic pain. Today I want to know — how are you feeling?</p>
+      <p>If you have followed the program consistently you should be experiencing significantly less pain than when you started. Many of my patients are completely pain-free by day 90.</p>
+      <p><strong>Your 90-day results checklist:</strong></p>
+      <ul style="padding-left:20px;line-height:2;">
+        <li>How does your pain score compare to day 1?</li>
+        <li>Are you standing taller with better posture?</li>
+        <li>Are you sleeping better?</li>
+        <li>Are you moving with less restriction?</li>
+        <li>Has your quality of life improved?</li>
+      </ul>
+      <p>If you are not yet pain-free do not be discouraged. Everyone heals at a different rate depending on the severity and duration of their condition. Here are your next steps:</p>
+      <ul style="padding-left:20px;line-height:2;">
+        <li>Book a <strong>1-on-1 Virtual Consultation</strong> from your dashboard — I will personally review your case and adjust your protocol</li>
+        <li>Add the <strong>Nutrition for Inflammation</strong> course — diet plays a massive role in chronic pain</li>
+        <li>Continue the protocol for another 30–60 days — some cases take longer but the results always come with consistency</li>
+      </ul>
+      <p><strong>Your 90-day money-back guarantee:</strong></p>
+      <p>If you have completed all 7 modules and logged in for at least 30 days and you are not satisfied with your results you may request a refund from your dashboard between days 90 and 120 of your membership.</p>
+      <p>Thank you for trusting me with your health. It has been an honor to be part of your pain relief journey.</p>
+      <p>To your health,<br>Dr. Connor Oliveri, DC<br>Elevate Health | Tampa, FL</p>
+      <p style="text-align:center;margin-top:32px;">
+        <a href="${SITE_URL}/login" style="background:#0F6E56;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">
+          Go to My Program →
+        </a>
+      </p>
+    `),
+    text: `Hi ${firstName || "there"},
+
+90 days ago you made a decision to take control of your chronic pain. Today I want to know — how are you feeling?
+
+If you have followed the program consistently you should be experiencing significantly less pain than when you started. Many of my patients are completely pain-free by day 90.
+
+Your 90-day results checklist:
+
+- How does your pain score compare to day 1?
+- Are you standing taller with better posture?
+- Are you sleeping better?
+- Are you moving with less restriction?
+- Has your quality of life improved?
+
+If you are not yet pain-free do not be discouraged. Everyone heals at a different rate depending on the severity and duration of their condition. Here are your next steps:
+
+- Book a 1-on-1 Virtual Consultation from your dashboard — I will personally review your case and adjust your protocol
+- Add the Nutrition for Inflammation course — diet plays a massive role in chronic pain
+- Continue the protocol for another 30-60 days — some cases take longer but the results always come with consistency
+
+Your 90-day money-back guarantee:
+If you have completed all 7 modules and logged in for at least 30 days and you are not satisfied with your results you may request a refund from your dashboard between days 90 and 120 of your membership.
+
+Thank you for trusting me with your health. It has been an honor to be part of your pain relief journey.
+
+To your health,
+Dr. Connor Oliveri, DC
+Elevate Health | Tampa, FL
+
+Go to My Program: ${SITE_URL}/login`,
+  };
+}
+
 // ── Post-purchase sequence ────────────────────────────────────────────────────
 
 export function welcomeEmail({
