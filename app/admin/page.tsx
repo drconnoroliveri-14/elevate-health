@@ -274,7 +274,7 @@ export default function AdminPage() {
                         <TD muted>{formatDate(p.purchased_at)}</TD>
                         <TD>
                           <span className="font-semibold text-teal-600">
-                            $997
+                            $97
                           </span>
                         </TD>
                       </tr>
